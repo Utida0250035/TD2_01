@@ -1,0 +1,16 @@
+#include "../Math/AeVector3.h"
+#include "../System/DataComponent.h"
+
+namespace Atrum {
+
+class CmpDirection : public DataComponent {
+private:
+	Math::Vector3 direction_{};
+
+public:
+	Math::Vector3 GetDirection() const { return direction_; }
+	void SetDirection(Math::Vector3 direction) { direction_ = direction; }
+	Math::Vector3& RefDirection() { return direction_; };
+};
+
+} // namespace Atrum
