@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Math/Vector3.h"
+#include "../Math/Vector4.h"
 #include <memory>
 #include <stdlib.h>
 #include <time.h>
@@ -10,6 +11,8 @@ namespace Atrum {
 
 // 粒子個々の情報
 struct ParticleInfo {
+	// 色(RGBA)
+	Math::Vector4 color = Math::Vector4::White();
 	// 位置
 	Math::Vector3 position{};
 	// 速度
