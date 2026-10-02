@@ -1,6 +1,6 @@
 #include "../System/BehDodge.h"
 
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include "../System/BehaviorBox.h"
 #include "../System/CmpDirection.h"
 #include "../System/CmpLhRigidBody.h"

@@ -3,7 +3,7 @@
 #include "../Cast/StaticCast.h"
 #include "../Math/Matrix4x4.h"
 #include "../Math/Quaternion.h"
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include <numbers>
 
 namespace Atrum {
@@ -42,7 +42,7 @@ namespace Atrum {
 		}
 
 		void UpdateMatrix() {
-			viewMatrix_ = Math::Matrix4x4::InverseRT(quaternion_.MakeRotateMatrixRh(), Math::Matrix4x4::Translate(translate_));
+			viewMatrix_ = Math::Matrix4x4::InverseRT(quaternion_.MakeRotateMatrixLh(), Math::Matrix4x4::Translate(translate_));
 		}
 
 		/* ゲッター */
@@ -64,11 +64,11 @@ namespace Atrum {
 
 			rotate_.x = std::clamp(rotate_.x, -std::numbers::pi_v<float> *-0.5f, std::numbers::pi_v<float> *0.5f);
 
-			Math::Quaternion yawQ = Math::Quaternion::FromAxisAngle(Math::Vector3::Up(), rotate_.y);
+			Math::Quaternion yawQ = Math::Quaternion::FromAxisAngle(Math::Vector3::UpLh(), rotate_.y);
 
-			Math::Quaternion pitchQ = Math::Quaternion::FromAxisAngle(Math::Vector3::Right(), rotate_.x);
+			Math::Quaternion pitchQ = Math::Quaternion::FromAxisAngle(Math::Vector3::RightLh(), rotate_.x);
 
-			Math::Quaternion rollQ = Math::Quaternion::FromAxisAngle(Math::Vector3::Forward(), rotate_.z);
+			Math::Quaternion rollQ = Math::Quaternion::FromAxisAngle(Math::Vector3::ForwardLh(), rotate_.z);
 
 			quaternion_ = (yawQ * pitchQ).Normalized();
 

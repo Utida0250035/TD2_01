@@ -1,11 +1,10 @@
 #include "../System/EntityFactory.h"
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include "../Math/Transform.h"
 #include "../System/CmpChildEntitys.h"
 #include "../System/CmpDirection.h"
 #include "../System/CmpDrawBullet.h"
 #include "../System/CmpDrawHitSphere.h"
-#include "../System/CmpEnemy.h"
 #include "../System/CmpHealthHit.h"
 #include "../System/CmpHitSphere.h"
 #include "../System/CmpLhRigidBody.h"
@@ -31,7 +30,7 @@ std::unique_ptr<Entity> EntityFactory::PlayerMononofu() {
 
 	Math::TransformLH initialTransform = Math::TransformLH{};
 
-	initialTransform.quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::Up(), -std::numbers::pi_v<float> * 0.5f);
+	initialTransform.quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::UpLh(), -std::numbers::pi_v<float> * 0.5f);
 	initialTransform.translate = {-8.0f, -3.0f, 0.0f};
 
 	playerMononofu->SetInitialTransform(initialTransform);
@@ -79,7 +78,7 @@ std::unique_ptr<Entity> EntityFactory::PlayerMononofu() {
 
 	Math::TransformLH weaponPivotInitialTransform{};
 
-	weaponPivotInitialTransform.quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::Forward(), -std::numbers::pi_v<float>);
+	weaponPivotInitialTransform.quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::ForwardLh(), -std::numbers::pi_v<float>);
 
 	weaponPivot->SetInitialTransform(weaponPivotInitialTransform);
 
@@ -95,7 +94,7 @@ std::unique_ptr<Entity> EntityFactory::PlayerMononofu() {
 	Math::TransformLH weaponInitialTransform{};
 
 	weaponInitialTransform.translate = {-1.0f, 0.0f, 0.0f};
-	weaponInitialTransform.quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::Forward(), std::numbers::pi_v<float>);
+	weaponInitialTransform.quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::ForwardLh(), std::numbers::pi_v<float>);
 
 	weapon->SetInitialTransform(weaponInitialTransform);
 
@@ -109,109 +108,6 @@ std::unique_ptr<Entity> EntityFactory::PlayerMononofu() {
 	playerMononofu->Initialize();
 
 	return std::move(playerMononofu);
-}
-
-std::unique_ptr<Entity> EntityFactory::EnemyAstro(Entity* player) {
-
-	std::unique_ptr<Entity> enemyAstro = std::make_unique<Entity>();
-	enemyAstro->SetEntityType(EntityType::ENEMY);
-
-	Math::TransformLH initialTransform = Math::TransformLH{};
-
-	initialTransform.quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::Up(), std::numbers::pi_v<float> * 0.5f);
-	initialTransform.translate = {8.0f, 0.0f, 0.0f};
-
-	enemyAstro->SetInitialTransform(initialTransform);
-
-	enemyAstro->AddUpdCmp<CmpHitSphere>();
-	enemyAstro->AddUpdCmp<CmpHealthHit>();
-	enemyAstro->AddUpdCmp<CmpEnemy>();
-	enemyAstro->AddUpdCmp<CmpReflectableBullet>();
-	enemyAstro->AddDrawCmp<CmpMeshSphere>();
-	enemyAstro->AddDrawCmp<CmpDrawHitSphere>();
-	enemyAstro->AddDrawCmp<CmpDrawBullet>();
-	enemyAstro->AddUpdCmp<CmpChildEntitys>();
-
-	CmpMeshSphere* cmpMeshSphere = enemyAstro->GetDrawCmp<CmpMeshSphere>();
-	cmpMeshSphere->SetColor({0.75f, 0.25f, 0.125f, 1.0f});
-	cmpMeshSphere->SetRadius(1.0f);
-
-	CmpHitSphere* cmpHitSphere = enemyAstro->GetUpdCmp<CmpHitSphere>();
-	cmpHitSphere->SetSpheres({
-	    {{}, 0.8f}
-    });
-
-	CmpHealthHit* cmpHealthHit = enemyAstro->GetUpdCmp<CmpHealthHit>();
-	cmpHealthHit->SetHurterTypes({EntityType::PLAYER_ITEM});
-	cmpHealthHit->SetInitialHealthCount(32);
-
-	CmpChildEntitys* cmpChildEntitys = enemyAstro->GetUpdCmp<CmpChildEntitys>();
-
-	const float orbiterHitRadius = 0.4f;
-	const float orbiterRadius = 0.5f;
-	const float distance = 1.5f;
-	const Math::Vector4 orbiterColor = {0.75f, 0.25f, 0.125f, 1.0f};
-
-	CmpEnemy* cmpEnemy = enemyAstro->GetUpdCmp<CmpEnemy>();
-	cmpEnemy->SetPlayer(player);
-
-	std::vector<Entity*> orbiters{};
-
-	const Math::Vector3 defaultInitialTransform = {distance, 0.0f, 0.0f};
-	const Math::Vector3 defaultOrbitAxis = Math::Vector3::Up();
-
-	struct OrbitConfig {
-		Math::Vector3 axisRotateByDegree{};
-		float rotateSpeedByDegree;
-	};
-
-	std::vector<OrbitConfig> orbitConfigs{
-	    {{0.0f, 0.0f, 0.0f},    180.0f},
-        {{45.0f, 0.0f, 0.0f},   150.0f},
-        {{30.0f, 0.0f, 15.0f},  200.0f},
-        {{90.0f, 0.0f, 30.0f},  360.0f},
-        {{60.0f, 30.0f, 70.0f}, 200.0f}
-    };
-
-	Math::TransformLH orbiterInitialTransform{};
-
-	Math::Matrix4x4 orbitAxisRotateMatrix{};
-
-	CmpMeshSphere* orbiterCmpMeshSphere = nullptr;
-	CmpHitSphere* orbiterCmpHitSphere = nullptr;
-	CmpOrbiter* cmpOrbiter = nullptr;
-
-	for (size_t i = 0; i < orbitConfigs.size(); ++i) {
-		orbiters.emplace_back(new Entity());
-		orbiters.back()->SetEntityType(EntityType::ENEMY_WEAPON);
-		orbiters.back()->AddUpdCmp<CmpOrbiter>();
-		orbiters.back()->AddDrawCmp<CmpMeshSphere>();
-		orbiters.back()->AddUpdCmp<CmpHitSphere>();
-
-		orbiterCmpMeshSphere = orbiters.back()->GetDrawCmp<CmpMeshSphere>();
-		orbiterCmpMeshSphere->SetColor(orbiterColor);
-		orbiterCmpMeshSphere->SetRadius(orbiterRadius);
-
-		orbiterCmpHitSphere = orbiters.back()->GetUpdCmp<CmpHitSphere>();
-		orbiterCmpHitSphere->SetSpheres({
-		    {{}, orbiterHitRadius}
-        });
-
-		orbitAxisRotateMatrix = Math::Matrix4x4::Rotate(orbitConfigs[i].axisRotateByDegree / 180.0f * std::numbers::pi_v<float>);
-
-		orbiterInitialTransform.translate = orbitAxisRotateMatrix.Transform(defaultInitialTransform);
-		orbiters[i]->SetInitialTransform(orbiterInitialTransform);
-
-		cmpOrbiter = orbiters[i]->GetUpdCmp<CmpOrbiter>();
-		cmpOrbiter->SetRotateAxis(orbitAxisRotateMatrix.Transform(defaultOrbitAxis));
-		cmpOrbiter->SetRotateSpeed(orbitConfigs[i].rotateSpeedByDegree / 180.0f * std::numbers::pi_v<float>);
-	}
-
-	cmpChildEntitys->AddChilds(orbiters);
-
-	enemyAstro->ResolveDependences();
-
-	return std::move(enemyAstro);
 }
 
 std::vector<std::unique_ptr<Entity>> EntityFactory::ScrollSpheres() {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include "../System/UpdComponent.h"
 
 namespace Atrum {

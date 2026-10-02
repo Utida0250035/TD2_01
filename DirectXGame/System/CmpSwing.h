@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include "../System/UpdComponent.h"
 
 namespace Atrum {
@@ -13,7 +13,7 @@ private:
 	float swingSpeed_ = 0.0f;
 	float swingDuration_ = 0.0f;
 	float swingTimer_ = 0.0f;
-	Math::Vector3 swingAxis_ = Math::Vector3::Right();
+	Math::Vector3 swingAxis_ = Math::Vector3::RightLh();
 	Entity* pivot_ = nullptr;
 	FrameDeltaTime* frameDeltaTime_ = nullptr;
 

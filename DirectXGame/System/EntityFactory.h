@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include <memory>
 #include <vector>
 
@@ -16,7 +16,6 @@ private:
 
 public:
 	static std::unique_ptr<Entity> PlayerMononofu();
-	static std::unique_ptr<Entity> EnemyAstro(Entity* player);
 	static std::vector<std::unique_ptr<Entity>> ScrollSpheres();
 	static std::unique_ptr<Entity> LinearEnemyBullet(const Math::Vector3& velocity, const Math::Vector3& position);
 	static std::unique_ptr<Entity> Parry(Entity* parent);

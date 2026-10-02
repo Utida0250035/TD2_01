@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "../../Math/AeVector3.h"
-#include "../../Math/AeVector4.h"
+#include "../../Math/Vector3.h"
+#include "../../Math/Vector4.h"
 #include "../../System/BehaviorBox.h"
 #include "../../System/Playable/CmpInput.h"
 #include "../../System/UpdComponent.h"

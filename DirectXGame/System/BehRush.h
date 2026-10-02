@@ -1,18 +1,16 @@
 #pragma once
 
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include "../System/Behavior.h"
 
 namespace Atrum {
 
 class Entity;
 class FrameDeltaTime;
-class CmpEnemy;
 
 class BehRush : public Behavior {
 private:
 	FrameDeltaTime* frameDeltaTime_ = nullptr;
-	CmpEnemy* cmpEnemy_ = nullptr;
 
 	Math::Vector3 sourcePos_{};
 	Math::Vector3 destinationPos_{};

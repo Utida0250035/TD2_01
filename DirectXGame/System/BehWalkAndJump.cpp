@@ -1,6 +1,6 @@
 #include "../System/BehWalkAndJump.h"
 #include "../ConstantVal.h"
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include "../Math/Quaternion.h"
 #include "../System/CmpDirection.h"
 #include "../System/CmpLhRigidBody.h"
@@ -31,11 +31,11 @@ void BehWalkAndJump::Execute() {
 	if (inputData.vec2Input.x < 0.0f) {
 		velocity.x = -walkSpeed_;
 		direction.x = -1.0f;
-		quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::Up(), -std::numbers::pi_v<float> * 0.5f);
+		quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::UpLh(), -std::numbers::pi_v<float> * 0.5f);
 	} else if (inputData.vec2Input.x > 0.0f) {
 		velocity.x = walkSpeed_;
 		direction.x = 1.0f;
-		quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::Up(), std::numbers::pi_v<float> * 0.5f);
+		quaternion = Math::Quaternion::FromAxisAngle(Math::Vector3::UpLh(), std::numbers::pi_v<float> * 0.5f);
 	}
 
 	if (inputData.isJumpTrigger) {

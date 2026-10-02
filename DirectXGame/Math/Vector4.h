@@ -90,7 +90,7 @@ namespace Atrum::Math {
 
 		float Length() const;
 
-		constexpr float LengthSquare() const {
+		inline constexpr float LengthSquare() const {
 
 			return x * x + y * y + z * z + w * w;
 

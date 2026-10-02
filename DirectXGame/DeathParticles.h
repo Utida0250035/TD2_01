@@ -1,8 +1,8 @@
 #pragma once
 
 #include "KamataEngine.h"
-#include "Math/AeVector3.h"
-#include "Math/AeVector4.h"
+#include "../Math/Vector3.h"
+#include "../Math/Vector4.h"
 #include <array>
 
 class DeathParticles {

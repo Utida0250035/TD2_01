@@ -1,4 +1,4 @@
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include "../System/DataComponent.h"
 
 namespace Atrum {

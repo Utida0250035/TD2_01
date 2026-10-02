@@ -1,7 +1,5 @@
 #include "../System/BehRush.h"
 #include "../Easing.h"
-#include "../System/BehEnemyShot.h"
-#include "../System/CmpEnemy.h"
 #include "../System/Entity.h"
 #include "../Time/DeltaTime.h"
 
@@ -9,7 +7,6 @@ namespace Atrum {
 
 void BehRush::ResolveDependence() {
 	frameDeltaTime_ = FrameDeltaTime::GetInstance();
-	cmpEnemy_ = RefGrandOwner().GetUpdCmp<CmpEnemy>();
 }
 
 void BehRush::Initialize() { 
@@ -26,10 +23,6 @@ void BehRush::Execute() {
 	}
 
 	RefGrandOwner().RefTransform().translate = Interpolation::Lerp(sourcePos_, destinationPos_, Interpolation::EaseInBack(timer_ / endTime_));
-
-	if (timer_ >= endTime_) {
-		cmpEnemy_->RefBehaviorBox().Transition(new BehEnemyShot());
-	}
 }
 
 } // namespace Atrum

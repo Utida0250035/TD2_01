@@ -79,8 +79,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	Atrum::EntityStorage::GetInstance()->Register("playerMononofu", Atrum::EntityFactory::PlayerMononofu());
 
-	Atrum::EntityStorage::GetInstance()->Register("enemyAstro", Atrum::EntityFactory::EnemyAstro(Atrum::EntityStorage::GetInstance()->Find("playerMononofu").ptr_));
-
 	// ゲーム実行インスタンスの取得
 	Atrum::GameOrder* order = Atrum::GameOrder::GetInstance();
 

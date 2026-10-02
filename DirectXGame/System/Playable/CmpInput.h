@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Math/AeVector2.h"
+#include "../Math/Vector2.h"
 #include "../UpdComponent.h"
 #include <KamataEngine.h>
 #include <cstdint>

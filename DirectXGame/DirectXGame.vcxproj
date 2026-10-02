@@ -158,22 +158,20 @@
     <ClCompile Include="Audio\AudioDecoder.cpp" />
     <ClCompile Include="Audio\StreamingVoiceCallBack.cpp" />
     <ClCompile Include="Audio\VoiceCallBack.cpp" />
-    <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="DeathParticles.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="File\FileSize.cpp" />
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="KeMatrix3D.cpp" />
     <ClCompile Include="Math\Matrix3x3.cpp" />
-    <ClCompile Include="Math\Matrix3x3Physics.cpp" />
     <ClCompile Include="Math\Matrix4x4.cpp" />
-    <ClCompile Include="Math\AeVector2.cpp" />
-    <ClCompile Include="Math\AeVector3.cpp" />
-    <ClCompile Include="Math\AeVector4.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Math\Vector2.cpp" />
+    <ClCompile Include="Math\Vector3.cpp" />
+    <ClCompile Include="Math\Vector4.cpp" />
+    <ClCompile Include="Particle\CommandParticle.cpp" />
+    <ClCompile Include="Particle\Particle.cpp" />
+    <ClCompile Include="Particle\ParticleSample.cpp" />
     <ClCompile Include="Scene\ChangeScene.cpp" />
     <ClCompile Include="Scene\ChangeSceneFade.cpp" />
     <ClCompile Include="Scene\CommandChangeScene.cpp" />
@@ -185,14 +183,10 @@
     <ClCompile Include="String\ConvertString.cpp" />
     <ClCompile Include="System\BehaviorBox.cpp" />
     <ClCompile Include="System\BehDodge.cpp" />
-    <ClCompile Include="System\BehEnemyMeteor.cpp" />
-    <ClCompile Include="System\BehEnemyShot.cpp" />
-    <ClCompile Include="System\BehEnemyWallShot.cpp" />
     <ClCompile Include="System\BehRush.cpp" />
     <ClCompile Include="System\BehWalkAndJump.cpp" />
     <ClCompile Include="System\CmpDrawBullet.cpp" />
     <ClCompile Include="System\CmpDrawHitSphere.cpp" />
-    <ClCompile Include="System\CmpEnemy.cpp" />
     <ClCompile Include="System\CmpHealthHit.cpp" />
     <ClCompile Include="System\CmpHitSphere.cpp" />
     <ClCompile Include="System\CmpLhRigidBody.cpp" />
@@ -210,7 +204,6 @@
     <ClCompile Include="System\Playable\CmpInput.cpp" />
     <ClCompile Include="System\Playable\CmpMoveByInput.cpp" />
     <ClCompile Include="Time\DeltaTime.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
@@ -310,6 +303,11 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Lerp.h" />
+    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Matrix3x3.h" />
+    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Matrix4x4.h" />
+    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Quaternion.h" />
+    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Transform.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Audio\AudioDecoder.h" />
@@ -319,7 +317,6 @@
     <ClInclude Include="Audio\StreamingVoiceCallBack.h" />
     <ClInclude Include="Audio\VoiceCallBack.h" />
     <ClInclude Include="Audio\VoiceState.h" />
-    <ClInclude Include="CameraController.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Cast\StaticCast.h" />
     <ClInclude Include="DeathParticles.h" />
@@ -342,15 +339,14 @@
     <ClInclude Include="KeMatrix3D.h" />
     <ClInclude Include="KeVectorUtility.h" />
     <ClInclude Include="Math\Lerp.h" />
-    <ClInclude Include="Math\Matrix3x3.h" />
-    <ClInclude Include="Math\Matrix3x3Physics.h" />
-    <ClInclude Include="Math\Matrix4x4.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Transform.h" />
-    <ClInclude Include="Math\AeVector2.h" />
-    <ClInclude Include="Math\AeVector3.h" />
-    <ClInclude Include="Math\AeVector4.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="Math\Vector2.h" />
+    <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Math\Vector4.h" />
+    <ClInclude Include="Particle\CommandParticle.h" />
+    <ClInclude Include="Particle\Particle.h" />
+    <ClInclude Include="Particle\ParticleSample.h" />
     <ClInclude Include="Scene\ChangeScene.h" />
     <ClInclude Include="Scene\ChangeSceneFade.h" />
     <ClInclude Include="Scene\CommandChangeScene.h" />
@@ -364,16 +360,12 @@
     <ClInclude Include="System\Behavior.h" />
     <ClInclude Include="System\BehaviorBox.h" />
     <ClInclude Include="System\BehDodge.h" />
-    <ClInclude Include="System\BehEnemyMeteor.h" />
-    <ClInclude Include="System\BehEnemyShot.h" />
-    <ClInclude Include="System\BehEnemyWallShot.h" />
     <ClInclude Include="System\BehRush.h" />
     <ClInclude Include="System\BehWalkAndJump.h" />
     <ClInclude Include="System\CmpChildEntitys.h" />
     <ClInclude Include="System\CmpDirection.h" />
     <ClInclude Include="System\CmpDrawBullet.h" />
     <ClInclude Include="System\CmpDrawHitSphere.h" />
-    <ClInclude Include="System\CmpEnemy.h" />
     <ClInclude Include="System\CmpHealthHit.h" />
     <ClInclude Include="System\CmpHitSphere.h" />
     <ClInclude Include="System\CmpLhRigidBody.h" />
@@ -395,8 +387,6 @@
     <ClInclude Include="System\Playable\CmpInput.h" />
     <ClInclude Include="System\Playable\CmpMoveByInput.h" />
     <ClInclude Include="Time\DeltaTime.h" />
-    <ClInclude Include="Vector3.h" />
-    <ClInclude Include="Vector4.h" />
     <ClInclude Include="WindowSize.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

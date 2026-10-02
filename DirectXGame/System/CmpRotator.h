@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Math/AeVector3.h"
+#include "../Math/Vector3.h"
 #include "../System/DataComponent.h"
 #include "../System/UpdComponent.h"
 
@@ -11,7 +11,7 @@ class Entity;
 
 class CmpRotator : public UpdComponent {
 private:
-	Math::Vector3 rotateAxis_ = Math::Vector3::Up();
+	Math::Vector3 rotateAxis_ = Math::Vector3::UpLh();
 	float rotateSpeed_ = 0.0f;
 	FrameDeltaTime* frameDeltaTime_ = nullptr;
 	Entity* entPivot_ = nullptr;
