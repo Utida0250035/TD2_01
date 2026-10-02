@@ -161,6 +161,7 @@
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="File\FileSize.cpp" />
+    <ClCompile Include="ForDebug\Log.cpp" />
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="KeMatrix3D.cpp" />
@@ -328,6 +329,7 @@
     <ClInclude Include="Fade.h" />
     <ClInclude Include="File\FileSize.h" />
     <ClInclude Include="ForDebug\ImGui.h" />
+    <ClInclude Include="ForDebug\Log.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Geometry\Triangle.h" />
     <ClInclude Include="Hash\Hash64.h" />
