@@ -95,9 +95,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	/// ↑初期化処理ここまで
 	///
 
-	Player* player_ = new Player;
-	player_->Initialize();
-
 	while (true) {
 
 		// エンジンの更新
@@ -106,21 +103,15 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 
-		player_->Update();
-
 		order->Run();
 
 		audio->Update();
-
-		player_->Draw();
 
 	}
 
 	///
 	/// ↓終了処理ここから
 	///
-
-	delete player_;
 
 	KamataEngine::Finalize();
 

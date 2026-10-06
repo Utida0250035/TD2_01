@@ -12,9 +12,14 @@ void SceneGame::EnterScene() {
 
 	std::cout << "key C to go Result\n" << std::endl;
 
+	player_ = new Player;
+	player_->Initialize();
+
 }
 
 void SceneGame::Update() {
+
+	player_->Update();
 
 	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_C)) {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
@@ -23,8 +28,15 @@ void SceneGame::Update() {
 
 void SceneGame::Draw() {
 
+	player_->Draw();
+
 }
 
-void SceneGame::ExitScene() {}
+void SceneGame::ExitScene() {
+
+	delete player_;
+	player_ = nullptr;
+
+}
 
 } // namespace Atrum

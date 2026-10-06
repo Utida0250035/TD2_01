@@ -2,13 +2,13 @@
 
 #include "KamataEngine.h"
 
-#include "Math/Vector3.h"
-#include "Math/Transform.h"
+#include "../Math/Vector2.h"
+#include "../Math/Vector3.h"
 #include "Math/Matrix4x4.h"
 #include "System//CmpMesh.h"
 
-#include "System/Entity.h"
 #include "System/CmpLhRigidBody.h"
+#include "System/Entity.h"
 
 #include <algorithm>
 #include <cassert>
@@ -27,43 +27,41 @@
 // プレイヤー
 class Player final {
 
-	private:
+private:
+	static inline const float gravity_ = 5.0f;
 
-		static inline const float gravity_ = 0.05f;
+	// 入力
+	KamataEngine::Input* input_ = nullptr;
 
-		// モデル
-		KamataEngine::Model* model_ = nullptr;
+	// エンティティ
+	std::unique_ptr<Atrum::Entity> entity_ = nullptr;
 
-		// ワールド変換データ
-		//KamataEngine::WorldTransform worldTransform_;
+public:
+	static inline const float jumpPower_ = 20.0f;
 
-		// ワールド変換データ
-		Atrum::Math::Transform transform_;
+	// 初期化
+	void Initialize();
 
-		// カメラ
-		KamataEngine::Camera* camera_ = nullptr;
+	// 更新
+	void Update();
 
-		// 移動方向
-		KamataEngine::Vector2 moveDirection = {};
-
-		// ベクトル
-		Atrum::Math::Vector3 velocity_ = {};
-
-		// 入力
-		KamataEngine::Input* input_ = nullptr;
-
-		// エンティティ
-	    std::unique_ptr<Atrum::Entity> entity_ = nullptr;
-
-	public:
-
-		// 初期化
-	    void Initialize();
-
-		// 更新
-		void Update();
-
-		// 描画
-		void Draw();
-
+	// 描画
+	void Draw();
 };
+
+namespace Atrum {
+
+class CmpPlayer : public UpdComponent {
+
+private:
+	CmpLhRigidBody* rigidBody_ = nullptr;
+
+public:
+	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::INPUT; }
+
+	void ResolveDependence() override;
+	void Initialize() override;
+	void Update() override;
+};
+
+} // namespace Atrum
