@@ -17,6 +17,7 @@
 #include "../System/CmpSwing.h"
 #include "../System/Entity.h"
 #include "../System/Playable/CmpMoveByInput.h"
+#include "../System/CmpLifeTime.h"
 #include <numbers>
 #include <stdlib.h>
 #include <time.h>
@@ -213,6 +214,11 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos) {
 	cmpHitSphere->SetSpheres({
 	    {{}, 3.0f}
     });
+
+	boom->AddUpdCmp<CmpLifeTime>();
+	CmpLifeTime* cmpLifeTime = boom->GetUpdCmp<CmpLifeTime>();
+
+	cmpLifeTime->SetLifeTime(0.75f);
 
 	boom->AddDrawCmp<CmpDrawHitSphere>();
 	CmpDrawHitSphere* cmpDrawHitSphere = boom->GetDrawCmp<CmpDrawHitSphere>();
