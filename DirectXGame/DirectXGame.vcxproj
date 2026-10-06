@@ -178,7 +178,10 @@
     <ClCompile Include="Scene\CommandChangeScene.cpp" />
     <ClCompile Include="Scene\CommandScene.cpp" />
     <ClCompile Include="Scene\GameOrder.cpp" />
+    <ClCompile Include="Scene\SceneGame.cpp" />
+    <ClCompile Include="Scene\SceneResult.cpp" />
     <ClCompile Include="Scene\SceneSample.cpp" />
+    <ClCompile Include="Scene\SceneSelect.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="String\ConvertString.cpp" />
@@ -355,7 +358,10 @@
     <ClInclude Include="Scene\CommandScene.h" />
     <ClInclude Include="Scene\GameOrder.h" />
     <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneGame.h" />
+    <ClInclude Include="Scene\SceneResult.h" />
     <ClInclude Include="Scene\SceneSample.h" />
+    <ClInclude Include="Scene\SceneSelect.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="String\ConvertString.h" />
