@@ -1,5 +1,7 @@
 #include "Player.h"
-#include <iostream>
+
+#include "Math/Lerp.h"
+
 using namespace Atrum;
 using namespace Atrum::Math;
 
@@ -10,6 +12,7 @@ void Player::Initialize() {
 	entity_->SetInitialTransform({});
 
 	entity_->AddUpdCmp<CmpLhRigidBody>();
+	entity_->AddUpdCmp<CmpHitSphere>();
 	entity_->AddUpdCmp<CmpPlayer>();
 	entity_->AddDrawCmp<CmpMesh>();
 
@@ -18,6 +21,12 @@ void Player::Initialize() {
 
 	CmpLhRigidBody* cmpLhRigidBody = entity_->GetUpdCmp<CmpLhRigidBody>();
 	cmpLhRigidBody->SetGravity({0.0f, -gravity_, 0.0f});
+	cmpLhRigidBody->SetIsUseSpaceEnd(false);
+
+	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
+	cmpHitSphere->SetSpheres({
+	    {{}, 2.0f}
+    });
 
 	entity_->ResolveDependences();
 	entity_->Initialize();
@@ -55,9 +64,20 @@ namespace Atrum {
 
 	void CmpPlayer::Update() {
 	
+		noGravityTime_ -= 1.0f / 60.0f;
+
+	    if (noGravityTime_ <= 0.0f) {
+		    rigidBody_->SetIsUseGravity(true);
+		}
+
 		Vector3& velocity = rigidBody_->RefVelocity();
 		Vector2 direction = {};
 	    Vector2 moveDirection = {};
+
+		//if (noGravityTime_ <= 0.0f) {
+		    velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
+		//}
+		
 
 		KamataEngine::Input *input_ = KamataEngine::Input::GetInstance();
 
@@ -79,8 +99,17 @@ namespace Atrum {
 
 	    if (input_->TriggerKey(DIK_SPACE)) {
 
-		    velocity.x = moveDirection.x * 10.0f;
-		    velocity.y = moveDirection.y * 10.0f;
+			noGravityTime_ = noGravityTimer_;
+
+			if (moveDirection.x == 0.0f && moveDirection.y == 0.0f) {
+			    moveDirection.y = 1.0f;
+			}
+
+		    velocity.x = moveDirection.x * Player::jumpPower_;
+		    velocity.y = moveDirection.y * Player::jumpPower_;
+
+			rigidBody_->SetIsUseGravity(false);
+
 	    }
 
 	    // 仮地面
@@ -90,6 +119,7 @@ namespace Atrum {
 		   // velocity_.y = 0.0f;
 	   // }
 
+		//velocity.x = Atrum::Interpolation::Lerp(velocity.x, 0.0f, 0.01f);
 
 	}
 
