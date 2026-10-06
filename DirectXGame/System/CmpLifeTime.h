@@ -36,6 +36,9 @@ public:
 
 	void SetLifeTime(const float seconds) { lifeTime_ = seconds; }
 
+	float GetLifeTime() const { return lifeTime_; }
+	float GetLifeTimer() const { return lifeTimer_; }
+
 };
 
 } // namespace Atrum

@@ -26,7 +26,7 @@ namespace Atrum {
 		    
 				lifeTimer_ = 0.0f;
 
-				RefOwner().SetState(Entity::State::Destroy);
+				RefOwner().SetState(Entity::State::Sleep);
 			
 			}
 
