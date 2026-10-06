@@ -197,6 +197,32 @@ std::unique_ptr<Entity> EntityFactory::LinearEnemyBullet(const Math::Vector3& ve
 	return std::move(bullet);
 }
 
+std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos) {
+
+	std::unique_ptr<Entity> boom = std::make_unique<Entity>();
+
+	Math::TransformLH initTransform{};
+
+	initTransform.translate = pos;
+
+	boom->SetInitialTransform(initTransform);
+
+	boom->AddUpdCmp<CmpHitSphere>();
+	CmpHitSphere* cmpHitSphere = boom->GetUpdCmp<CmpHitSphere>();
+
+	cmpHitSphere->SetSpheres({
+	    {{}, 3.0f}
+    });
+
+	boom->AddDrawCmp<CmpMeshSphere>();
+	CmpMeshSphere* cmpMeshSphere = boom->GetDrawCmp<CmpMeshSphere>();
+
+	cmpMeshSphere->SetColor({0.75f, 0.1f, 0.1f, 1.0f});
+
+	return std::move(boom);
+
+}
+
 std::unique_ptr<Entity> EntityFactory::Parry(Entity* parent) {
 
 	std::unique_ptr<Entity> parry = std::make_unique<Entity>();
