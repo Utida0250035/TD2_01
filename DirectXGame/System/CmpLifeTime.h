@@ -9,7 +9,7 @@ class FrameDeltaTime;
 class CmpLifeTime : public UpdComponent {
 
 public:
-	constexpr UpdCmpGroup UpdGroup() { return UpdCmpGroup::PRE_RENDER; }
+	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::PRE_RENDER; }
 
 	/// <summary>
 	/// 依存解決用 オーナーエンティティからのコンポーネントのポインタ取得やシングルトンクラスのポインタ取得など

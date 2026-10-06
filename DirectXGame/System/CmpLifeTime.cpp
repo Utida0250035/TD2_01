@@ -20,7 +20,7 @@ namespace Atrum {
 
 		if (lifeTimer_ > 0.0f) {
 
-		    lifeTimer_ -= frameDeltaTime_;
+		    lifeTimer_ -= frameDeltaTime_->GetDeltaTime();
 
 			if (lifeTimer_ <= 0.0f) {
 		    
