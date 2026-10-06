@@ -34,8 +34,6 @@ void Player::Initialize() {
 
 void Player::Update() {
 
-	// cmpMesh->worldTransform_ = worldTransform_;
-
 	entity_->Update();
 }
 
@@ -57,69 +55,83 @@ namespace Atrum {
 }
 	void CmpPlayer::Initialize() {
 
-		//Vector3& velocity = rigidBody_->RefVelocity();
-	    //(void)velocity;
-
 	}
 
 	void CmpPlayer::Update() {
 	
+		//--------------------------
+		// 無重力時間
+
 		noGravityTime_ -= 1.0f / 60.0f;
 
 	    if (noGravityTime_ <= 0.0f) {
 		    rigidBody_->SetIsUseGravity(true);
 		}
 
+		//
+	    //--------------------------
+
+		//--------------------------
+		//
+
+		// ベクトル
 		Vector3& velocity = rigidBody_->RefVelocity();
-		Vector2 direction = {};
+
+		// 移動方向
 	    Vector2 moveDirection = {};
 
-		//if (noGravityTime_ <= 0.0f) {
-		    velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
-		//}
-		
+
+		velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
 
 		KamataEngine::Input *input_ = KamataEngine::Input::GetInstance();
 
-	    if (input_->PushKey(DIK_W)) {
+		//
+	    //--------------------------
+
+		//--------------------------
+		// 方向指定
+
+	    if (input_->PushKey(DIK_W) || input_->PushKey(DIK_UP)) {
 		    moveDirection.y += 1.0f;
 	    }
 
-	    if (input_->PushKey(DIK_S)) {
+	    if (input_->PushKey(DIK_S) || input_->PushKey(DIK_DOWN)) {
 		    moveDirection.y -= 1.0f;
 	    }
 
-	    if (input_->PushKey(DIK_A)) {
+	    if (input_->PushKey(DIK_A) || input_->PushKey(DIK_LEFT)) {
 		    moveDirection.x -= 1.0f;
 	    }
 
-	    if (input_->PushKey(DIK_D)) {
+	    if (input_->PushKey(DIK_D) || input_->PushKey(DIK_RIGHT)) {
 		    moveDirection.x += 1.0f;
 	    }
 
+		//
+	    //--------------------------
+
+		//--------------------------
+		// 爆発
+
 	    if (input_->TriggerKey(DIK_SPACE)) {
 
+			// 無重力化
 			noGravityTime_ = noGravityTimer_;
+		    rigidBody_->SetIsUseGravity(false);
 
+			// 方向未指定の場合は真上に指定
 			if (moveDirection.x == 0.0f && moveDirection.y == 0.0f) {
 			    moveDirection.y = 1.0f;
 			}
 
+			// ベクトル更新
 		    velocity.x = moveDirection.x * Player::jumpPower_;
 		    velocity.y = moveDirection.y * Player::jumpPower_;
 
-			rigidBody_->SetIsUseGravity(false);
-
 	    }
 
-	    // 仮地面
-	   // if (transform_.translate.y <= 0.0f) {
-
-		    //transform_.translate.y = 0.0f;
-		   // velocity_.y = 0.0f;
-	   // }
-
-		//velocity.x = Atrum::Interpolation::Lerp(velocity.x, 0.0f, 0.01f);
+		//
+	    //--------------------------
 
 	}
 
