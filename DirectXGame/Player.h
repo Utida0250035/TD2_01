@@ -28,7 +28,7 @@
 class Player final {
 
 private:
-	static inline const float gravity_ = 5.0f;
+	static inline const float gravity_ = 50.0f;
 
 	// 入力
 	KamataEngine::Input* input_ = nullptr;
@@ -52,9 +52,15 @@ public:
 namespace Atrum {
 
 class CmpPlayer : public UpdComponent {
-
+		
 private:
 	CmpLhRigidBody* rigidBody_ = nullptr;
+
+	// 無重力時間
+	static inline const float noGravityTimer_ = 0.5f;
+
+	// 残り無重力時間
+	float noGravityTime_ = 0.0f;
 
 public:
 	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::INPUT; }
