@@ -26,7 +26,10 @@ void CameraController::Update() {
 
 		// 追従座標の補間
 		interTarget_ = Atrum::Interpolation::Lerp(interTarget_, target_, 0.1f);
-		translate_ = interTarget_;
+
+		// カメラ位置を計算
+		Vector3 offset = Offset();
+		translate_ = interTarget_ + offset;
 	}
 
 	// cameraに適用
