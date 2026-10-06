@@ -32,12 +32,12 @@ public:
 	Atrum::Math::Vector3 Offset() const;
 
 	// ゲッター
-	KamataEngine::Matrix4x4 GetView() { return view_; }
-	KamataEngine::Matrix4x4 GetProjection() { return projection_; }
+	Atrum::Math::Vector3 GetOffset() const { return offset_; }
 
 	// セッター
 	void SetTarget(const Atrum::Entity* target);
 	void SetCamera(Atrum::Camera* camera) { camera_ = camera; }
+	void SetOffset(const Atrum::Math::Vector3& offset) { offset_ = offset; }
 
 private:
 	// カメラ
@@ -47,12 +47,6 @@ private:
 	Atrum::Math::Vector3 translate_;
 	// 回転量
 	Atrum::Math::Vector3 rotate_;
-
-	// ビュー行列
-	KamataEngine::Matrix4x4 view_;
-
-	// プロジェクション行列
-	KamataEngine::Matrix4x4 projection_;
 
 	// 追従対象
 	const Atrum::Entity* target_ = nullptr;
