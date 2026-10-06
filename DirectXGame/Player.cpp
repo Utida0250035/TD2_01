@@ -40,6 +40,11 @@ void Player::Initialize() {
 void Player::Update() {
 
 	entity_->Update();
+
+	for (auto& i : booms_) {
+
+		i->Update();
+	}
 }
 
 void Player::Draw() {
