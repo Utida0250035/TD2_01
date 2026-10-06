@@ -1,4 +1,4 @@
-﻿#include "Player.h"
+#include "Player.h"
 
 #include "Math/Lerp.h"
 #include "System/EntityFactory.h"
@@ -50,6 +50,8 @@ void Player::Update() {
 
 		if (booms_[i]->GetState() == Entity::State::Sleep) {
 		
+			booms_[i]->Finalize();
+
 			// 寿命を終えた爆発エンティティを削除
 			booms_.erase(booms_.begin() + i);
 
