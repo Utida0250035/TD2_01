@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "Math/Lerp.h"
+#include "System/EntityFactory.h"
 
 using namespace Atrum;
 using namespace Atrum::Math;
@@ -15,6 +16,10 @@ void Player::Initialize() {
 	entity_->AddUpdCmp<CmpHitSphere>();
 	entity_->AddUpdCmp<CmpPlayer>();
 	entity_->AddDrawCmp<CmpMesh>();
+
+	CmpPlayer* cmpPlayer = entity_->GetUpdCmp<CmpPlayer>();
+
+	cmpPlayer->SetAnotherOwner(this);
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 	cmpMesh->SetModel(KamataEngine::Model::Create());
@@ -42,6 +47,12 @@ void Player::Draw() {
 	KamataEngine::Model::PreDraw();
 
 	entity_->Draw();
+
+	for (auto& i : booms_) {
+	
+		i->Draw();
+	
+	}
 
 	KamataEngine::Model::PostDraw();
 }
@@ -127,6 +138,8 @@ namespace Atrum {
 			// ベクトル更新
 		    velocity.x = moveDirection.x * Player::jumpPower_;
 		    velocity.y = moveDirection.y * Player::jumpPower_;
+
+			anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::Boom(RefOwner().GetWorldPosition()));
 
 	    }
 

@@ -36,6 +36,8 @@ private:
 	// エンティティ
 	std::unique_ptr<Atrum::Entity> entity_ = nullptr;
 
+	std::vector<std::unique_ptr<Atrum::Entity>> booms_{};
+
 public:
 	static inline const float jumpPower_ = 50.0f;
 
@@ -47,6 +49,9 @@ public:
 
 	// 描画
 	void Draw();
+
+	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
+
 };
 
 namespace Atrum {
@@ -54,6 +59,7 @@ namespace Atrum {
 class CmpPlayer : public UpdComponent {
 		
 private:
+	::Player* anotherOwner_ = nullptr;
 	CmpLhRigidBody* rigidBody_ = nullptr;
 
 	// 無重力時間
@@ -68,6 +74,9 @@ public:
 	void ResolveDependence() override;
 	void Initialize() override;
 	void Update() override;
+
+	void SetAnotherOwner(::Player* owner) { anotherOwner_ = owner; }
+
 };
 
 } // namespace Atrum
