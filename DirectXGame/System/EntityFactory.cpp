@@ -214,10 +214,13 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos) {
 	    {{}, 3.0f}
     });
 
-	boom->AddDrawCmp<CmpMeshSphere>();
-	CmpMeshSphere* cmpMeshSphere = boom->GetDrawCmp<CmpMeshSphere>();
+	boom->AddDrawCmp<CmpDrawHitSphere>();
+	CmpDrawHitSphere* cmpDrawHitSphere = boom->GetDrawCmp<CmpDrawHitSphere>();
 
-	cmpMeshSphere->SetColor({0.75f, 0.1f, 0.1f, 1.0f});
+	cmpDrawHitSphere->SetColor({0.75f, 0.1f, 0.1f, 1.0f});
+
+	boom->ResolveDependences();
+	boom->Initialize();
 
 	return std::move(boom);
 
