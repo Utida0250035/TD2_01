@@ -196,6 +196,7 @@
     <ClCompile Include="System\CmpHealthHit.cpp" />
     <ClCompile Include="System\CmpHitSphere.cpp" />
     <ClCompile Include="System\CmpLhRigidBody.cpp" />
+    <ClCompile Include="System\CmpLifeTime.cpp" />
     <ClCompile Include="System\CmpMesh.cpp" />
     <ClCompile Include="System\CmpMeshSphere.cpp" />
     <ClCompile Include="System\CmpMeshSpheres.cpp" />
@@ -379,6 +380,7 @@
     <ClInclude Include="System\CmpHealthHit.h" />
     <ClInclude Include="System\CmpHitSphere.h" />
     <ClInclude Include="System\CmpLhRigidBody.h" />
+    <ClInclude Include="System\CmpLifeTime.h" />
     <ClInclude Include="System\CmpMesh.h" />
     <ClInclude Include="System\CmpMeshSphere.h" />
     <ClInclude Include="System\CmpMeshSpheres.h" />

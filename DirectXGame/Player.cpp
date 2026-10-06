@@ -41,9 +41,23 @@ void Player::Update() {
 
 	entity_->Update();
 
-	for (auto& i : booms_) {
+	for (size_t i = 0; i < booms_.size(); ++i) {
 
-		i->Update();
+		if (!booms_[i])
+			continue;
+
+		booms_[i]->Update();
+
+		if (booms_[i]->GetState() == Entity::State::Sleep) {
+		
+			// 寿命を終えた爆発エンティティを削除
+			booms_.erase(booms_.begin() + i);
+
+			// 削除した分デクリメントする
+			--i;
+		
+		}
+
 	}
 }
 
