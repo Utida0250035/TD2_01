@@ -197,6 +197,16 @@ namespace Atrum::Math {
 
 		}
 
+		constexpr Vector3 TransformNormal(const Vector3& v) const {
+
+		   // 平行移動を無視して適用
+		    Vector3 result{v.x * m[0][0] + v.y * m[1][0] + v.z * m[2][0],
+				v.x * m[0][1] + v.y * m[1][1] + v.z * m[2][1],
+				v.x * m[0][2] + v.y * m[1][2] + v.z * m[2][2]};
+
+		    return result;
+	    }
+
 		static constexpr Vector3 ScreenTransform(const Vector3& vector, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix) {
 
 			return viewportMatrix.Transform(viewProjectionMatrix.Transform(vector));
