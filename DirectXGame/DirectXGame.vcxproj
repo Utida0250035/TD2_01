@@ -200,6 +200,9 @@
     <ClCompile Include="System\CmpOrbiter.cpp" />
     <ClCompile Include="System\CmpReflectableBullet.cpp" />
     <ClCompile Include="System\CmpRotator.cpp" />
+    <ClCompile Include="System\CmpSampleData.cpp" />
+    <ClCompile Include="System\CmpSampleDraw.cpp" />
+    <ClCompile Include="System\CmpSampleUpd.cpp" />
     <ClCompile Include="System\CmpSwing.cpp" />
     <ClCompile Include="System\Entity.cpp" />
     <ClCompile Include="System\EntityFactory.cpp" />
@@ -307,11 +310,6 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Lerp.h" />
-    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Matrix3x3.h" />
-    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Matrix4x4.h" />
-    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Quaternion.h" />
-    <ClInclude Include="..\..\CG2_BuildUp\Codes\Include\Math\Transform.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Audio\AudioDecoder.h" />
@@ -383,6 +381,9 @@
     <ClInclude Include="System\CmpOrbiter.h" />
     <ClInclude Include="System\CmpReflectableBullet.h" />
     <ClInclude Include="System\CmpRotator.h" />
+    <ClInclude Include="System\CmpSampleData.h" />
+    <ClInclude Include="System\CmpSampleDraw.h" />
+    <ClInclude Include="System\CmpSampleUpd.h" />
     <ClInclude Include="System\CmpScroll.h" />
     <ClInclude Include="System\CmpSwing.h" />
     <ClInclude Include="System\DataComponent.h" />
