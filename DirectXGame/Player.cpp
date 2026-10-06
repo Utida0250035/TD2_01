@@ -12,6 +12,7 @@ void Player::Initialize() {
 	entity_->SetInitialTransform({});
 
 	entity_->AddUpdCmp<CmpLhRigidBody>();
+	entity_->AddUpdCmp<CmpHitSphere>();
 	entity_->AddUpdCmp<CmpPlayer>();
 	entity_->AddDrawCmp<CmpMesh>();
 
@@ -21,6 +22,11 @@ void Player::Initialize() {
 	CmpLhRigidBody* cmpLhRigidBody = entity_->GetUpdCmp<CmpLhRigidBody>();
 	cmpLhRigidBody->SetGravity({0.0f, -gravity_, 0.0f});
 	cmpLhRigidBody->SetIsUseSpaceEnd(false);
+
+	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
+	cmpHitSphere->SetSpheres({
+	    {{}, 2.0f}
+    });
 
 	entity_->ResolveDependences();
 	entity_->Initialize();
@@ -68,6 +74,11 @@ namespace Atrum {
 		Vector2 direction = {};
 	    Vector2 moveDirection = {};
 
+		//if (noGravityTime_ <= 0.0f) {
+		    velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
+		//}
+		
+
 		KamataEngine::Input *input_ = KamataEngine::Input::GetInstance();
 
 	    if (input_->PushKey(DIK_W)) {
@@ -94,8 +105,8 @@ namespace Atrum {
 			    moveDirection.y = 1.0f;
 			}
 
-		    velocity.x = moveDirection.x * 30.0f;
-		    velocity.y = moveDirection.y * 30.0f;
+		    velocity.x = moveDirection.x * Player::jumpPower_;
+		    velocity.y = moveDirection.y * Player::jumpPower_;
 
 			rigidBody_->SetIsUseGravity(false);
 
