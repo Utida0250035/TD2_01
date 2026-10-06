@@ -37,7 +37,7 @@ private:
 	std::unique_ptr<Atrum::Entity> entity_ = nullptr;
 
 public:
-	static inline const float jumpPower_ = 20.0f;
+	static inline const float jumpPower_ = 50.0f;
 
 	// 初期化
 	void Initialize();
@@ -57,7 +57,7 @@ private:
 	CmpLhRigidBody* rigidBody_ = nullptr;
 
 	// 無重力時間
-	static inline const float noGravityTimer_ = 0.5f;
+	static inline const float noGravityTimer_ = 0.2f;
 
 	// 残り無重力時間
 	float noGravityTime_ = 0.0f;
