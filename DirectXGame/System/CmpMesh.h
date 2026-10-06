@@ -28,4 +28,4 @@ public:
 	void SetColor(const Math::Vector4& color) { colorVec_ = color; }
 };
 
-} // namespace Atrum
+} // namespace Atrumz

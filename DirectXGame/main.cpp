@@ -11,6 +11,8 @@
 #include <KamataEngine.h>
 #include <Windows.h>
 
+#include "Player.h"
+
 /*
 
 チーム: チーム番号_ゲームタイトル
@@ -84,10 +86,15 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// シーンの初期化
 	Atrum::CommandChangeScene::GetInstance()->Set(Atrum::SceneTitle::GetInstance());
+	
+	Atrum::FrameDeltaTime::GetInstance()->Initialize();
 
 	///
 	/// ↑初期化処理ここまで
 	///
+
+	Player* player_ = new Player;
+	player_->Initialize();
 
 	while (true) {
 
@@ -97,14 +104,21 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 
+		player_->Update();
+
 		order->Run();
 
 		audio->Update();
+
+		player_->Draw();
+
 	}
 
 	///
 	/// ↓終了処理ここから
 	///
+
+	delete player_;
 
 	KamataEngine::Finalize();
 
