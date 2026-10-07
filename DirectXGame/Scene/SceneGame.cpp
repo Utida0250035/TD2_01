@@ -40,6 +40,10 @@ void SceneGame::Update() {
 		}
 	}
 
+	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_J)) {
+		cameraController_->Shake(2.0f, 3.0f);
+	}
+
 #endif // _DEBUG
 }
 

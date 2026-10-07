@@ -4,7 +4,7 @@
 #include "../Math/Matrix4x4.h"
 #include "../System/Entity.h"
 #include "../Camera/Camera.h"
-
+#include <random>
 
 /// <summary>
 /// 追従カメラ
@@ -30,6 +30,13 @@ public:
 	/// オフセット計算
 	/// </summary>
 	Atrum::Math::Vector3 Offset() const;
+
+	/// <summary>
+	/// シェイク
+	/// </summary>
+	/// <param name="shakeDuration">シェイクの長さ<秒></param>
+	/// <param name="maxAmplitude">シェイクの強さ</param>
+	void Shake(float shakeDuration, float maxAmplitude);
 
 	// ゲッター
 	Atrum::Math::Vector3 GetOffset() const { return offset_; }
@@ -70,5 +77,14 @@ private:
 
 	// 初期座標
 	Atrum::Math::Vector3 firstPos_ = {0.0f, 0.0f, -50.0f};
+
+	// シェイク
+	float shakeDuration_;
+	float shakeTimer_;
+	float maxAmplitude_;
+	float amplitude_;
+	Atrum::Math::Vector3 shake_;
+
+	std::mt19937 engine_;
 };
 

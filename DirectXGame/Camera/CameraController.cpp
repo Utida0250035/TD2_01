@@ -10,6 +10,10 @@ using namespace Atrum::Math;
 void CameraController::Initialize() {
 	camera_ = KeMainCamera::GetInstance()->camera_;
 	interTarget_ = firstPos_;
+
+	// ランダム
+	std::random_device seedGen;
+	engine_.seed(seedGen());
 }
 
 void CameraController::Update() {
@@ -32,9 +36,22 @@ void CameraController::Update() {
 		translate_ = interTarget_ + offset;
 	}
 
+	// シェイク
+	if (shakeTimer_ > 0.0f) {
+		if (amplitude_ > 0.0f) {
+			std::uniform_real_distribution<float> distribution(-amplitude_, amplitude_);
+			shake_ = {distribution(engine_), distribution(engine_), distribution(engine_)};
+		}
+
+		shakeTimer_ -= 1.0f / 60.0f;
+		amplitude_ = maxAmplitude_ * (shakeTimer_ / shakeDuration_);
+	} else {
+		shake_ = {0.0f, 0.0f, 0.0f};
+	}
+
 	// cameraに適用
 	if (camera_) {
-		camera_->translation_ = ToKamataEngine(translate_);
+		camera_->translation_ = ToKamataEngine(translate_ + shake_);
 		camera_->UpdateMatrix();
 		camera_->TransferMatrix();
 	}
@@ -64,6 +81,17 @@ Vector3 CameraController::Offset() const {
 	offset = rotateMatrix.TransformNormal(offset);
 
 	return offset;
+}
+
+void CameraController::Shake(float shakeDuration, float maxAmplitude) {
+	if (shakeDuration <= 0.0f) {
+		return;
+	}
+
+	shakeDuration_ = shakeDuration;
+	maxAmplitude_ = maxAmplitude;
+	shakeTimer_ = shakeDuration_;
+	amplitude_ = maxAmplitude_;
 }
 
 void CameraController::SetTarget(const Atrum::Math::Vector3& target) {
