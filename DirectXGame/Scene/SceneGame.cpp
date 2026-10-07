@@ -15,28 +15,44 @@ void SceneGame::EnterScene() {
 	player_ = new Player;
 	player_->Initialize();
 
+	cameraController_ = new CameraController;
+	cameraController_->Initialize();
 }
 
 void SceneGame::Update() {
 
 	player_->Update();
 
+	cameraController_->Update();
+
 	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_C)) {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
 	}
+
+#ifdef _DEBUG
+
+	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_F)) {
+		if (cameraController_->GetIsFollow()) {
+			cameraController_->SetIsFollow(false);
+		} else {
+			cameraController_->SetIsFollow(true);
+			cameraController_->SetTarget({0.0f, 0.0f, 0.0f});
+		}
+	}
+
+	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_J)) {
+		cameraController_->Shake(2.0f, 3.0f);
+	}
+
+#endif // _DEBUG
 }
 
-void SceneGame::Draw() {
-
-	player_->Draw();
-
-}
+void SceneGame::Draw() { player_->Draw(); }
 
 void SceneGame::ExitScene() {
 
 	delete player_;
 	player_ = nullptr;
-
 }
 
 } // namespace Atrum
