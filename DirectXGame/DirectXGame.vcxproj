@@ -178,6 +178,7 @@
     <ClCompile Include="Particle\Particle.cpp" />
     <ClCompile Include="Particle\ParticleSample.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Scene\ChangeScene.cpp" />
     <ClCompile Include="Scene\ChangeSceneFade.cpp" />
     <ClCompile Include="Scene\CommandChangeScene.cpp" />
@@ -361,6 +362,7 @@
     <ClInclude Include="Particle\Particle.h" />
     <ClInclude Include="Particle\ParticleSample.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Scene\ChangeScene.h" />
     <ClInclude Include="Scene\ChangeSceneFade.h" />
     <ClInclude Include="Scene\CommandChangeScene.h" />
