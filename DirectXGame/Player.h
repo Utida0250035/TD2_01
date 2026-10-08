@@ -36,6 +36,7 @@ private:
 	// エンティティ
 	std::unique_ptr<Atrum::Entity> entity_ = nullptr;
 
+	// 爆発エンティティ
 	std::vector<std::unique_ptr<Atrum::Entity>> booms_{};
 
 public:
@@ -61,6 +62,10 @@ class CmpPlayer : public UpdComponent {
 private:
 	::Player* anotherOwner_ = nullptr;
 	CmpLhRigidBody* rigidBody_ = nullptr;
+
+	KamataEngine::Model* explosionFireModel_ = nullptr;
+	KamataEngine::Model* explosionSmokeModel_ = nullptr;
+	KamataEngine::Model* explosionRingModel_ = nullptr;
 
 	// 無重力時間
 	static inline const float noGravityTimer_ = 0.2f;

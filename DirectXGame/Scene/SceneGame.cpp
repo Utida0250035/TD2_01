@@ -20,6 +20,9 @@ void SceneGame::EnterScene() {
 
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
+
+	commandParticle_ = CommandParticle::GetInstance();
+
 }
 
 void SceneGame::Update() {
@@ -29,6 +32,8 @@ void SceneGame::Update() {
 	boss_->Update();
 
 	cameraController_->Update();
+
+	commandParticle_->Update();
 
 	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_C)) {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
@@ -72,6 +77,8 @@ void SceneGame::ExitScene() {
 
 	delete player_;
 	player_ = nullptr;
+
+	commandParticle_ = nullptr;
 }
 
 } // namespace Atrum

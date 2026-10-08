@@ -4,6 +4,7 @@
 #include "../Player.h"
 #include "../Boss.h"
 #include "../Camera/CameraController.h"
+#include "../Particle/CommandParticle.h"
 
 namespace Atrum {
 
@@ -21,6 +22,9 @@ class SceneGame final : public Scene {
 
 		// カメラコントローラ
 	    CameraController* cameraController_ = nullptr;
+
+		// パーティクルマネージャ
+		CommandParticle* commandParticle_ = nullptr;
 
 public:
 	void EnterScene() override;
