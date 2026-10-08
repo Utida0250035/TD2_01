@@ -158,6 +158,7 @@
     <ClCompile Include="Audio\AudioDecoder.cpp" />
     <ClCompile Include="Audio\StreamingVoiceCallBack.cpp" />
     <ClCompile Include="Audio\VoiceCallBack.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="Fade.cpp" />
@@ -322,6 +323,7 @@
     <ClInclude Include="Audio\StreamingVoiceCallBack.h" />
     <ClInclude Include="Audio\VoiceCallBack.h" />
     <ClInclude Include="Audio\VoiceState.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraController.h" />
     <ClInclude Include="Cast\StaticCast.h" />

@@ -15,6 +15,9 @@ void SceneGame::EnterScene() {
 	player_ = new Player;
 	player_->Initialize();
 
+	boss_ = new Boss;
+	boss_->Initialize();
+
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
 }
@@ -22,6 +25,8 @@ void SceneGame::EnterScene() {
 void SceneGame::Update() {
 
 	player_->Update();
+
+	boss_->Update();
 
 	cameraController_->Update();
 
@@ -52,9 +57,18 @@ void SceneGame::Update() {
 #endif // _DEBUG
 }
 
-void SceneGame::Draw() { player_->Draw(); }
+void SceneGame::Draw() { 
+	player_->Draw();
+
+	boss_->Draw();
+}
 
 void SceneGame::ExitScene() {
+	delete cameraController_;
+	cameraController_ = nullptr;
+
+	delete boss_;
+	boss_ = nullptr;
 
 	delete player_;
 	player_ = nullptr;

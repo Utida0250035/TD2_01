@@ -201,6 +201,7 @@ std::unique_ptr<Entity> EntityFactory::LinearEnemyBullet(const Math::Vector3& ve
 std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos) {
 
 	std::unique_ptr<Entity> boom = std::make_unique<Entity>();
+	boom->SetEntityType(EntityType::PLAYER_WEAPON);
 
 	Math::TransformLH initTransform{};
 
