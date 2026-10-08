@@ -62,6 +62,9 @@ class CmpPlayer : public UpdComponent {
 private:
 	::Player* anotherOwner_ = nullptr;
 	CmpLhRigidBody* rigidBody_ = nullptr;
+
+	KamataEngine::Model* explosionFireModel_ = nullptr;
+	KamataEngine::Model* explosionSmokeModel_ = nullptr;
 	KamataEngine::Model* explosionRingModel_ = nullptr;
 
 	// 無重力時間

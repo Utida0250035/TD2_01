@@ -78,7 +78,7 @@ void Player::Draw() {
 	
 	}
 
-	CommandParticle::GetInstance()->Draw("explosionRing");
+	CommandParticle::GetInstance()->Draw("explosion");
 
 	KamataEngine::Model::PostDraw();
 }
@@ -92,6 +92,8 @@ namespace Atrum {
 }
 	void CmpPlayer::Initialize() {
 
+		explosionFireModel_ = KamataEngine::Model::CreateFromOBJ("explosionFire", false);
+		explosionSmokeModel_ = KamataEngine::Model::CreateFromOBJ("explosionSmoke", false);
 		explosionRingModel_ = KamataEngine::Model::CreateFromOBJ("explosionRing", false);
 
 	}
@@ -170,12 +172,12 @@ namespace Atrum {
 		    // 判定エンティティ
 		    anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::Boom(RefOwner().GetWorldPosition()));
 
-		    ParticleExplosionRing* ring = new ParticleExplosionRing;
-		    ring->SetInitialTranslation(RefOwner().GetWorldPosition());
-		    ring->SetModel(explosionRingModel_);
-		    ring->Initialize();
+		    ParticleExplosion* particle = new ParticleExplosion;
+		    particle->SetInitialTranslation(RefOwner().GetWorldPosition());
+		    particle->SetModel(explosionFireModel_, explosionSmokeModel_, explosionRingModel_);
+		    particle->Initialize();
 
-			CommandParticle::GetInstance()->Generate("explosionRing", ring);
+			CommandParticle::GetInstance()->Generate("explosion", particle);
 
 	    }
 
