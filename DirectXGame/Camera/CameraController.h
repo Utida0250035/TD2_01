@@ -34,7 +34,7 @@ public:
 	/// <summary>
 	/// シェイク
 	/// </summary>
-	/// <param name="shakeDuration">シェイクの長さ<秒></param>
+	/// <param name="shakeDuration">シェイクの長さ(秒)</param>
 	/// <param name="maxAmplitude">シェイクの強さ</param>
 	void Shake(float shakeDuration, float maxAmplitude);
 
