@@ -55,6 +55,9 @@ void CameraController::Update() {
 		camera_->UpdateMatrix();
 		camera_->TransferMatrix();
 	}
+
+	// ボス出現演出
+	BeginBossUpdate();
 }
 
 void CameraController::Reset() {
@@ -92,6 +95,37 @@ void CameraController::Shake(float shakeDuration, float maxAmplitude) {
 	maxAmplitude_ = maxAmplitude;
 	shakeTimer_ = shakeDuration_;
 	amplitude_ = maxAmplitude_;
+}
+
+void CameraController::BeginBossUpdate() {
+	if (isBeginBoss_) {
+		BeginBossTimer_ -= 1.0f / 60.0f;
+		if (BeginBossTimer_ <= 0.0f) {
+			if (target_.z == 0.0f) {
+				// 集まって完成(少し遠ざかってシェイク)
+				SetTarget({0.0f, 0.0f, -15.0f});
+				Shake(2.0f, 3.0f);
+				BeginBossTimer_ = 3.0f;
+				return;
+			}
+
+			if (target_.z == -15.0f) {
+				// 戦闘開始(通常画面)
+				SetIsFollow(false);
+				BeginBossTimer_ = 0.0f;
+				isBeginBoss_ = false;
+				return;
+			}
+		}
+	}
+}
+
+void CameraController::StartBeginBoss() {
+	isBeginBoss_ = true;
+	// 集まる演出(近づく)
+	SetIsFollow(true);
+	SetTarget({0.0f, 0.0f, 0.0f});
+	BeginBossTimer_ = 3.0f;
 }
 
 void CameraController::SetTarget(const Atrum::Math::Vector3& target) {
