@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "../Player.h"
+#include "../Boss.h"
 #include "../Camera/CameraController.h"
 #include "../Particle/CommandParticle.h"
 
@@ -15,6 +16,9 @@ class SceneGame final : public Scene {
 
 		// プレイヤー
 	    Player* player_ = nullptr;
+
+		// ボス
+	    Boss* boss_ = nullptr;
 
 		// カメラコントローラ
 	    CameraController* cameraController_ = nullptr;

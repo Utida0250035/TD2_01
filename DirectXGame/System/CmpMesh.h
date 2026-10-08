@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../KeVectorUtility.h"
 #include "../Math/Vector4.h"
 #include "../System/DrawComponent.h"

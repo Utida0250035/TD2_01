@@ -105,7 +105,7 @@ void CameraController::BeginBossUpdate() {
 				// 集まって完成(少し遠ざかってシェイク)
 				SetTarget({0.0f, 0.0f, -15.0f});
 				Shake(2.0f, 3.0f);
-				BeginBossTimer_ = 3.0f;
+				BeginBossTimer_ = 2.0f;
 				return;
 			}
 
