@@ -1,7 +1,9 @@
-﻿#include "Player.h"
+#include "Player.h"
 
 #include "Math/Lerp.h"
 #include "System/EntityFactory.h"
+#include "Particle/CommandParticle.h"
+#include "ParticleExplosionRing.h"
 
 using namespace Atrum;
 using namespace Atrum::Math;
@@ -35,6 +37,7 @@ void Player::Initialize() {
 
 	entity_->ResolveDependences();
 	entity_->Initialize();
+
 }
 
 void Player::Update() {
@@ -75,6 +78,8 @@ void Player::Draw() {
 	
 	}
 
+	CommandParticle::GetInstance()->Draw("explosionRing");
+
 	KamataEngine::Model::PostDraw();
 }
 
@@ -86,6 +91,8 @@ namespace Atrum {
 
 }
 	void CmpPlayer::Initialize() {
+
+		explosionRingModel_ = KamataEngine::Model::CreateFromOBJ("explosionRing", false);
 
 	}
 
@@ -112,7 +119,7 @@ namespace Atrum {
 		// 移動方向
 	    Vector2 moveDirection = {};
 
-
+		// 減衰
 		velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
 
 		KamataEngine::Input *input_ = KamataEngine::Input::GetInstance();
@@ -147,20 +154,28 @@ namespace Atrum {
 
 	    if (input_->TriggerKey(DIK_SPACE)) {
 
-			// 無重力化
-			noGravityTime_ = noGravityTimer_;
+		    // 無重力化
+		    noGravityTime_ = noGravityTimer_;
 		    rigidBody_->SetIsUseGravity(false);
 
-			// 方向未指定の場合は真上に指定
-			if (moveDirection.x == 0.0f && moveDirection.y == 0.0f) {
+		    // 方向未指定の場合は真上に指定
+		    if (moveDirection.x == 0.0f && moveDirection.y == 0.0f) {
 			    moveDirection.y = 1.0f;
-			}
+		    }
 
-			// ベクトル更新
+		    // ベクトル更新
 		    velocity.x = moveDirection.x * Player::jumpPower_;
 		    velocity.y = moveDirection.y * Player::jumpPower_;
 
-			anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::Boom(RefOwner().GetWorldPosition()));
+		    // 判定エンティティ
+		    anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::Boom(RefOwner().GetWorldPosition()));
+
+		    ParticleExplosionRing* ring = new ParticleExplosionRing;
+		    ring->SetInitialTranslation(RefOwner().GetWorldPosition());
+		    ring->SetModel(explosionRingModel_);
+		    ring->Initialize();
+
+			CommandParticle::GetInstance()->Generate("explosionRing", ring);
 
 	    }
 
