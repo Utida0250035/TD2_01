@@ -44,6 +44,11 @@ void SceneGame::Update() {
 		cameraController_->Shake(2.0f, 3.0f);
 	}
 
+	// ボス出現演出デモ
+	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_G)) {
+		cameraController_->StartBeginBoss();
+	}
+
 #endif // _DEBUG
 }
 

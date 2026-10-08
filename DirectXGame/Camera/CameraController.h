@@ -38,6 +38,17 @@ public:
 	/// <param name="maxAmplitude">シェイクの強さ</param>
 	void Shake(float shakeDuration, float maxAmplitude);
 
+	/// <summary>
+	/// ボス出現演出
+	/// </summary>
+	void BeginBossUpdate();
+
+	/// <summary>
+	/// ボス出現演出開始
+	/// </summary>
+	void StartBeginBoss();
+
+
 	// ゲッター
 	Atrum::Math::Vector3 GetOffset() const { return offset_; }
 	bool GetIsFollow() const { return isFollow_; }
@@ -79,12 +90,15 @@ private:
 	Atrum::Math::Vector3 firstPos_ = {0.0f, 0.0f, -50.0f};
 
 	// シェイク
-	float shakeDuration_;
-	float shakeTimer_;
-	float maxAmplitude_;
-	float amplitude_;
+	float shakeDuration_ = 0.0f;
+	float shakeTimer_ = 0.0f;
+	float maxAmplitude_ = 0.0f;
+	float amplitude_ = 0.0f;
 	Atrum::Math::Vector3 shake_;
 
 	std::mt19937 engine_;
+
+	bool isBeginBoss_ = false;
+	float BeginBossTimer_ = 0.0f;
 };
 
