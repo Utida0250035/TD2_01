@@ -2,6 +2,9 @@
 
 #include "Math/Lerp.h"
 #include "System/EntityFactory.h"
+#include "Particle/CommandParticle.h"
+
+#include "ParticleBossAppear.h"
 
 using namespace Atrum;
 using namespace Atrum::Math;
@@ -36,6 +39,13 @@ void Boss::Initialize() {
 
 	entity_->ResolveDependences();
 	entity_->Initialize();
+
+	ParticleBossAppear* particle = new ParticleBossAppear;
+	particle->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
+	particle->Initialize();
+
+	CommandParticle::GetInstance()->Generate("bossAppear", particle);
+
 }
 
 void Boss::Update() {
@@ -53,11 +63,16 @@ void Boss::Draw() {
 	}
 
 	KamataEngine::Model::PostDraw();
+
+	CommandParticle::GetInstance()->Draw("bossAppear");
+
 }
 
 namespace Atrum {
 void CmpBoss::ResolveDependence() {}
-void CmpBoss::Initialize() {}
+void CmpBoss::Initialize() {
+
+}
 
 void CmpBoss::Update() {
 
