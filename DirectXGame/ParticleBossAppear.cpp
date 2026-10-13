@@ -79,7 +79,7 @@ void Atrum::ParticleBossAppear::Update() {
 		particle->objectColor_.SetColor({1.0f, 1.0f, 1.0f, particle->alpha_});
 
 		// 終了
-		if (translationToDistance <= 0.5f) {
+		if (translationToDistance <= 0.9f) {
 			particle->isFinish_ = true;
 		}
 
