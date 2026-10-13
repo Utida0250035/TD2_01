@@ -161,6 +161,7 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
     <ClCompile Include="DeathParticles.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="ParticleBossAppear.cpp" />
     <ClCompile Include="ParticleBossDefeat.cpp" />
     <ClCompile Include="ParticleExplosionRing.cpp" />
