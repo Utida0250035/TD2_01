@@ -96,6 +96,18 @@ void Atrum::ParticleBossDefeat::Update() {
 		}
 	}
 
+	//------------------
+	// 生成タイマー
+
+	timer_ -= 1.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();
+
+	if (timer_ <= 0.0f) {
+		canCreate_ = false;
+	}
+
+	//
+	//------------------
+
 	///
 	///
 	///-------------------------------------

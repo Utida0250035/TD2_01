@@ -41,11 +41,11 @@ void Boss::Initialize() {
 	entity_->ResolveDependences();
 	entity_->Initialize();
 
-	//ParticleBossAppear* particle = new ParticleBossAppear;
-	//particle->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
-	//particle->Initialize();
+	ParticleBossAppear* particleAppear = new ParticleBossAppear;
+	particleAppear->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
+	particleAppear->Initialize();
 
-	//CommandParticle::GetInstance()->Generate("bossAppear", particle);
+	CommandParticle::GetInstance()->Generate("bossAppear", particleAppear);
 
 	ParticleBossDefeat* particleDefeat = new ParticleBossDefeat;
 	particleDefeat->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
@@ -72,7 +72,7 @@ void Boss::Draw() {
 
 	KamataEngine::Model::PostDraw();
 
-	CommandParticle::GetInstance()->Draw("bossDefeat");
+	CommandParticle::GetInstance()->Draw("bossAppear");
 
 }
 

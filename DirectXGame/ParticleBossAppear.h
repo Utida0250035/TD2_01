@@ -17,6 +17,9 @@ private:
 	// 半径
 	float radius_ = 20.0f;
 
+	// パーティクルを出せる時間
+	float timer_ = 5.0f;
+
 	// 生成できるか
 	bool canCreate_ = true;
 
