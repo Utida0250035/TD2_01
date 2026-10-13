@@ -162,6 +162,7 @@
     <ClCompile Include="Camera\CameraController.cpp" />
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="ParticleBossAppear.cpp" />
+    <ClCompile Include="ParticleBossDefeat.cpp" />
     <ClCompile Include="ParticleExplosionRing.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="File\FileSize.cpp" />
@@ -337,6 +338,7 @@
     <ClInclude Include="EnemyBehavior.h" />
     <ClInclude Include="EnemyBehaviorWalk.h" />
     <ClInclude Include="ParticleBossAppear.h" />
+    <ClInclude Include="ParticleBossDefeat.h" />
     <ClInclude Include="ParticleExplosionRing.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="File\FileSize.h" />
