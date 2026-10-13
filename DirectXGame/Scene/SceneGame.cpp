@@ -72,6 +72,7 @@ void SceneGame::ExitScene() {
 	delete cameraController_;
 	cameraController_ = nullptr;
 
+	boss_->GetEntity()->Finalize();
 	delete boss_;
 	boss_ = nullptr;
 

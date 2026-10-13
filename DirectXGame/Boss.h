@@ -26,13 +26,20 @@
 #include "../System/EntityType.h"
 #include "../System/UpdComponent.h"
 
+#include "Enemy.h"
+
 // ボス
 class Boss final {
 private:
 	// エンティティ
 	std::unique_ptr<Atrum::Entity> entity_ = nullptr;
 
+	// 取り巻き
+	std::vector<std::unique_ptr<Enemy>> enemies_{};
+
 public:
+	~Boss();
+
 	// 初期化
 	void Initialize();
 
@@ -43,6 +50,7 @@ public:
 	void Draw();
 
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
+	std::vector<std::unique_ptr<Enemy>>& GetEnemies() { return enemies_; }
 };
 
 namespace Atrum {
