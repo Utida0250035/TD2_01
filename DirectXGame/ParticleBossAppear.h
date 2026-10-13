@@ -11,6 +11,21 @@ class ParticleBossAppear : public Particles {
 
 private:
 
+	//---------------------------------------------
+	//
+
+	// 半径
+	float radius_ = 20.0f;
+
+	// 生成できるか
+	bool canCreate_ = true;
+
+	//
+	//---------------------------------------------
+
+	//---------------------------------------------
+	//
+
 	// このクラス用のパーティクルデータ
 	class ParticleData final {
 
@@ -35,8 +50,11 @@ private:
 		bool isFinish_ = false;
 	};
 
-	// 半径
-	float radius_ = 20.0f;
+	//
+	//---------------------------------------------
+
+	//---------------------------------------------
+	//
 
 	// モデル
 	KamataEngine::Model* model_ = nullptr;
@@ -50,7 +68,15 @@ private:
 	// パーティクルリスト
 	std::list<ParticleData*> particles_;
 
+	float Lerp(const float start, const float end, const float t) { return ((1.0f - t) * start) + (t * end); }
+
+	//
+	//---------------------------------------------
+
 public:
+
+	//---------------------------------------------
+	//
 
 	// 初期化
 	void Initialize() override;
@@ -63,6 +89,12 @@ public:
 
 	// 終了
 	void Finalize() override;
+
+	//
+	//---------------------------------------------
+
+	//---------------------------------------------
+	//
 
 	/// <summary>
 	/// モデル指定
@@ -78,6 +110,10 @@ public:
 	/// </summary>
 	/// <param name="position">ターゲット座標</param>
 	void SetTargetPosition(const Math::Vector3 position) { targetPosition_ = position; }
+
+	//
+	//---------------------------------------------
+
 };
 
 } // namespace Atrum
