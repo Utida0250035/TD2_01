@@ -5,6 +5,7 @@
 #include "Particle/CommandParticle.h"
 
 #include "ParticleBossAppear.h"
+#include "ParticleBossDefeat.h"
 
 using namespace Atrum;
 using namespace Atrum::Math;
@@ -40,11 +41,18 @@ void Boss::Initialize() {
 	entity_->ResolveDependences();
 	entity_->Initialize();
 
-	ParticleBossAppear* particle = new ParticleBossAppear;
-	particle->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
-	particle->Initialize();
+	//ParticleBossAppear* particle = new ParticleBossAppear;
+	//particle->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
+	//particle->Initialize();
 
-	CommandParticle::GetInstance()->Generate("bossAppear", particle);
+	//CommandParticle::GetInstance()->Generate("bossAppear", particle);
+
+	ParticleBossDefeat* particleDefeat = new ParticleBossDefeat;
+	particleDefeat->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
+	particleDefeat->Initialize();
+	particleDefeat->SetInitialPosition({});
+
+	CommandParticle::GetInstance()->Generate("bossDefeat", particleDefeat);
 
 }
 
@@ -64,7 +72,7 @@ void Boss::Draw() {
 
 	KamataEngine::Model::PostDraw();
 
-	CommandParticle::GetInstance()->Draw("bossAppear");
+	CommandParticle::GetInstance()->Draw("bossDefeat");
 
 }
 
