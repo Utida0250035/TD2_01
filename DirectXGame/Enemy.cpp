@@ -51,6 +51,8 @@ void Enemy::Initialize() {
 	uint32_t texture = KamataEngine::TextureManager::Load("white1x1.png");
 	spriteWarning_.reset(KamataEngine::Sprite::Create(texture, {0.0f, 0.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
 	spriteWarning_->SetSize({32.0f, 32.0f});
+
+	Audio::Manager::GetInstance()->Play("./Resources/seEnemyAppear.mp3");
 }
 
 void Enemy::Update() { entity_->Update(); }
@@ -136,6 +138,7 @@ void CmpEnemy::Update() {
 			anotherOwner_->SetIsWarning(false);
 			isAttack_ = true;
 			attackTimer_ = 0.0f;
+			Audio::Manager::GetInstance()->Play("./Resources/seEnemyAttack.mp3");
 		}
 	}
 
