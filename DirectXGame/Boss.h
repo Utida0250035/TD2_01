@@ -37,6 +37,9 @@ private:
 	// 取り巻き
 	std::vector<std::unique_ptr<Enemy>> enemies_{};
 
+	// プレイヤー
+	Atrum::Entity* player_ = nullptr;
+
 public:
 	~Boss();
 
@@ -51,6 +54,9 @@ public:
 
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
 	std::vector<std::unique_ptr<Enemy>>& GetEnemies() { return enemies_; }
+	Atrum::Entity* GetPlayer() const { return player_; }
+
+	void SetPlayer(Atrum::Entity* player) { player_ = player; }
 };
 
 namespace Atrum {
