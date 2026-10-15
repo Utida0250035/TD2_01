@@ -159,9 +159,12 @@
     <ClCompile Include="Audio\StreamingVoiceCallBack.cpp" />
     <ClCompile Include="Audio\VoiceCallBack.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossCloud.cpp" />
+    <ClCompile Include="BossLightning.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyEmitter.cpp" />
     <ClCompile Include="ParticleBossAppear.cpp" />
     <ClCompile Include="ParticleBossDefeat.cpp" />
     <ClCompile Include="ParticleExplosionRing.cpp" />
@@ -329,6 +332,8 @@
     <ClInclude Include="Audio\VoiceCallBack.h" />
     <ClInclude Include="Audio\VoiceState.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossCloud.h" />
+    <ClInclude Include="BossLightning.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraController.h" />
     <ClInclude Include="Cast\StaticCast.h" />
@@ -338,6 +343,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBehavior.h" />
     <ClInclude Include="EnemyBehaviorWalk.h" />
+    <ClInclude Include="EnemyEmitter.h" />
     <ClInclude Include="ParticleBossAppear.h" />
     <ClInclude Include="ParticleBossDefeat.h" />
     <ClInclude Include="ParticleExplosionRing.h" />

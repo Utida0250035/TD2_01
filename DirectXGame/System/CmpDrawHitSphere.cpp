@@ -39,7 +39,28 @@ void CmpDrawHitSphere::Draw() {
 
 	std::vector<HitSphere> hitSpheres = cmpHitSphere_->GetSpheres();
 
+	if (worldTransforms_.size() < hitSpheres.size()) {
+
+		worldTransforms_.resize(hitSpheres.size());
+
+		for (auto& worldTransform : worldTransforms_) {
+
+			if (worldTransform) {
+				delete worldTransform;
+				worldTransform = nullptr;
+			}
+
+			worldTransform = new KamataEngine::WorldTransform();
+
+			worldTransform->Initialize();
+
+		}
+	}
+
 	for (size_t i = 0; i < worldTransforms_.size(); ++i) {
+
+		if (!worldTransforms_[i])
+			continue;
 
 		worldTransforms_[i]->scale_ = {hitSpheres[i].radius, hitSpheres[i].radius, hitSpheres[i].radius};
 		worldTransforms_[i]->translation_ = ToKamataEngine(GetOwner()->GetWorldPosition() + hitSpheres[i].localOffset);

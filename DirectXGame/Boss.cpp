@@ -1,15 +1,17 @@
 #include "Boss.h"
 
 #include "Math/Lerp.h"
-#include "System/EntityFactory.h"
 #include "Particle/CommandParticle.h"
 #include "Random.h"
+#include "System/EntityFactory.h"
 
+#include "BossLightning.h"
+#include "EnemyEmitter.h"
 #include "ParticleBossAppear.h"
 #include "ParticleBossDefeat.h"
+#include "Time/DeltaTime.h"
 
-using namespace Atrum;
-using namespace Atrum::Math;
+namespace Atrum {
 
 Boss::~Boss() {
 	for (auto& enemy : enemies_) {
@@ -25,12 +27,7 @@ void Boss::Initialize() {
 
 	entity_->AddUpdCmp<CmpHitSphere>();
 	entity_->AddUpdCmp<CmpHealthHit>();
-	entity_->AddUpdCmp<CmpBoss>();
 	entity_->AddDrawCmp<CmpMesh>();
-
-	CmpBoss* cmpBoss = entity_->GetUpdCmp<CmpBoss>();
-
-	cmpBoss->SetAnotherOwner(this);
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 	cmpMesh->SetModel(KamataEngine::Model::Create());
@@ -44,6 +41,7 @@ void Boss::Initialize() {
 	std::vector<EntityType> hurterTypes;
 	hurterTypes.push_back(EntityType::PLAYER_WEAPON);
 	cmpHealthHit->SetHurterTypes(hurterTypes);
+	cmpHealthHit->SetInitialHealthCount(200);
 
 	entity_->ResolveDependences();
 	entity_->Initialize();
@@ -61,11 +59,24 @@ void Boss::Initialize() {
 
 	CommandParticle::GetInstance()->Generate("bossDefeat", particleDefeat);
 
+	frameDeltaTime_ = FrameDeltaTime::GetInstance();
 }
 
 void Boss::Update() {
 
+	if (CommandParticle::GetInstance()->IsExist("bossAppear"))
+		return;
+
 	entity_->Update();
+
+	summonLoopTimer_ += frameDeltaTime_->GetDeltaTime();
+
+	if (summonLoopTimer_ >= summonLoopTime_) {
+
+		summonLoopTimer_ = 0.0f;
+
+		EnemyEmitter::Emit(enemies_, entity_->GetWorldPosition());
+	}
 
 	for (auto& enemy : enemies_) {
 		enemy->Update();
@@ -79,6 +90,37 @@ void Boss::Update() {
 		}
 		return false;
 	});
+
+	attackLoopTimer_ += frameDeltaTime_->GetDeltaTime();
+
+	if (attackLoopTimer_ >= attackLoopTime_) {
+
+		attackLoopTimer_ = 0.0f;
+
+		for (size_t i = 0; i < 2; ++i) {
+			lightningAttacks_.emplace_back(std::make_unique<Atrum::BossLightning>());
+			lightningAttacks_.back()->Initialize(entity_->GetWorldPosition() + lightningAttackOffsets_[i]);
+		}
+	}
+
+	for (auto& lightning : lightningAttacks_) {
+
+		if (!lightning)
+			continue;
+
+		lightning->Update();
+		if (lightning && !lightning->IsActive()) {
+			lightning->Finalize();
+		}
+	}
+
+	std::erase_if(lightningAttacks_, [](const auto& lightning) {
+		if (!lightning || !lightning->IsActive()) {
+			return true;
+		}
+
+		return false;
+	});
 }
 
 void Boss::Draw() {
@@ -90,39 +132,18 @@ void Boss::Draw() {
 	}
 
 	KamataEngine::Model::PostDraw();
-	
+
 	for (auto& enemy : enemies_) {
 		enemy->Draw();
 	}
 
-	CommandParticle::GetInstance()->Draw("bossAppear");
+	for (auto& lightning : lightningAttacks_) {
 
-}
-
-namespace Atrum {
-void CmpBoss::ResolveDependence() {}
-void CmpBoss::Initialize() {
-
-}
-
-void CmpBoss::Update() {
-
-	//--------------------------
-	// 取り巻き召喚テスト
-
-	KamataEngine::Input* input_ = KamataEngine::Input::GetInstance();
-	if (input_->TriggerKey(DIK_T)) {
-		std::unique_ptr<Enemy> enemy;
-		enemy = std::make_unique<Enemy>();
-		enemy->Initialize();
-		enemy->GetEntity()->RefTransform().translate.x = Random::Create(-30.0f, 30.0f);
-		enemy->GetEntity()->RefTransform().translate.y = Random::Create(-20.0f, 20.0f);
-		anotherOwner_->GetEnemies().push_back(std::move(enemy));
+		if (lightning)
+			lightning->Draw();
 	}
 
-
-	//
-	//--------------------------
+	CommandParticle::GetInstance()->Draw("bossAppear");
 }
 
 } // namespace Atrum
