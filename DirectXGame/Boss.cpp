@@ -1,4 +1,4 @@
-﻿#include "Boss.h"
+#include "Boss.h"
 
 #include "Math/Lerp.h"
 #include "Particle/CommandParticle.h"
@@ -84,7 +84,7 @@ void Boss::Update() {
 
 	// 取り巻き削除
 	std::erase_if(enemies_, [](const std::unique_ptr<Enemy>& enemy) {
-		if (enemy->GetEntity()->GetUpdCmp<CmpHealthHit>()->GetHealthCount() <= 0) {
+		if (enemy->GetIsDead()) {
 			enemy->GetEntity()->Finalize();
 			return true;
 		}
