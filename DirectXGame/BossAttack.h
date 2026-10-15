@@ -28,6 +28,8 @@ public:
 	// 有効状態
 	bool IsActive() { return entity_->GetState() == Entity::State::Active; };
 
+	virtual ~BossAttack() = default;
+
 };
 
 } // namespace Atrum

@@ -27,6 +27,7 @@
 
 #include "BossLightning.h"
 #include "Enemy.h"
+#include "BossCloud.h"
 
 namespace Atrum {
 
@@ -44,6 +45,9 @@ private:
 
 	// 取り巻き
 	std::vector<std::unique_ptr<Enemy>> enemies_{};
+
+	// 曇
+	std::vector<std::unique_ptr<BossCloud>> clouds_{};
 
 	// 雷攻撃
 	std::vector<std::unique_ptr<Atrum::BossLightning>> lightningAttacks_{};

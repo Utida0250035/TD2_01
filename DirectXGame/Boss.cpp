@@ -60,6 +60,11 @@ void Boss::Initialize() {
 	CommandParticle::GetInstance()->Generate("bossDefeat", particleDefeat);
 
 	frameDeltaTime_ = FrameDeltaTime::GetInstance();
+
+	std::unique_ptr<BossCloud> testCloud = std::make_unique<BossCloud>();
+	testCloud->Initialize({});
+	clouds_.emplace_back(std::move(testCloud));
+
 }
 
 void Boss::Update() {
@@ -88,6 +93,18 @@ void Boss::Update() {
 			enemy->GetEntity()->Finalize();
 			return true;
 		}
+		return false;
+	});
+
+	for (auto& cloud : clouds_) {
+		cloud->Update();
+	}
+
+	std::erase_if(clouds_, [](const auto& cloud) {
+		if (!cloud || !cloud->IsActive()) {
+			return true;
+		}
+
 		return false;
 	});
 
@@ -135,6 +152,10 @@ void Boss::Draw() {
 
 	for (auto& enemy : enemies_) {
 		enemy->Draw();
+	}
+
+	for (auto& cloud : clouds_) {
+		cloud->Draw();
 	}
 
 	for (auto& lightning : lightningAttacks_) {
