@@ -32,6 +32,7 @@ void Enemy::Initialize() {
 	cmpHitSphere->SetSpheres({
 	    {{}, 3.0f}
     });
+	cmpHitSphere->SetIsActive(false);
 
 	cmpHitSphere->SetEnemy();
 
@@ -85,6 +86,7 @@ void CmpEnemy::Update() {
 		anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor(entityColor_);
 		if (beginTimer_ >= kBeginTime_) {
 			isBegin_ = false;
+			anotherOwner_->GetEntity()->GetUpdCmp<CmpHitSphere>()->SetIsActive(true);
 		}
 	}
 
