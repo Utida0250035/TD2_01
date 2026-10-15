@@ -62,6 +62,8 @@ private:
 
 	KamataEngine::Sprite* gaugeSprite_ = nullptr;
 
+	KamataEngine::Model* directionArrowModel_ = nullptr;
+
 	//
 	//----------------------------------
 
