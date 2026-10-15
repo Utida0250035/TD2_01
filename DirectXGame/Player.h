@@ -104,6 +104,9 @@ private:
 	// 残り無重力時間
 	float noGravityTime_ = 0.0f;
 
+	// テスト用に用意した床判定の座標
+	static inline const float testGroundPos = -20.0f;
+
 public:
 	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::INPUT; }
 

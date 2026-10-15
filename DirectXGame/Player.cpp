@@ -5,6 +5,8 @@
 #include "Particle/CommandParticle.h"
 #include "ParticleExplosionRing.h"
 
+#include "Time/DeltaTime.h"
+
 using namespace Atrum;
 using namespace Atrum::Math;
 
@@ -131,7 +133,7 @@ namespace Atrum {
 		//--------------------------
 		// 無重力時間
 
-		noGravityTime_ -= 1.0f / 60.0f;
+		noGravityTime_ -= 1.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();
 
 	    if (noGravityTime_ <= 0.0f) {
 		    rigidBody_->SetIsUseGravity(true);
@@ -141,24 +143,59 @@ namespace Atrum {
 	    //--------------------------
 
 		//--------------------------
-		//
+		// ベクトルと座標更新
+
+		//--------------
+		// 変数
+
+		#pragma region var
 
 		// ベクトル
 		Vector3& velocity = rigidBody_->RefVelocity();
 
+		// トランスフォーム
+		TransformLH &transform = RefOwner().RefTransform();
+
 		// 移動方向
 	    Vector2 moveDirection = {};
+
+		KamataEngine::Input* input_ = KamataEngine::Input::GetInstance();
+
+		#pragma endregion
+
+		//
+	    //--------------
+
+		//--------------
+		//
+
+		#pragma region update
 
 		// 減衰
 		velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
 
-		KamataEngine::Input *input_ = KamataEngine::Input::GetInstance();
+		// 着地処理
+		if (transform.translate.y < testGroundPos) {
+
+			// 着地状態ならさらに減衰
+		    velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.1f);
+			velocity.y = 0.0f;
+
+			transform.translate.y = testGroundPos;
+	    }
+
+		#pragma endregion
+
+		//
+	    //--------------
 
 		//
 	    //--------------------------
 
 		//--------------------------
 		// 方向指定
+
+		#pragma region directionInput
 
 	    if (input_->PushKey(DIK_W) || input_->PushKey(DIK_UP)) {
 		    moveDirection.y += 1.0f;
@@ -175,6 +212,8 @@ namespace Atrum {
 	    if (input_->PushKey(DIK_D) || input_->PushKey(DIK_RIGHT)) {
 		    moveDirection.x += 1.0f;
 	    }
+
+		#pragma endregion
 
 		//
 	    //--------------------------
