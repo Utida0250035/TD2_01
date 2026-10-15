@@ -3,17 +3,19 @@
 #include "Math/Vector3.h"
 #include "System/CmpHitSphere.h"
 #include "System/Entity.h"
+#include "BossAttack.h"
+
 #include <memory>
 
 namespace Atrum {
 
 class FrameDeltaTime;
 
-class BossLightning {
+class BossLightning : public BossAttack {
 private:
 
 	CmpHitSphere* cmpHitSphere_ = nullptr;
-	std::unique_ptr<Entity> entity_ = nullptr;
+	
 
 	float growTimer_ = 0.0f;
 	float growTime_ = 0.01562f;
@@ -30,12 +32,11 @@ private:
 	FrameDeltaTime* frameDeltaTime_ = nullptr;
 
 public:
-	void Initialize(const Math::Vector3& emitPos);
-	void Update();
-	void Draw();
-	void Finalize();
+	void Initialize(const Math::Vector3& emitPos) override;
+	void Update() override;
+	void Draw() override;
+	void Finalize() override;
 
-	bool IsActive();
 };
 
 } // namespace Atrum

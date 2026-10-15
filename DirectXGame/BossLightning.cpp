@@ -12,7 +12,7 @@ void BossLightning::Initialize(const Math::Vector3& emitPos) {
 	Math::TransformLH initialTransform{};
 	initialTransform.translate = emitPos;
 
-	entity_.reset(new Entity);
+	entity_.reset(new Entity());
 	entity_->SetEntityType(EntityType::ENEMY_WEAPON);
 	entity_->SetInitialTransform(initialTransform);
 
@@ -76,8 +76,6 @@ void BossLightning::Draw() {
 	KamataEngine::Model::PostDraw();
 
 }
-
-bool BossLightning::IsActive() { return entity_->GetState() == Entity::State::Active; }
 
 void BossLightning::Finalize() {
 

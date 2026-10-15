@@ -159,6 +159,7 @@
     <ClCompile Include="Audio\StreamingVoiceCallBack.cpp" />
     <ClCompile Include="Audio\VoiceCallBack.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossAttack.cpp" />
     <ClCompile Include="BossCloud.cpp" />
     <ClCompile Include="BossLightning.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
@@ -333,6 +334,7 @@
     <ClInclude Include="Audio\VoiceCallBack.h" />
     <ClInclude Include="Audio\VoiceState.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossAttack.h" />
     <ClInclude Include="BossCloud.h" />
     <ClInclude Include="BossLightning.h" />
     <ClInclude Include="Camera\Camera.h" />
