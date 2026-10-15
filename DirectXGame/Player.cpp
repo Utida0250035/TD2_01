@@ -38,6 +38,20 @@ void Player::Initialize() {
 	entity_->ResolveDependences();
 	entity_->Initialize();
 
+	gaugeSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 16.0f});
+
+}
+
+void Player::AddCharge() {
+
+	superCharge_++;
+
+	if (superCharge_ > maxCharge_) {
+		superCharge_ = maxCharge_;
+	}
+
+	std::cout << superCharge_ << std::endl;
+
 }
 
 void Player::Update() {
@@ -64,6 +78,10 @@ void Player::Update() {
 		}
 
 	}
+
+	// UI
+	gaugeSprite_->SetSize({(static_cast<float>(superCharge_) / static_cast<float>(maxCharge_)) * chargeUIMax_, 32.0f});
+
 }
 
 void Player::Draw() {
@@ -81,6 +99,16 @@ void Player::Draw() {
 	CommandParticle::GetInstance()->Draw("explosion");
 
 	KamataEngine::Model::PostDraw();
+}
+
+void Player::DrawUI() {
+
+	KamataEngine::Sprite::PreDraw();
+
+	gaugeSprite_->Draw();
+
+	KamataEngine::Sprite::PostDraw();
+
 }
 
 namespace Atrum {

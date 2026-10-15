@@ -30,7 +30,20 @@
 class Player final {
 
 private:
+
+	//----------------------------------
+	//
+
+	// 重力
 	static inline const float gravity_ = 50.0f;
+
+	// 最大となるチャージ量
+	static inline const uint32_t maxCharge_ = 50;
+
+	static inline const float chargeUIMax_ = 512.0f;
+
+	//
+	//----------------------------------
 
 	// 入力
 	KamataEngine::Input* input_ = nullptr;
@@ -41,11 +54,16 @@ private:
 	// 爆発エンティティ
 	std::vector<std::unique_ptr<Atrum::Entity>> booms_{};
 
+	//----------------------------------
+	//
+
 	// 必殺ゲージ
 	uint32_t superCharge_ = 0;
 
-	// 最大となるチャージ量
-	static inline const uint32_t maxCharge_ = 50;
+	KamataEngine::Sprite* gaugeSprite_ = nullptr;
+
+	//
+	//----------------------------------
 
 public:
 	static inline const float jumpPower_ = 50.0f;
@@ -59,10 +77,10 @@ public:
 	// 描画
 	void Draw();
 
-	void AddCharge() {
-		superCharge_++;
-		std::cout << superCharge_ << std::endl;
-	}
+	// UI描画
+	void DrawUI();
+
+	void AddCharge();
 
 	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
 
