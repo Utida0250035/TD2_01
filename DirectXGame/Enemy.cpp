@@ -5,7 +5,7 @@
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
 #include "Particle/CommandParticle.h"
-#include "Audio/Audio.h"
+#include "../SEPlayer.h"
 
 #include "ParticleEnemyAppear.h"
 
@@ -52,7 +52,7 @@ void Enemy::Initialize() {
 	spriteWarning_.reset(KamataEngine::Sprite::Create(texture, {0.0f, 0.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
 	spriteWarning_->SetSize({32.0f, 32.0f});
 
-	Audio::Manager::GetInstance()->Play("./Resources/seEnemyAppear.mp3");
+	SEPlayer::GetInstance()->Play("./Resources/seEnemyAppear.mp3");
 }
 
 void Enemy::Update() { entity_->Update(); }
@@ -138,7 +138,7 @@ void CmpEnemy::Update() {
 			anotherOwner_->SetIsWarning(false);
 			isAttack_ = true;
 			attackTimer_ = 0.0f;
-			Audio::Manager::GetInstance()->Play("./Resources/seEnemyAttack.mp3");
+			SEPlayer::GetInstance()->Play("./Resources/seEnemyAttack.mp3");
 		}
 	}
 
@@ -201,7 +201,7 @@ void CmpEnemy::Update() {
 		if (endTimer_ == 0.0f) {
 			anotherOwner_->GetEntity()->GetUpdCmp<CmpHitSphere>()->SetIsActive(false);
 			anotherOwner_->EmitParticle(anotherOwner_->GetEntity()->GetWorldPosition());
-			Audio::Manager::GetInstance()->Play("./Resources/seHit.mp3");
+			SEPlayer::GetInstance()->Play("./Resources/seHit.mp3");
 		}
 		endTimer_ += 1.0f / 60.0f;
 

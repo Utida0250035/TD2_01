@@ -195,6 +195,7 @@
     <ClCompile Include="Scene\SceneSample.cpp" />
     <ClCompile Include="Scene\SceneSelect.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
+    <ClCompile Include="SEPlayer.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="String\ConvertString.cpp" />
     <ClCompile Include="System\BehaviorBox.cpp" />
@@ -385,6 +386,7 @@
     <ClInclude Include="Scene\SceneSample.h" />
     <ClInclude Include="Scene\SceneSelect.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
+    <ClInclude Include="SEPlayer.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="String\ConvertString.h" />
     <ClInclude Include="System\Behavior.h" />
