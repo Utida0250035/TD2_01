@@ -17,7 +17,6 @@ void SceneGame::EnterScene() {
 
 	boss_ = new Boss;
 	boss_->Initialize();
-	boss_->SetPlayer(player_->GetEntity());
 
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
