@@ -4,6 +4,9 @@
 #include "System/EntityFactory.h"
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
+#include "Particle/CommandParticle.h"
+
+#include "ParticleEnemyAppear.h"
 
 using namespace Atrum;
 using namespace Atrum::Math;
@@ -25,12 +28,14 @@ void Enemy::Initialize() {
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 	cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("unitSphere"));
-	cmpMesh->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
+	cmpMesh->SetColor({1.0f, 0.0f, 0.0f, 0.0f});
+	entity_->RefTransform().scale = {0.2f, 0.2f, 0.2f};
 
 	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere->SetSpheres({
 	    {{}, 3.0f}
     });
+	cmpHitSphere->SetIsActive(false);
 
 	cmpHitSphere->SetEnemy();
 
@@ -64,6 +69,16 @@ void Enemy::Draw() {
 	}
 
 	KamataEngine::Sprite::PostDraw();
+
+	CommandParticle::GetInstance()->Draw("enemyAppear");
+}
+
+void Enemy::EmitParticle(const Vector3& pos) {
+	ParticleEnemyAppear* particleAppear = new ParticleEnemyAppear;
+	particleAppear->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
+	particleAppear->SetTargetPosition(pos);
+	particleAppear->Initialize();
+	CommandParticle::GetInstance()->Generate("enemyAppear", particleAppear);
 }
 
 namespace Atrum {
@@ -74,10 +89,29 @@ void CmpEnemy::Initialize() {}
 void CmpEnemy::Update() {
 
 	//--------------------------
+	// 登場演出
+
+	if (isBegin_) {
+		beginTimer_ += 1.0f / 60.0f;
+		
+		float plusScale = 0.8f * (kBeginTime_ / 60.0f);
+		anotherOwner_->GetEntity()->RefTransform().scale += {plusScale, plusScale, plusScale};
+		entityColor_.w += 1.0f * (kBeginTime_ / 15.0f);
+		anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor(entityColor_);
+		if (beginTimer_ >= kBeginTime_) {
+			isBegin_ = false;
+			anotherOwner_->GetEntity()->GetUpdCmp<CmpHitSphere>()->SetIsActive(true);
+		}
+	}
+
+	//
+	//--------------------------
+
+	//--------------------------
 	// プレイヤーに突進
 
 	// タイマー
-	if (!isAttack) {
+	if (!isAttack && !isBegin_) {
 		attackTimer_ += 1.0f / 60.0f;
 	}
 

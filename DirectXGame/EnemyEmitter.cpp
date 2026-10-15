@@ -11,6 +11,7 @@ void EnemyEmitter::Emit(std::vector<std::unique_ptr<Enemy>>& enemies, const Math
 	enemy->SetPlayer(SceneGame::GetInstance()->GetPlayer()->GetEntity());
 	enemy->GetEntity()->RefTransform().translate.x = bossPos.x + Random::Create(-10.0f, 15.0f);
 	enemy->GetEntity()->RefTransform().translate.y = bossPos.y + Random::Create(-10.0f, 10.0f);
+	enemy->EmitParticle(enemy->GetEntity()->GetTransform().translate);
 	enemies.push_back(std::move(enemy));
 
 }
