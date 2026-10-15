@@ -37,6 +37,8 @@ private:
 	std::unique_ptr<KamataEngine::Sprite> spriteWarning_;
 	bool isWarning_ = false;
 
+	bool isDead_ = false;
+
 public:
 	// 初期化
 	void Initialize();
@@ -52,9 +54,11 @@ public:
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
 	Atrum::Entity* GetPlayer() const { return player_; }
 	KamataEngine::Sprite* GetSprite() const { return spriteWarning_.get(); }
+	bool GetIsDead() const { return isDead_; }
 
 	void SetPlayer(Atrum::Entity* player) { player_ = player; }
 	void SetIsWarning(bool isWarning) { isWarning_ = isWarning; }
+	void SetIsDead(bool isDead) { isDead_ = isDead; }
 };
 
 namespace Atrum {
@@ -69,13 +73,15 @@ private:
 	// 演出時間<秒>
 	static inline const float kBeginTime_ = 0.5f;
 	float beginTimer_ = 0.0f;
+	static inline const float kEndTime_ = 0.5f;
+	float endTimer_ = 0.0f;
 	Math::Vector4 entityColor_ = {1.0f, 0.0f, 0.0f, 0.0f};
 
 	// 攻撃間隔<秒>
 	static inline const float kAttackTime_ = 1.5f;
 	static inline const float kBackTime_ = 0.5f;
 	float attackTimer_ = 0.0f;
-	bool isAttack = false;
+	bool isAttack_ = false;
 	bool isBack_ = false;
 	Math::Vector3 attackPos_{};
 	static inline const float kAttackSpeed_ = 2.0f;

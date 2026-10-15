@@ -5,6 +5,7 @@
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
 #include "Particle/CommandParticle.h"
+#include "Audio/Audio.h"
 
 #include "ParticleEnemyAppear.h"
 
@@ -50,6 +51,8 @@ void Enemy::Initialize() {
 	uint32_t texture = KamataEngine::TextureManager::Load("white1x1.png");
 	spriteWarning_.reset(KamataEngine::Sprite::Create(texture, {0.0f, 0.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
 	spriteWarning_->SetSize({32.0f, 32.0f});
+
+	Audio::Manager::GetInstance()->Play("./Resources/seEnemyAppear.mp3");
 }
 
 void Enemy::Update() { entity_->Update(); }
@@ -111,12 +114,12 @@ void CmpEnemy::Update() {
 	// プレイヤーに突進
 
 	// タイマー
-	if (!isAttack && !isBegin_) {
+	if (!isAttack_ && !isBegin_) {
 		attackTimer_ += 1.0f / 60.0f;
 	}
 
 	// 攻撃開始
-	if (!isAttack && attackTimer_ >= kAttackTime_) {
+	if (!isAttack_ && attackTimer_ >= kAttackTime_) {
 		isBack_ = true;
 		anotherOwner_->SetIsWarning(true);
 		attackTimer_ = 0.0f;
@@ -133,13 +136,14 @@ void CmpEnemy::Update() {
 		if (attackTimer_ >= kBackTime_) {
 			isBack_ = false;
 			anotherOwner_->SetIsWarning(false);
-			isAttack = true;
+			isAttack_ = true;
 			attackTimer_ = 0.0f;
+			Audio::Manager::GetInstance()->Play("./Resources/seEnemyAttack.mp3");
 		}
 	}
 
 	// 攻撃
-	if (isAttack) {
+	if (isAttack_) {
 		// 突進
 		Vector3 difference = attackPos_ - anotherOwner_->GetEntity()->GetTransform().translate;
 		float t = 1.0f - std::exp(-kAttackSpeed_ * (1.0f / 60.0f));
@@ -147,7 +151,7 @@ void CmpEnemy::Update() {
 		
 		// 一定距離まで近づいたら終了
 		if (difference.Length() <= kAttackSpeed_) {
-			isAttack = false;
+			isAttack_ = false;
 		}
 	}
 
@@ -186,6 +190,33 @@ void CmpEnemy::Update() {
 	}
 
 	anotherOwner_->GetSprite()->SetColor(warningColor_);
+
+	//
+	//--------------------------
+
+	//--------------------------
+	// 死亡演出
+
+	if (anotherOwner_->GetEntity()->GetUpdCmp<CmpHealthHit>()->GetHealthCount() <= 0) {
+		if (endTimer_ == 0.0f) {
+			anotherOwner_->GetEntity()->GetUpdCmp<CmpHitSphere>()->SetIsActive(false);
+			anotherOwner_->EmitParticle(anotherOwner_->GetEntity()->GetWorldPosition());
+			Audio::Manager::GetInstance()->Play("./Resources/seHit.mp3");
+		}
+		endTimer_ += 1.0f / 60.0f;
+
+		anotherOwner_->SetIsWarning(false);
+		isAttack_ = false;
+		isBack_ = false;
+
+		float minusScale = 0.8f * (kEndTime_ / 60.0f);
+		anotherOwner_->GetEntity()->RefTransform().scale -= {minusScale, minusScale, minusScale};
+		entityColor_.w -= 1.0f * (kEndTime_ / 15.0f);
+		anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor(entityColor_);
+		if (endTimer_ >= kEndTime_) {
+			anotherOwner_->SetIsDead(true);
+		}
+	}
 
 	//
 	//--------------------------
