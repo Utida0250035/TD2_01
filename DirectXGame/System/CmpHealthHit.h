@@ -48,6 +48,9 @@ public:
 	void SetHealthCount(const uint32_t health) { healthCount_ = health; }
 
 	void SetInvincibleTimer(const float time) { invincibleTimer_ = time; }
+
+	void SetInvincibleTime(const float time) { invincibleTime_ = time; }
+
 };
 
 } // namespace Atrum

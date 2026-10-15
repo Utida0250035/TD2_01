@@ -4,6 +4,7 @@
 #include "System/EntityFactory.h"
 #include "Particle/CommandParticle.h"
 #include "ParticleExplosionRing.h"
+
 #include "KeMatrix3D.h"
 #include "KeMainCamera.h"
 #include "Time/DeltaTime.h"
@@ -19,6 +20,7 @@ void Player::Initialize() {
 
 	entity_->AddUpdCmp<CmpLhRigidBody>();
 	entity_->AddUpdCmp<CmpHitSphere>();
+	entity_->AddUpdCmp<CmpHealthHit>();
 	entity_->AddUpdCmp<CmpPlayer>();
 	entity_->AddDrawCmp<CmpMesh>();
 
@@ -38,13 +40,30 @@ void Player::Initialize() {
 	    {{}, 2.0f}
     });
 
+	cmpHealthHit_ = entity_->GetUpdCmp<CmpHealthHit>();
+	std::vector<EntityType> hurterTypes;
+	cmpHealthHit_->SetInitialHealthCount(maxHealth_);
+	cmpHealthHit_->SetInvincibleTime(invincibleTime_);
+	hurterTypes.push_back(EntityType::ENEMY);
+	hurterTypes.push_back(EntityType::ENEMY_WEAPON);
+	cmpHealthHit_->SetHurterTypes(hurterTypes);
+
 	entity_->ResolveDependences();
 	entity_->Initialize();
 
-	gaugeSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 16.0f});
+	gaugeSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 64.0f});
 
 	directionArrowModel_ = KamataEngine::Model::CreateFromOBJ("directionArrow", false);
 	arrowTransform_.Initialize();
+
+	healthTexture_ = KamataEngine::TextureManager::Load("white1x1.png");
+
+	for (uint32_t i = 0; i < maxHealth_; i++) {
+
+		healthSprites_[i] = KamataEngine::Sprite::Create(healthTexture_, {16.0f + (36.0f * i), 16.0f}, {1.0f, 1.0f, 0.0f, 1.0f});
+		healthSprites_[i]->SetSize({32.0f, 32.0f});
+	
+	}
 
 }
 
@@ -74,7 +93,62 @@ void Player::SetArrowDireciton(const Vector2 direction) {
 
 void Player::Update() {
 
+	uint32_t preHealth = cmpHealthHit_->GetHealthCount();
+
 	entity_->Update();
+
+	uint32_t afterHealth = cmpHealthHit_->GetHealthCount();
+
+	if (cmpHealthHit_->GetHealthCount() == 0) {
+
+		isDead_ = true;
+
+		CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
+		cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
+	}
+
+	// 被弾検知
+	if (!isInvincible_) {
+		if (afterHealth != preHealth) {
+
+			currentHealth_--;
+			isInvincible_ = true;
+
+			if (cmpHealthHit_->GetHealthCount() == 0) {
+
+				isDead_ = true;
+
+				CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
+				cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
+
+
+			} else {
+
+				invincibleTimer_ = invincibleTime_;
+
+				CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
+				cmpMesh->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
+
+			}
+
+		}
+	}
+
+	// 無敵クールダウン
+	if (!isDead_) {
+		if (isInvincible_) {
+
+			invincibleTimer_ -= 1.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();
+
+			if (invincibleTimer_ <= 0.0f) {
+
+				isInvincible_ = false;
+
+				CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
+				cmpMesh->SetColor({1.0f, 1.0f, 1.0f, 1.0f});
+			}
+		}
+	}
 
 	arrowTransform_.translation_.x = entity_.get()->RefTransform().translate.x;
 	arrowTransform_.translation_.y = entity_.get()->RefTransform().translate.y;
@@ -137,6 +211,10 @@ void Player::DrawUI() {
 	KamataEngine::Sprite::PreDraw();
 
 	gaugeSprite_->Draw();
+
+	for (uint32_t i = 0; i < currentHealth_; i++) {
+		healthSprites_[i]->Draw();
+	}
 
 	KamataEngine::Sprite::PostDraw();
 

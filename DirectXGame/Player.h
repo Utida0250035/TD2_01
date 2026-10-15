@@ -23,6 +23,7 @@
 #include "../System/DrawComponent.h"
 #include "../System/EntityType.h"
 #include "../System/UpdComponent.h"
+#include "../System/CmpHealthHit.h"
 
 #include <iostream>
 
@@ -64,6 +65,34 @@ private:
 
 	KamataEngine::WorldTransform arrowTransform_;
 	KamataEngine::Model* directionArrowModel_ = nullptr;
+
+	//
+	//----------------------------------
+
+	//----------------------------------
+	//
+
+	// 最大体力
+	static inline const uint32_t maxHealth_ = 3;
+	uint32_t currentHealth_ = maxHealth_;
+
+	uint32_t healthTexture_ = 0;
+
+	KamataEngine::Sprite* healthSprites_[maxHealth_];
+
+	Atrum::CmpHealthHit* cmpHealthHit_ = nullptr;
+
+	// 無敵タイマー
+	float invincibleTimer_ = 0.0f;
+
+	// 被弾時の無敵時間
+	static inline const float invincibleTime_ = 1.0f;
+
+	// 無敵状態
+	bool isInvincible_ = false;
+
+	// 死亡状態
+	bool isDead_ = false;
 
 	//
 	//----------------------------------
