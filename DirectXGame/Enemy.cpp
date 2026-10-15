@@ -25,7 +25,8 @@ void Enemy::Initialize() {
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 	cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("unitSphere"));
-	cmpMesh->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
+	cmpMesh->SetColor({1.0f, 0.0f, 0.0f, 0.0f});
+	entity_->RefTransform().scale = {0.2f, 0.2f, 0.2f};
 
 	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere->SetSpheres({
@@ -72,12 +73,29 @@ void CmpEnemy::ResolveDependence() {}
 void CmpEnemy::Initialize() {}
 
 void CmpEnemy::Update() {
+	//--------------------------
+	// 登場演出
+
+	if (isBegin_) {
+		beginTimer_ += 1.0f / 60.0f;
+		
+		float plusScale = 0.8f * (kBeginTime_ / 60.0f);
+		anotherOwner_->GetEntity()->RefTransform().scale += {plusScale, plusScale, plusScale};
+		entityColor_.w += 1.0f * (kBeginTime_ / 15.0f);
+		anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor(entityColor_);
+		if (beginTimer_ >= kBeginTime_) {
+			isBegin_ = false;
+		}
+	}
+
+	//
+	//--------------------------
 
 	//--------------------------
 	// プレイヤーに突進
 
 	// タイマー
-	if (!isAttack) {
+	if (!isAttack && !isBegin_) {
 		attackTimer_ += 1.0f / 60.0f;
 	}
 

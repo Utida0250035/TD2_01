@@ -62,6 +62,13 @@ class CmpEnemy : public UpdComponent {
 private:
 	::Enemy* anotherOwner_ = nullptr;
 
+	// 登場演出中か
+	bool isBegin_ = true;
+	// 演出時間<秒>
+	static inline const float kBeginTime_ = 0.5f;
+	float beginTimer_ = 0.0f;
+	Math::Vector4 entityColor_ = {1.0f, 0.0f, 0.0f, 0.0f};
+
 	// 攻撃間隔<秒>
 	static inline const float kAttackTime_ = 1.5f;
 	static inline const float kBackTime_ = 0.5f;
