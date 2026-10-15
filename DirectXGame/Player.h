@@ -62,6 +62,7 @@ private:
 
 	KamataEngine::Sprite* gaugeSprite_ = nullptr;
 
+	KamataEngine::WorldTransform arrowTransform_;
 	KamataEngine::Model* directionArrowModel_ = nullptr;
 
 	//
@@ -83,6 +84,8 @@ public:
 	void DrawUI();
 
 	void AddCharge();
+
+	void SetArrowDireciton(const Atrum::Math::Vector2 direction);
 
 	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
 	Atrum::Entity* GetEntity() const { return entity_.get(); }

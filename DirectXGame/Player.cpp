@@ -4,7 +4,8 @@
 #include "System/EntityFactory.h"
 #include "Particle/CommandParticle.h"
 #include "ParticleExplosionRing.h"
-
+#include "KeMatrix3D.h"
+#include "KeMainCamera.h"
 #include "Time/DeltaTime.h"
 
 using namespace Atrum;
@@ -42,6 +43,9 @@ void Player::Initialize() {
 
 	gaugeSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 16.0f});
 
+	directionArrowModel_ = KamataEngine::Model::CreateFromOBJ("directionArrow", false);
+	arrowTransform_.Initialize();
+
 }
 
 void Player::AddCharge() {
@@ -56,9 +60,28 @@ void Player::AddCharge() {
 
 }
 
+void Player::SetArrowDireciton(const Vector2 direction) {
+
+	float angle = std::atan2(direction.y, direction.x);
+
+	if (direction.x == 0.0f && direction.y == 0.0f) {
+		angle = std::atan2(1.0f, 0.0f);
+	}
+
+	arrowTransform_.rotation_.z = angle;
+
+}
+
 void Player::Update() {
 
 	entity_->Update();
+
+	arrowTransform_.translation_.x = entity_.get()->RefTransform().translate.x;
+	arrowTransform_.translation_.y = entity_.get()->RefTransform().translate.y;
+	arrowTransform_.translation_.z = entity_.get()->RefTransform().translate.z;
+
+	arrowTransform_.matWorld_ = MakeWorldMatrix(arrowTransform_.translation_, arrowTransform_.scale_, arrowTransform_.rotation_);
+	arrowTransform_.TransferMatrix();
 
 	for (size_t i = 0; i < booms_.size(); ++i) {
 
@@ -97,6 +120,12 @@ void Player::Draw() {
 		i->Draw();
 	
 	}
+
+	KamataEngine::Model::PreDraw(KamataEngine::ModelCommon::CullingMode::kBack, KamataEngine::Model::BlendMode::kNormal, KamataEngine::Model::DepthTestMode::kReadOnly);
+
+	directionArrowModel_->Draw(arrowTransform_, *KeMainCamera::GetInstance()->camera_);
+
+	KamataEngine::Model::PostDraw();
 
 	CommandParticle::GetInstance()->Draw("explosion");
 
@@ -212,6 +241,8 @@ namespace Atrum {
 	    if (input_->PushKey(DIK_D) || input_->PushKey(DIK_RIGHT)) {
 		    moveDirection.x += 1.0f;
 	    }
+
+		anotherOwner_->SetArrowDireciton(moveDirection);
 
 		#pragma endregion
 
