@@ -118,6 +118,7 @@ void CmpBoss::Update() {
 		enemy->SetPlayer(anotherOwner_->GetPlayer());
 		enemy->GetEntity()->RefTransform().translate.x = Random::Create(-30.0f, 30.0f);
 		enemy->GetEntity()->RefTransform().translate.y = Random::Create(-20.0f, 20.0f);
+		enemy->EmitParticle(enemy->GetEntity()->GetTransform().translate);
 		anotherOwner_->GetEnemies().push_back(std::move(enemy));
 	}
 

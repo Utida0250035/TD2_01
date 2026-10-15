@@ -47,6 +47,8 @@ public:
 	// 描画
 	void Draw();
 
+	void EmitParticle(const Atrum::Math::Vector3& pos);
+
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
 	Atrum::Entity* GetPlayer() const { return player_; }
 	KamataEngine::Sprite* GetSprite() const { return spriteWarning_.get(); }

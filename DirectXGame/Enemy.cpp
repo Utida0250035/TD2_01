@@ -4,6 +4,9 @@
 #include "System/EntityFactory.h"
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
+#include "Particle/CommandParticle.h"
+
+#include "ParticleEnemyAppear.h"
 
 using namespace Atrum;
 using namespace Atrum::Math;
@@ -66,6 +69,16 @@ void Enemy::Draw() {
 	}
 
 	KamataEngine::Sprite::PostDraw();
+
+	CommandParticle::GetInstance()->Draw("enemyAppear");
+}
+
+void Enemy::EmitParticle(const Vector3& pos) {
+	ParticleEnemyAppear* particleAppear = new ParticleEnemyAppear;
+	particleAppear->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
+	particleAppear->SetTargetPosition(pos);
+	particleAppear->Initialize();
+	CommandParticle::GetInstance()->Generate("enemyAppear", particleAppear);
 }
 
 namespace Atrum {
@@ -74,6 +87,7 @@ void CmpEnemy::ResolveDependence() {}
 void CmpEnemy::Initialize() {}
 
 void CmpEnemy::Update() {
+
 	//--------------------------
 	// 登場演出
 
