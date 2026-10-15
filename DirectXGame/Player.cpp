@@ -4,6 +4,9 @@
 #include "System/EntityFactory.h"
 #include "Particle/CommandParticle.h"
 #include "ParticleExplosionRing.h"
+#include "KeMatrix3D.h"
+#include "KeMainCamera.h"
+#include "Time/DeltaTime.h"
 
 using namespace Atrum;
 using namespace Atrum::Math;
@@ -38,11 +41,47 @@ void Player::Initialize() {
 	entity_->ResolveDependences();
 	entity_->Initialize();
 
+	gaugeSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 16.0f});
+
+	directionArrowModel_ = KamataEngine::Model::CreateFromOBJ("directionArrow", false);
+	arrowTransform_.Initialize();
+
+}
+
+void Player::AddCharge() {
+
+	superCharge_++;
+
+	if (superCharge_ > maxCharge_) {
+		superCharge_ = maxCharge_;
+	}
+
+	std::cout << superCharge_ << std::endl;
+
+}
+
+void Player::SetArrowDireciton(const Vector2 direction) {
+
+	float angle = std::atan2(direction.y, direction.x);
+
+	if (direction.x == 0.0f && direction.y == 0.0f) {
+		angle = std::atan2(1.0f, 0.0f);
+	}
+
+	arrowTransform_.rotation_.z = angle;
+
 }
 
 void Player::Update() {
 
 	entity_->Update();
+
+	arrowTransform_.translation_.x = entity_.get()->RefTransform().translate.x;
+	arrowTransform_.translation_.y = entity_.get()->RefTransform().translate.y;
+	arrowTransform_.translation_.z = entity_.get()->RefTransform().translate.z;
+
+	arrowTransform_.matWorld_ = MakeWorldMatrix(arrowTransform_.translation_, arrowTransform_.scale_, arrowTransform_.rotation_);
+	arrowTransform_.TransferMatrix();
 
 	for (size_t i = 0; i < booms_.size(); ++i) {
 
@@ -64,6 +103,10 @@ void Player::Update() {
 		}
 
 	}
+
+	// UI
+	gaugeSprite_->SetSize({(static_cast<float>(superCharge_) / static_cast<float>(maxCharge_)) * chargeUIMax_, 32.0f});
+
 }
 
 void Player::Draw() {
@@ -78,9 +121,25 @@ void Player::Draw() {
 	
 	}
 
+	KamataEngine::Model::PreDraw(KamataEngine::ModelCommon::CullingMode::kBack, KamataEngine::Model::BlendMode::kNormal, KamataEngine::Model::DepthTestMode::kReadOnly);
+
+	directionArrowModel_->Draw(arrowTransform_, *KeMainCamera::GetInstance()->camera_);
+
+	KamataEngine::Model::PostDraw();
+
 	CommandParticle::GetInstance()->Draw("explosion");
 
 	KamataEngine::Model::PostDraw();
+}
+
+void Player::DrawUI() {
+
+	KamataEngine::Sprite::PreDraw();
+
+	gaugeSprite_->Draw();
+
+	KamataEngine::Sprite::PostDraw();
+
 }
 
 namespace Atrum {
@@ -103,7 +162,7 @@ namespace Atrum {
 		//--------------------------
 		// 無重力時間
 
-		noGravityTime_ -= 1.0f / 60.0f;
+		noGravityTime_ -= 1.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();
 
 	    if (noGravityTime_ <= 0.0f) {
 		    rigidBody_->SetIsUseGravity(true);
@@ -113,24 +172,59 @@ namespace Atrum {
 	    //--------------------------
 
 		//--------------------------
-		//
+		// ベクトルと座標更新
+
+		//--------------
+		// 変数
+
+		#pragma region var
 
 		// ベクトル
 		Vector3& velocity = rigidBody_->RefVelocity();
 
+		// トランスフォーム
+		TransformLH &transform = RefOwner().RefTransform();
+
 		// 移動方向
 	    Vector2 moveDirection = {};
+
+		KamataEngine::Input* input_ = KamataEngine::Input::GetInstance();
+
+		#pragma endregion
+
+		//
+	    //--------------
+
+		//--------------
+		//
+
+		#pragma region update
 
 		// 減衰
 		velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
 
-		KamataEngine::Input *input_ = KamataEngine::Input::GetInstance();
+		// 着地処理
+		if (transform.translate.y < testGroundPos) {
+
+			// 着地状態ならさらに減衰
+		    velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.1f);
+			velocity.y = 0.0f;
+
+			transform.translate.y = testGroundPos;
+	    }
+
+		#pragma endregion
+
+		//
+	    //--------------
 
 		//
 	    //--------------------------
 
 		//--------------------------
 		// 方向指定
+
+		#pragma region directionInput
 
 	    if (input_->PushKey(DIK_W) || input_->PushKey(DIK_UP)) {
 		    moveDirection.y += 1.0f;
@@ -147,6 +241,10 @@ namespace Atrum {
 	    if (input_->PushKey(DIK_D) || input_->PushKey(DIK_RIGHT)) {
 		    moveDirection.x += 1.0f;
 	    }
+
+		anotherOwner_->SetArrowDireciton(moveDirection);
+
+		#pragma endregion
 
 		//
 	    //--------------------------
@@ -170,7 +268,7 @@ namespace Atrum {
 		    velocity.y = moveDirection.y * Player::jumpPower_;
 
 		    // 判定エンティティ
-		    anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::Boom(RefOwner().GetWorldPosition()));
+		    anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::Boom(RefOwner().GetWorldPosition(), anotherOwner_));
 
 		    ParticleExplosion* particle = new ParticleExplosion;
 		    particle->SetInitialTranslation(RefOwner().GetWorldPosition());

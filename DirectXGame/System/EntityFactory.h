@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 
+class Player;
 
 namespace Atrum {
 
@@ -19,7 +20,7 @@ public:
 	static std::vector<std::unique_ptr<Entity>> ScrollSpheres();
 	static std::unique_ptr<Entity> LinearEnemyBullet(const Math::Vector3& velocity, const Math::Vector3& position);
 	static std::unique_ptr<Entity> Parry(Entity* parent);
-	static std::unique_ptr<Entity> Boom(const Math::Vector3& pos);
+	static std::unique_ptr<Entity> Boom(const Math::Vector3& pos, ::Player *player = nullptr);
 
 	// コピーコンストラクタの削除
 	EntityFactory(const EntityFactory& source) = delete;

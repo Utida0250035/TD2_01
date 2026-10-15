@@ -38,6 +38,9 @@ public:
 
 		return &instance;
 	}
+
+	Player* GetPlayer() { return player_; }
+
 };
 
 } // namespace Atrum

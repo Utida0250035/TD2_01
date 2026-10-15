@@ -17,6 +17,7 @@ void SceneGame::EnterScene() {
 
 	boss_ = new Boss;
 	boss_->Initialize();
+	boss_->SetPlayer(player_->GetEntity());
 
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
@@ -66,6 +67,8 @@ void SceneGame::Draw() {
 	player_->Draw();
 
 	boss_->Draw();
+
+	player_->DrawUI();
 }
 
 void SceneGame::ExitScene() {

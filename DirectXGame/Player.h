@@ -24,11 +24,26 @@
 #include "../System/EntityType.h"
 #include "../System/UpdComponent.h"
 
+#include <iostream>
+
 // プレイヤー
 class Player final {
 
 private:
+
+	//----------------------------------
+	//
+
+	// 重力
 	static inline const float gravity_ = 50.0f;
+
+	// 最大となるチャージ量
+	static inline const uint32_t maxCharge_ = 50;
+
+	static inline const float chargeUIMax_ = 512.0f;
+
+	//
+	//----------------------------------
 
 	// 入力
 	KamataEngine::Input* input_ = nullptr;
@@ -38,6 +53,20 @@ private:
 
 	// 爆発エンティティ
 	std::vector<std::unique_ptr<Atrum::Entity>> booms_{};
+
+	//----------------------------------
+	//
+
+	// 必殺ゲージ
+	uint32_t superCharge_ = 0;
+
+	KamataEngine::Sprite* gaugeSprite_ = nullptr;
+
+	KamataEngine::WorldTransform arrowTransform_;
+	KamataEngine::Model* directionArrowModel_ = nullptr;
+
+	//
+	//----------------------------------
 
 public:
 	static inline const float jumpPower_ = 50.0f;
@@ -51,8 +80,15 @@ public:
 	// 描画
 	void Draw();
 
-	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
+	// UI描画
+	void DrawUI();
 
+	void AddCharge();
+
+	void SetArrowDireciton(const Atrum::Math::Vector2 direction);
+
+	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
+	Atrum::Entity* GetEntity() const { return entity_.get(); }
 };
 
 namespace Atrum {
@@ -72,6 +108,9 @@ private:
 
 	// 残り無重力時間
 	float noGravityTime_ = 0.0f;
+
+	// テスト用に用意した床判定の座標
+	static inline const float testGroundPos = -20.0f;
 
 public:
 	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::INPUT; }

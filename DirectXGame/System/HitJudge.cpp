@@ -3,6 +3,8 @@
 #include "../System/Entity.h"
 #include <cassert>
 
+#include "../Player.h"
+
 #ifdef _DEBUG
 
 #include <iostream>
@@ -55,6 +57,16 @@ std::vector<Entity*> HitJudge::IsHitOthers(CmpHitSphere* cmpHitSphere) {
 					hitEntitys.push_back(&otherOwner);
 
 					isHit = true;
+
+					if (cmp->IsEnemy()) {
+					
+						// プレイヤーにゲージ加算
+						Player* player_ = cmpHitSphere->GetPlayer();
+						if (player_) {
+							player_->AddCharge();
+						}
+
+					}
 
 					break;
 				}

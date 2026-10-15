@@ -25,11 +25,17 @@
 #include "../System/EntityType.h"
 #include "../System/UpdComponent.h"
 
-// ボス
+// 取り巻き
 class Enemy final {
 private:
 	// エンティティ
 	std::unique_ptr<Atrum::Entity> entity_ = nullptr;
+
+	Atrum::Entity* player_ = nullptr;
+
+	// 警告マーク
+	std::unique_ptr<KamataEngine::Sprite> spriteWarning_;
+	bool isWarning_ = false;
 
 public:
 	// 初期化
@@ -42,6 +48,11 @@ public:
 	void Draw();
 
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
+	Atrum::Entity* GetPlayer() const { return player_; }
+	KamataEngine::Sprite* GetSprite() const { return spriteWarning_.get(); }
+
+	void SetPlayer(Atrum::Entity* player) { player_ = player; }
+	void SetIsWarning(bool isWarning) { isWarning_ = isWarning; }
 };
 
 namespace Atrum {
@@ -50,6 +61,19 @@ class CmpEnemy : public UpdComponent {
 
 private:
 	::Enemy* anotherOwner_ = nullptr;
+
+	// 攻撃間隔<秒>
+	static inline const float kAttackTime_ = 1.5f;
+	static inline const float kBackTime_ = 0.5f;
+	float attackTimer_ = 0.0f;
+	bool isAttack = false;
+	bool isBack_ = false;
+	Math::Vector3 attackPos_{};
+	static inline const float kAttackSpeed_ = 2.0f;
+
+	// 警告マーク
+	KamataEngine::Vector4 warningColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
+	bool isToAlpha_ = true;
 
 public:
 	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::MOVEMENT; }
