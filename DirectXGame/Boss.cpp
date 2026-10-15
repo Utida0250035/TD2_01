@@ -115,6 +115,7 @@ void CmpBoss::Update() {
 		std::unique_ptr<Enemy> enemy;
 		enemy = std::make_unique<Enemy>();
 		enemy->Initialize();
+		enemy->SetPlayer(anotherOwner_->GetPlayer());
 		enemy->GetEntity()->RefTransform().translate.x = Random::Create(-30.0f, 30.0f);
 		enemy->GetEntity()->RefTransform().translate.y = Random::Create(-20.0f, 20.0f);
 		anotherOwner_->GetEnemies().push_back(std::move(enemy));

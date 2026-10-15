@@ -83,7 +83,7 @@ public:
 	void AddCharge();
 
 	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
-
+	Atrum::Entity* GetEntity() const { return entity_.get(); }
 };
 
 namespace Atrum {
