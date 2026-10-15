@@ -4,6 +4,8 @@
 #include "../System/UpdComponent.h"
 #include <vector>
 
+class Player;
+
 namespace Atrum {
 
 struct HitSphere {
@@ -18,9 +20,14 @@ class CmpHitSphere : public UpdComponent {
 private:
 	HitJudge* hitJudge_ = nullptr;
 
+	// プレイヤー
+	::Player* player_ = nullptr;
+
 	std::vector<HitSphere> hitSpheres_{};
 	std::vector<Entity*> hitEntitys_{};
 	bool isActive_ = true;
+
+	bool isEnemy_ = false;
 
 public:
 	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::HIT_JUDGE; }
@@ -35,6 +42,12 @@ public:
 
 	void SetIsActive(const bool isActive) { isActive_ = isActive; }
 	bool GetIsActive() const { return isActive_; }
+
+	void SetPlayer(::Player* player) { player_ = player; }
+	::Player* GetPlayer() { return player_; }
+
+	void SetEnemy() { isEnemy_ = true; }
+	bool IsEnemy() const { return isEnemy_; }
 
 	std::vector<Entity*> GetHitEntitys();
 };

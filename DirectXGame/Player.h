@@ -24,6 +24,8 @@
 #include "../System/EntityType.h"
 #include "../System/UpdComponent.h"
 
+#include <iostream>
+
 // プレイヤー
 class Player final {
 
@@ -39,6 +41,12 @@ private:
 	// 爆発エンティティ
 	std::vector<std::unique_ptr<Atrum::Entity>> booms_{};
 
+	// 必殺ゲージ
+	uint32_t superCharge_ = 0;
+
+	// 最大となるチャージ量
+	static inline const uint32_t maxCharge_ = 50;
+
 public:
 	static inline const float jumpPower_ = 50.0f;
 
@@ -50,6 +58,11 @@ public:
 
 	// 描画
 	void Draw();
+
+	void AddCharge() {
+		superCharge_++;
+		std::cout << superCharge_ << std::endl;
+	}
 
 	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
 

@@ -170,7 +170,7 @@ namespace Atrum {
 		    velocity.y = moveDirection.y * Player::jumpPower_;
 
 		    // 判定エンティティ
-		    anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::Boom(RefOwner().GetWorldPosition()));
+		    anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::Boom(RefOwner().GetWorldPosition(), anotherOwner_));
 
 		    ParticleExplosion* particle = new ParticleExplosion;
 		    particle->SetInitialTranslation(RefOwner().GetWorldPosition());

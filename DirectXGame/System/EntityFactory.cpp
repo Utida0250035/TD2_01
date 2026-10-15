@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "../Player.h"
+
 namespace Atrum {
 
 std::unique_ptr<Entity> EntityFactory::PlayerMononofu() {
@@ -198,7 +200,7 @@ std::unique_ptr<Entity> EntityFactory::LinearEnemyBullet(const Math::Vector3& ve
 	return std::move(bullet);
 }
 
-std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos) {
+std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos, ::Player *player) {
 
 	std::unique_ptr<Entity> boom = std::make_unique<Entity>();
 	boom->SetEntityType(EntityType::PLAYER_WEAPON);
@@ -215,6 +217,10 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos) {
 	cmpHitSphere->SetSpheres({
 	    {{}, 3.0f}
     });
+
+	if (player != nullptr) {
+		cmpHitSphere->SetPlayer(player);
+	}
 
 	boom->AddUpdCmp<CmpLifeTime>();
 	CmpLifeTime* cmpLifeTime = boom->GetUpdCmp<CmpLifeTime>();

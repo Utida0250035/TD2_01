@@ -29,6 +29,8 @@ void Enemy::Initialize() {
 	    {{}, 3.0f}
     });
 
+	cmpHitSphere->SetEnemy();
+
 	CmpHealthHit* cmpHealthHit = entity_->GetUpdCmp<CmpHealthHit>();
 	std::vector<EntityType> hurterTypes;
 	hurterTypes.push_back(EntityType::PLAYER_WEAPON);
