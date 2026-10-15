@@ -1,6 +1,7 @@
 #include "../Scene/SceneGame.h"
 #include "../Scene/CommandChangeScene.h"
 #include "../Scene/SceneResult.h"
+#include "../SEPlayer.h"
 #include <KamataEngine.h>
 #include <iostream>
 
@@ -35,6 +36,8 @@ void SceneGame::Update() {
 	cameraController_->Update();
 
 	commandParticle_->Update();
+
+	SEPlayer::GetInstance()->Update();
 
 	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_C)) {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
