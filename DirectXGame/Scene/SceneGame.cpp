@@ -20,6 +20,7 @@ void SceneGame::EnterScene() {
 
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
+	cameraController_->StartBeginBoss();
 
 	commandParticle_ = CommandParticle::GetInstance();
 
@@ -41,23 +42,7 @@ void SceneGame::Update() {
 
 #ifdef _DEBUG
 
-	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_F)) {
-		if (cameraController_->GetIsFollow()) {
-			cameraController_->SetIsFollow(false);
-		} else {
-			cameraController_->SetIsFollow(true);
-			cameraController_->SetTarget({0.0f, 0.0f, 0.0f});
-		}
-	}
-
-	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_J)) {
-		cameraController_->Shake(2.0f, 3.0f);
-	}
-
-	// ボス出現演出デモ
-	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_G)) {
-		cameraController_->StartBeginBoss();
-	}
+	
 
 #endif // _DEBUG
 }

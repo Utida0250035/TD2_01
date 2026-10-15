@@ -48,6 +48,12 @@ public:
 	/// </summary>
 	void StartBeginBoss();
 
+	/// <summary>
+	/// ボス撃破演出開始
+	/// </summary>
+	void StartEndBoss();
+
+
 
 	// ゲッター
 	Atrum::Math::Vector3 GetOffset() const { return offset_; }

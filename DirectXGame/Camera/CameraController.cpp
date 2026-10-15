@@ -128,6 +128,11 @@ void CameraController::StartBeginBoss() {
 	BeginBossTimer_ = 3.0f;
 }
 
+void CameraController::StartEndBoss() {
+	SetIsFollow(true);
+	SetTarget({0.0f, 0.0f, 0.0f});
+}
+
 void CameraController::SetTarget(const Atrum::Math::Vector3& target) {
 	target_ = target;
 	//Reset();
