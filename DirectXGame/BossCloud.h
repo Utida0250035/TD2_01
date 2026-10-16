@@ -22,6 +22,8 @@ private:
 	// エンティティ
 	std::unique_ptr<Entity> entity_;
 
+	bool isActive_ = true;
+
 public:
 
 	// 初期化
@@ -32,6 +34,8 @@ public:
 
 	// 描画
 	void Draw();
+
+	bool IsActive() const { return isActive_; }
 
 	~BossCloud() = default;
 	BossCloud() = default;

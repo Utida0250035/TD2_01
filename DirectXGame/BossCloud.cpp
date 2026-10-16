@@ -34,6 +34,7 @@ void BossCloud::Update() {
 	if (!attack_->IsActive()) {
 		attack_->Finalize();
 		entity_->SetState(Entity::State::Sleep);
+		isActive_ = false;
 	}
 
 
