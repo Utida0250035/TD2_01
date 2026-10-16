@@ -66,6 +66,9 @@ private:
 	KamataEngine::WorldTransform arrowTransform_;
 	KamataEngine::Model* directionArrowModel_ = nullptr;
 
+	// 操作方法
+	KamataEngine::Sprite* inputManual_ = nullptr;
+
 	//
 	//----------------------------------
 

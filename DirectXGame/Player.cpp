@@ -66,6 +66,10 @@ void Player::Initialize() {
 	
 	}
 
+	inputManual_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("inputManual.png"), {16.0f, 704.0f});
+	inputManual_->SetAnchorPoint({0.0f, 1.0f});
+
+
 }
 
 void Player::AddCharge() {
@@ -217,6 +221,8 @@ void Player::DrawUI() {
 	for (uint32_t i = 0; i < currentHealth_; i++) {
 		healthSprites_[i]->Draw();
 	}
+
+	inputManual_->Draw();
 
 	KamataEngine::Sprite::PostDraw();
 
