@@ -63,6 +63,11 @@ void Boss::Initialize() {
 
 	frameDeltaTime_ = FrameDeltaTime::GetInstance();
 
+	std::unique_ptr<BossCloud> testCloud = std::make_unique<BossCloud>();
+	testCloud->Initialize({});
+	clouds_.emplace_back(std::move(testCloud));
+
+
 	healthSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {640.0f - (healthBarWidth_ / 2.0f), 704.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f});
 	healthSprite_->SetSize({healthBarWidth_, 16.0f});
 }
@@ -93,6 +98,18 @@ void Boss::Update() {
 			enemy->GetEntity()->Finalize();
 			return true;
 		}
+		return false;
+	});
+
+	for (auto& cloud : clouds_) {
+		cloud->Update();
+	}
+
+	std::erase_if(clouds_, [](const auto& cloud) {
+		if (!cloud || !cloud->IsActive()) {
+			return true;
+		}
+
 		return false;
 	});
 
@@ -157,6 +174,10 @@ void Boss::Draw() {
 
 	for (auto& enemy : enemies_) {
 		enemy->Draw();
+	}
+
+	for (auto& cloud : clouds_) {
+		cloud->Draw();
 	}
 
 	for (auto& lightning : lightningAttacks_) {
