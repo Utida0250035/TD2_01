@@ -73,7 +73,7 @@ private:
 	float cloudLoopTimer_ = 0.0f;
 
 	// 雲召喚間隔
-	float cloudLoopTime_ = 5.0f;
+	float cloudLoopTime_ = 3.0f;
 
 	// 召喚ループ用タイマー
 	float summonLoopTimer_ = 0.0f;
@@ -105,7 +105,7 @@ private:
 	Actions currentAction_ = Move;
 
 	// 移動最大時間
-	static inline const float moveActionMaxTime_ = 2.0f;
+	static inline const float moveActionMaxTime_ = 1.5f;
 
 	// 乱数で指定する攻撃時間
 	float attackLimitTime_ = 0.0f;

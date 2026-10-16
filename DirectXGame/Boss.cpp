@@ -4,7 +4,6 @@
 #include "Particle/CommandParticle.h"
 #include "Random.h"
 #include "System/EntityFactory.h"
-#include "../SEPlayer.h"
 
 #include "BossLightning.h"
 #include "EnemyEmitter.h"
@@ -101,8 +100,9 @@ void Boss::Update() {
 			
 			actionTimer_ = 0.0f;
 			attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
+			cloudLoopTimer_ = cloudLoopTime_;
+			summonLoopTimer_ = summonLoopTime_;
 
-			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
 			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(EnemySummon), static_cast<int>(CloudSummon)));
 
 		}
@@ -115,19 +115,16 @@ void Boss::Update() {
 		summonLoopTimer_ += frameDeltaTime_->GetDeltaTime();
 
 		if (summonLoopTimer_ >= summonLoopTime_) {
-
 			summonLoopTimer_ = 0.0f;
-
 			EnemyEmitter::Emit(enemies_, entity_->GetWorldPosition());
 		}
 
 		if (actionTimer_ >= attackLimitTime_) {
 		
 			actionTimer_ = 0.0f;
-			attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
 
 			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
-			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(Move), static_cast<int>(CloudSummon)));
+			currentAction_ = Move;
 
 		}
 
@@ -140,20 +137,21 @@ void Boss::Update() {
 
 		if (cloudLoopTimer_ >= cloudLoopTime_) {
 
-			cloudLoopTimer_ = 0.0f;
+ 			cloudLoopTimer_ = 0.0f;
 
 			for (size_t i = 0; i < 2; ++i) {
 				clouds_.emplace_back(std::make_unique<Atrum::BossCloud>());
 				clouds_.back()->Initialize(entity_->GetWorldPosition() + lightningAttackOffsets_[i]);
 			}
+
 		}
 
 		if (actionTimer_ >= attackLimitTime_) {
 
 			actionTimer_ = 0.0f;
-			attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
+
 			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
-			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(Move), static_cast<int>(CloudSummon)));
+			currentAction_ = Move;
 
 		}
 
@@ -219,18 +217,6 @@ void Boss::Update() {
 
 	healthSprite_->SetSize({Interpolation::Lerp(currentBarWidth, endBarWidth, 0.2f), 16.0f});
 
-	// ダメージリアクション
-	if (damageReactionTimer_ > 0) {
-		damageReactionTimer_--;
-	} else {
-		entity_->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 1.0f, 1.0f, 1.0f});
-	}
-
-	if (cmpHealthHit->GetIsHurt()) {
-		entity_->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
-		SEPlayer::GetInstance()->Play("./Resources/seBossHit.mp3");
-		damageReactionTimer_ = damageReactionTime_;
-	}
 }
 
 void Boss::DrawUI() {
