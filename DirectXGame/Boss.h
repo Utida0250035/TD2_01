@@ -37,6 +37,17 @@ class FrameDeltaTime;
 class Boss final {
 private:
 
+	// 行動列挙型
+	enum Actions {
+
+		Move,
+
+		EnemySummon,
+
+		CloudSummon,
+
+	};
+
 	// 時間計測
 	FrameDeltaTime* frameDeltaTime_ = nullptr;
 
@@ -58,6 +69,12 @@ private:
 	// 1攻撃ループの時間
 	float attackLoopTime_ = 3.0f;
 
+	// 雲召喚タイマー
+	float cloudLoopTimer_ = 0.0f;
+
+	// 雲召喚間隔
+	float cloudLoopTime_ = 5.0f;
+
 	// 召喚ループ用タイマー
 	float summonLoopTimer_ = 0.0f;
 
@@ -74,6 +91,30 @@ private:
 
 	// 体力バー長さ
 	static inline const float healthBarWidth_ = 512.0f;
+
+	// 移動先座標
+	std::vector<Math::Vector3> movementPositions_;
+
+	// 目標移動先座標
+	Math::Vector3 currentTargetPosition_ = {};
+
+	// 行動タイマー
+	float actionTimer_ = 0.0f;
+
+	// 現在の行動
+	Actions currentAction_ = Move;
+
+	// 移動最大時間
+	static inline const float moveActionMaxTime_ = 2.0f;
+
+	// 乱数で指定する攻撃時間
+	float attackLimitTime_ = 0.0f;
+
+	// 攻撃最短時間
+	float attackMinTime_ = 1.0f;
+
+	// 攻撃最大時間
+	float attackMaxTime_ = 5.0f;
 
 public:
 	~Boss();

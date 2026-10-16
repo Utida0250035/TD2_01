@@ -11,7 +11,8 @@
 #include "ParticleBossDefeat.h"
 #include "Time/DeltaTime.h"
 
-#include "Math/Lerp.h"
+using namespace Atrum::Math;
+
 
 namespace Atrum {
 
@@ -67,6 +68,17 @@ void Boss::Initialize() {
 	testCloud->Initialize({});
 	clouds_.emplace_back(std::move(testCloud));
 
+	// 座標追加
+	movementPositions_ = {
+	    {20.0f, 15.0f, 0.0f},
+	    {0.0f, 15.0f, 0.0f},
+	    {-20.0f, 15.0f, 0.0f},
+	    {20.0f, -10.0f, 0.0f},
+	    {0.0f, -10.0f, 0.0f},
+	    {-20.0f, -10.0f, 0.0f},
+    };
+
+	currentTargetPosition_ = movementPositions_[Random::Create(0,static_cast<int>(movementPositions_.size() - 1))];
 
 	healthSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {640.0f - (healthBarWidth_ / 2.0f), 704.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f});
 	healthSprite_->SetSize({healthBarWidth_, 16.0f});
@@ -77,17 +89,85 @@ void Boss::Update() {
 	if (CommandParticle::GetInstance()->IsExist("bossAppear"))
 		return;
 
-	entity_->Update();
+	// 行動タイマー
+	actionTimer_ += frameDeltaTime_->GetDeltaTime();
 
-	summonLoopTimer_ += frameDeltaTime_->GetDeltaTime();
+	// 行動別の更新
+	switch (currentAction_) {
 
-	if (summonLoopTimer_ >= summonLoopTime_) {
+	case Move:
 
-		summonLoopTimer_ = 0.0f;
+		entity_->RefTransform().translate = Interpolation::Lerp(entity_->RefTransform().translate, currentTargetPosition_, 0.05f);
 
-		EnemyEmitter::Emit(enemies_, entity_->GetWorldPosition());
+		// 移行
+		if (actionTimer_ >= moveActionMaxTime_) {
+			
+			actionTimer_ = 0.0f;
+			attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
+
+			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
+			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(Move), static_cast<int>(CloudSummon)));
+
+		}
+
+		break;
+
+	case EnemySummon:
+
+		// 取り巻き召喚
+		summonLoopTimer_ += frameDeltaTime_->GetDeltaTime();
+
+		if (summonLoopTimer_ >= summonLoopTime_) {
+
+			summonLoopTimer_ = 0.0f;
+
+			EnemyEmitter::Emit(enemies_, entity_->GetWorldPosition());
+		}
+
+		if (actionTimer_ >= attackLimitTime_) {
+		
+			actionTimer_ = 0.0f;
+			attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
+
+			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
+			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(Move), static_cast<int>(CloudSummon)));
+
+		}
+
+		break;
+
+	case CloudSummon:
+
+		// 雲召喚
+		cloudLoopTimer_ += frameDeltaTime_->GetDeltaTime();
+
+		if (cloudLoopTimer_ >= cloudLoopTime_) {
+
+			cloudLoopTimer_ = 0.0f;
+
+			for (size_t i = 0; i < 2; ++i) {
+				clouds_.emplace_back(std::make_unique<Atrum::BossCloud>());
+				clouds_.back()->Initialize(entity_->GetWorldPosition() + lightningAttackOffsets_[i]);
+			}
+		}
+
+		if (actionTimer_ >= attackLimitTime_) {
+
+			actionTimer_ = 0.0f;
+			attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
+			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
+			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(Move), static_cast<int>(CloudSummon)));
+
+		}
+
+		break;
+
 	}
 
+	// 本体更新
+	entity_->Update();
+
+	// 取り巻き更新
 	for (auto& enemy : enemies_) {
 		enemy->Update();
 	}
@@ -101,10 +181,12 @@ void Boss::Update() {
 		return false;
 	});
 
+	// 曇更新
 	for (auto& cloud : clouds_) {
 		cloud->Update();
 	}
 
+	// 雲消去
 	std::erase_if(clouds_, [](const auto& cloud) {
 		if (!cloud || !cloud->IsActive()) {
 			return true;
@@ -112,18 +194,6 @@ void Boss::Update() {
 
 		return false;
 	});
-
-	attackLoopTimer_ += frameDeltaTime_->GetDeltaTime();
-
-	if (attackLoopTimer_ >= attackLoopTime_) {
-
-		attackLoopTimer_ = 0.0f;
-
-		for (size_t i = 0; i < 2; ++i) {
-			lightningAttacks_.emplace_back(std::make_unique<Atrum::BossLightning>());
-			lightningAttacks_.back()->Initialize(entity_->GetWorldPosition() + lightningAttackOffsets_[i]);
-		}
-	}
 
 	for (auto& lightning : lightningAttacks_) {
 
@@ -151,6 +221,7 @@ void Boss::Update() {
 	float endBarWidth = (static_cast<float>(cmpHealthHit->GetHealthCount()) / static_cast<float>(cmpHealthHit->GetInitialHealthCount())) * healthBarWidth_;
 
 	healthSprite_->SetSize({Interpolation::Lerp(currentBarWidth, endBarWidth, 0.2f), 16.0f});
+
 }
 
 void Boss::DrawUI() {
