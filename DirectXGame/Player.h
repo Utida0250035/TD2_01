@@ -118,6 +118,11 @@ public:
 
 	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
+
+	uint32_t GetMaxCharge() const { return maxCharge_; }
+	uint32_t GetCharge() const { return superCharge_; }
+
+	void SetCharge(uint32_t charge) { superCharge_ = charge; }
 };
 
 namespace Atrum {

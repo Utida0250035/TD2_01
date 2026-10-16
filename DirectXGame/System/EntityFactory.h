@@ -21,6 +21,8 @@ public:
 	static std::unique_ptr<Entity> LinearEnemyBullet(const Math::Vector3& velocity, const Math::Vector3& position);
 	static std::unique_ptr<Entity> Parry(Entity* parent);
 	static std::unique_ptr<Entity> Boom(const Math::Vector3& pos, ::Player *player = nullptr);
+	static std::unique_ptr<Entity> BigBoom(const Math::Vector3& pos, ::Player* player = nullptr);
+
 
 	// コピーコンストラクタの削除
 	EntityFactory(const EntityFactory& source) = delete;
