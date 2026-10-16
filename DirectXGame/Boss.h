@@ -65,6 +65,12 @@ private:
         {-2.5f, 2.5f, 0.0f}
     };
 
+	// 体力バースプライト
+	KamataEngine::Sprite* healthSprite_ = nullptr;
+
+	// 体力バー長さ
+	static inline const float healthBarWidth_ = 512.0f;
+
 public:
 	~Boss();
 
@@ -76,6 +82,9 @@ public:
 
 	// 描画
 	void Draw();
+
+	// UI描画
+	void DrawUI();
 
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
 	std::vector<std::unique_ptr<Enemy>>& GetEnemies() { return enemies_; }

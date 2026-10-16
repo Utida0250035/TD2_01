@@ -11,6 +11,8 @@
 #include "ParticleBossDefeat.h"
 #include "Time/DeltaTime.h"
 
+#include "Math/Lerp.h"
+
 namespace Atrum {
 
 Boss::~Boss() {
@@ -60,6 +62,9 @@ void Boss::Initialize() {
 	CommandParticle::GetInstance()->Generate("bossDefeat", particleDefeat);
 
 	frameDeltaTime_ = FrameDeltaTime::GetInstance();
+
+	healthSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {640.0f - (healthBarWidth_ / 2.0f), 704.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f});
+	healthSprite_->SetSize({healthBarWidth_, 16.0f});
 }
 
 void Boss::Update() {
@@ -121,6 +126,23 @@ void Boss::Update() {
 
 		return false;
 	});
+
+	// 体力
+	CmpHealthHit* cmpHealthHit = entity_->GetUpdCmp<CmpHealthHit>();
+
+	float currentBarWidth = healthSprite_->GetSize().x;
+	float endBarWidth = (static_cast<float>(cmpHealthHit->GetHealthCount()) / static_cast<float>(cmpHealthHit->GetInitialHealthCount())) * healthBarWidth_;
+
+	healthSprite_->SetSize({Interpolation::Lerp(currentBarWidth, endBarWidth, 0.2f), 16.0f});
+}
+
+void Boss::DrawUI() {
+
+	KamataEngine::Sprite::PreDraw();
+
+	healthSprite_->Draw();
+
+	KamataEngine::Sprite::PostDraw();
 }
 
 void Boss::Draw() {

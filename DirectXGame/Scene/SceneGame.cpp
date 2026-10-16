@@ -56,6 +56,8 @@ void SceneGame::Draw() {
 	boss_->Draw();
 
 	player_->DrawUI();
+	boss_->DrawUI();
+
 }
 
 void SceneGame::ExitScene() {
