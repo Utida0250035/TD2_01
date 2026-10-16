@@ -103,7 +103,7 @@ void Boss::Update() {
 			attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
 
 			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
-			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(Move), static_cast<int>(CloudSummon)));
+			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(EnemySummon), static_cast<int>(CloudSummon)));
 
 		}
 
