@@ -64,10 +64,6 @@ void Boss::Initialize() {
 
 	frameDeltaTime_ = FrameDeltaTime::GetInstance();
 
-	std::unique_ptr<BossCloud> testCloud = std::make_unique<BossCloud>();
-	testCloud->Initialize({});
-	clouds_.emplace_back(std::move(testCloud));
-
 	// 座標追加
 	movementPositions_ = {
 	    {20.0f, 15.0f, 0.0f},
