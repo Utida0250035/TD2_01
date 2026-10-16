@@ -201,7 +201,7 @@ void CmpEnemy::Update() {
 		if (endTimer_ == 0.0f) {
 			anotherOwner_->GetEntity()->GetUpdCmp<CmpHitSphere>()->SetIsActive(false);
 			anotherOwner_->EmitParticle(anotherOwner_->GetEntity()->GetWorldPosition());
-			SEPlayer::GetInstance()->Play("./Resources/seHit.mp3");
+			SEPlayer::GetInstance()->Play("./Resources/seEnemyHit.mp3");
 		}
 		endTimer_ += 1.0f / 60.0f;
 

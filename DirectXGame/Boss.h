@@ -116,6 +116,10 @@ private:
 	// 攻撃最大時間
 	float attackMaxTime_ = 5.0f;
 
+	// ダメージリアクション時間<フレーム>
+	uint32_t damageReactionTimer_ = 0;
+	uint32_t damageReactionTime_ = 5;
+
 public:
 	~Boss();
 
