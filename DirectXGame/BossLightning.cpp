@@ -4,6 +4,7 @@
 #include "System/CmpLifeTime.h"
 #include "Time/DeltaTime.h"
 #include <KamataEngine.h>
+#include <cassert>
 
 namespace Atrum {
 
@@ -24,6 +25,7 @@ void BossLightning::Initialize(const Math::Vector3& emitPos) {
 	entity_->AddUpdCmp<CmpHitSphere>();
 	cmpHitSphere_ = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere_->SetIsActive(true);
+	cmpHitSphere_->SetSpheres({});
 
 	entity_->AddUpdCmp<CmpLifeTime>();
 	CmpLifeTime* cmpLifeTime = entity_->GetUpdCmp<CmpLifeTime>();
@@ -44,18 +46,16 @@ void BossLightning::Update() {
 
 		if (growTimer_ >= growTime_) {
 
-			std::vector<HitSphere> hitSpheres = cmpHitSphere_->GetSpheres();
+			if (cmpHitSphere_->GetSpheres().size() > 0) {
 
-			if (hitSpheres.size() > 0) {
-
-				hitSpheres.push_back({hitSpheres.back().localOffset + offsets_[sphereCount_ % 4], kSphereRadius});
+				cmpHitSphere_->RefSpheres().push_back({cmpHitSphere_->GetSpheres().back().localOffset + offsets_[sphereCount_ % 4], kSphereRadius});
 			} else {
 
-				hitSpheres.push_back({{}, kSphereRadius});
+				cmpHitSphere_->RefSpheres().push_back({{}, kSphereRadius});
 			
 			}
 
-			cmpHitSphere_->SetSpheres(hitSpheres);
+			assert(cmpHitSphere_->GetSpheres().size() < 1000);
 
 			++sphereCount_;
 			growTimer_ = 0.0f;

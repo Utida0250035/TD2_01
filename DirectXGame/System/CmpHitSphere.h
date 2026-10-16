@@ -37,7 +37,10 @@ public:
 	void Update() override;
 	void Finalize() override;
 
-	std::vector<HitSphere> GetSpheres() const { return hitSpheres_; }
+	const std::vector<HitSphere>& GetSpheres() const { return hitSpheres_; }
+
+	std::vector<HitSphere>& RefSpheres() { return hitSpheres_; }
+
 	void SetSpheres(const std::vector<HitSphere>& hitSpheres) { hitSpheres_ = hitSpheres; }
 
 	void SetIsActive(const bool isActive) { isActive_ = isActive; }

@@ -25,7 +25,7 @@ std::vector<Entity*> HitJudge::IsHitOthers(CmpHitSphere* cmpHitSphere) {
 
 	std::vector<Entity*> hitEntitys{};
 
-	std::vector<HitSphere> myHitSpheres = cmpHitSphere->GetSpheres();
+	const std::vector<HitSphere>& myHitSpheres = cmpHitSphere->GetSpheres();
 
 	Math::Vector3 myPosition{};
 	Math::Vector3 otherPosition{};
@@ -42,7 +42,7 @@ std::vector<Entity*> HitJudge::IsHitOthers(CmpHitSphere* cmpHitSphere) {
 
 		Entity& otherOwner = cmp->RefOwner();
 
-		std::vector<HitSphere> otherHitSpheres = cmp->GetSpheres();
+		const std::vector<HitSphere>& otherHitSpheres = cmp->GetSpheres();
 
 		for (const HitSphere& myHitSphere : myHitSpheres) {
 

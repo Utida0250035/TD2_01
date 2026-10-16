@@ -41,7 +41,7 @@ void BossCloud::Update() {
 
 	if (timer_ >= 0.5f) {
 		if (attack_.get() == nullptr) {
-			attack_.reset(new BossLightning);
+			attack_.reset(new BossLightning());
 			attack_->Initialize(entity_->GetWorldPosition());
 		}
 	}
@@ -54,6 +54,7 @@ void BossCloud::Update() {
 
 		if (!attack_->IsActive()) {
 			attack_->Finalize();
+			entity_->Finalize();
 			entity_->SetState(Entity::State::Sleep);
 			isActive_ = false;
 		}
