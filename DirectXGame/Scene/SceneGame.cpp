@@ -2,6 +2,7 @@
 #include "../Scene/CommandChangeScene.h"
 #include "../Scene/SceneResult.h"
 #include "../SEPlayer.h"
+#include "../KeMainCamera.h"
 #include <KamataEngine.h>
 #include <iostream>
 
@@ -19,6 +20,12 @@ void SceneGame::EnterScene() {
 	boss_ = new Boss;
 	boss_->Initialize();
 
+	skyDome_ = new Skydome;
+	skyDome_->Initialize(KamataEngine::Model::CreateFromOBJ("skyDome"), KeMainCamera::GetInstance()->camera_);
+
+	cloud_ = new Cloud;
+	cloud_->Initialize(KamataEngine::Model::CreateFromOBJ("cloud"), KeMainCamera::GetInstance()->camera_);
+
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
 	cameraController_->StartBeginBoss();
@@ -32,6 +39,10 @@ void SceneGame::Update() {
 	player_->Update();
 
 	boss_->Update();
+
+	skyDome_->Update();
+
+	cloud_->Update();
 
 	cameraController_->Update();
 
@@ -51,9 +62,18 @@ void SceneGame::Update() {
 }
 
 void SceneGame::Draw() { 
+	KamataEngine::Model::PreDraw();
+
+	skyDome_->Draw();
+
+	cloud_->Draw();
+
+	KamataEngine::Model::PostDraw();
+
 	player_->Draw();
 
 	boss_->Draw();
+
 
 	player_->DrawUI();
 	boss_->DrawUI();
@@ -70,6 +90,10 @@ void SceneGame::ExitScene() {
 
 	delete player_;
 	player_ = nullptr;
+
+	delete skyDome_;
+
+	delete cloud_;
 
 	commandParticle_ = nullptr;
 }
