@@ -5,6 +5,8 @@
 #include "../Boss.h"
 #include "../Camera/CameraController.h"
 #include "../Particle/CommandParticle.h"
+#include "../Skydome.h"
+#include "../Cloud.h"
 
 namespace Atrum {
 
@@ -19,6 +21,12 @@ class SceneGame final : public Scene {
 
 		// ボス
 	    Boss* boss_ = nullptr;
+
+		// 天球
+	    Skydome* skyDome_ = nullptr;
+
+		// 雲
+	    Cloud* cloud_ = nullptr;
 
 		// カメラコントローラ
 	    CameraController* cameraController_ = nullptr;

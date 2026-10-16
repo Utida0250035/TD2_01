@@ -163,6 +163,7 @@
     <ClCompile Include="BossCloud.cpp" />
     <ClCompile Include="BossLightning.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
+    <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyEmitter.cpp" />
@@ -342,6 +343,7 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraController.h" />
     <ClInclude Include="Cast\StaticCast.h" />
+    <ClInclude Include="Cloud.h" />
     <ClInclude Include="DeathParticles.h" />
     <ClInclude Include="DeltaTime.h" />
     <ClInclude Include="Easing.h" />
