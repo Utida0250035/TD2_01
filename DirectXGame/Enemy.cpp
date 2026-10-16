@@ -29,8 +29,6 @@ void Enemy::Initialize() {
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 	cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("unitSphere"));
-	cmpMesh->SetColor({1.0f, 0.0f, 0.0f, 0.0f});
-	entity_->RefTransform().scale = {0.2f, 0.2f, 0.2f};
 
 	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere->SetSpheres({
@@ -47,6 +45,9 @@ void Enemy::Initialize() {
 
 	entity_->ResolveDependences();
 	entity_->Initialize();
+
+	cmpMesh->SetColor({1.0f, 0.0f, 0.0f, 0.0f});
+	entity_->RefTransform().scale = {0.2f, 0.2f, 0.2f};
 
 	uint32_t texture = KamataEngine::TextureManager::Load("white1x1.png");
 	spriteWarning_.reset(KamataEngine::Sprite::Create(texture, {0.0f, 0.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
@@ -93,13 +94,11 @@ void CmpEnemy::Update() {
 
 	//--------------------------
 	// 登場演出
-
 	if (isBegin_) {
 		beginTimer_ += 1.0f / 60.0f;
-		
-		float plusScale = 0.8f * (kBeginTime_ / 60.0f);
+		float plusScale = 0.8f / (kBeginTime_ * 60.0f);
 		anotherOwner_->GetEntity()->RefTransform().scale += {plusScale, plusScale, plusScale};
-		entityColor_.w += 1.0f * (kBeginTime_ / 15.0f);
+		entityColor_.w += 1.0f / (kBeginTime_ * 60.0f);
 		anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor(entityColor_);
 		if (beginTimer_ >= kBeginTime_) {
 			isBegin_ = false;
@@ -209,9 +208,9 @@ void CmpEnemy::Update() {
 		isAttack_ = false;
 		isBack_ = false;
 
-		float minusScale = 0.8f * (kEndTime_ / 60.0f);
+		float minusScale = 0.8f / (kEndTime_ * 60.0f);
 		anotherOwner_->GetEntity()->RefTransform().scale -= {minusScale, minusScale, minusScale};
-		entityColor_.w -= 1.0f * (kEndTime_ / 15.0f);
+		entityColor_.w -= 1.0f / (kEndTime_ * 60.0f);
 		anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor(entityColor_);
 		if (endTimer_ >= kEndTime_) {
 			anotherOwner_->SetIsDead(true);
