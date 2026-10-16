@@ -26,6 +26,9 @@ private:
 	// 有効状態
 	bool isActive_ = true;
 
+	// メッシュコンポーネント
+	CmpMesh* cmpMesh_ = nullptr;
+
 	float alpha_ = 0.0f;
 
 	// 経過時間
