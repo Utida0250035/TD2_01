@@ -6,7 +6,7 @@ void BossCloud::Initialize(const Math::Vector3& pos) {
 
 	entity_ = std::make_unique<Entity>();
 	entity_->SetEntityType(EntityType::ENEMY);
-	entity_->SetInitialTransform({{3.0f, 3.0f, 3.0f}, {}, pos });
+	entity_->SetInitialTransform({{5.0f, 3.0f, 3.0f}, {}, pos });
 
 	entity_->AddUpdCmp<CmpHitSphere>();
 	entity_->AddUpdCmp<CmpHealthHit>();
@@ -14,7 +14,7 @@ void BossCloud::Initialize(const Math::Vector3& pos) {
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 	cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("unitSphere", true));
-	cmpMesh->SetColor({0.1f, 0.1f, 0.1f, 1.0f});
+	cmpMesh->SetColor({0.1f, 0.1f, 0.1f, 0.0f});
 
 	entity_->Update();
 

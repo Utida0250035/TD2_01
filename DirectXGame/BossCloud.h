@@ -7,6 +7,7 @@
 #include "System/CmpLhRigidBody.h"
 #include "System/Entity.h"
 
+#include "Math/lerp.h"
 #include "BossAttack.h"
 #include "BossLightning.h"
 
@@ -22,7 +23,13 @@ private:
 	// エンティティ
 	std::unique_ptr<Entity> entity_;
 
+	// 有効状態
 	bool isActive_ = true;
+
+	float alpha_ = 0.0f;
+
+	// 経過時間
+	float timer_ = 0.0f;
 
 public:
 
