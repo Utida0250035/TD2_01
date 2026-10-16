@@ -80,6 +80,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	audio->Load("./Resources/seEnemyShot.mp3");
 	audio->Load("./Resources/seEnemyAppear.mp3");
 	audio->Load("./Resources/seEnemyAttack.mp3");
+	audio->Load("./Resources/seEnemyHit.mp3");
+	audio->Load("./Resources/seBossHit.mp3");
 
 	// エンティティの作成
 

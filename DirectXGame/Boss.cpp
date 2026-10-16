@@ -4,6 +4,7 @@
 #include "Particle/CommandParticle.h"
 #include "Random.h"
 #include "System/EntityFactory.h"
+#include "../SEPlayer.h"
 
 #include "BossLightning.h"
 #include "EnemyEmitter.h"
@@ -218,6 +219,18 @@ void Boss::Update() {
 
 	healthSprite_->SetSize({Interpolation::Lerp(currentBarWidth, endBarWidth, 0.2f), 16.0f});
 
+	// ダメージリアクション
+	if (damageReactionTimer_ > 0) {
+		damageReactionTimer_--;
+	} else {
+		entity_->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 1.0f, 1.0f, 1.0f});
+	}
+
+	if (cmpHealthHit->GetIsHurt()) {
+		entity_->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
+		SEPlayer::GetInstance()->Play("./Resources/seBossHit.mp3");
+		damageReactionTimer_ = damageReactionTime_;
+	}
 }
 
 void Boss::DrawUI() {
