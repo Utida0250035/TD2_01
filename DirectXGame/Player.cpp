@@ -4,6 +4,7 @@
 #include "System/EntityFactory.h"
 #include "Particle/CommandParticle.h"
 #include "ParticleExplosionRing.h"
+#include "ParticleBigExplosion.h"
 
 #include "KeMatrix3D.h"
 #include "KeMainCamera.h"
@@ -202,6 +203,7 @@ void Player::Draw() {
 	KamataEngine::Model::PostDraw();
 
 	CommandParticle::GetInstance()->Draw("explosion");
+	CommandParticle::GetInstance()->Draw("bigExplosion");
 
 	KamataEngine::Model::PostDraw();
 }
@@ -360,6 +362,25 @@ namespace Atrum {
 		//
 	    //--------------------------
 
+		//--------------------------
+	    // 必殺技
+
+		if (anotherOwner_->GetCharge() >= anotherOwner_->GetMaxCharge()) {
+		    anotherOwner_->SetCharge(0);
+
+			// 大爆発
+		    anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::BigBoom(RefOwner().GetWorldPosition(), anotherOwner_));
+
+		    ParticleBigExplosion* particle = new ParticleBigExplosion;
+		    particle->SetInitialTranslation(RefOwner().GetWorldPosition());
+		    particle->SetModel(explosionFireModel_, explosionSmokeModel_, explosionRingModel_);
+		    particle->Initialize();
+
+		    CommandParticle::GetInstance()->Generate("bigExplosion", particle);
+	    }
+
+		//
+	    //--------------------------
 	}
 
 } // namespace Atrum

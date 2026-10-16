@@ -166,6 +166,7 @@
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyEmitter.cpp" />
+    <ClCompile Include="ParticleBigExplosion.cpp" />
     <ClCompile Include="ParticleBossAppear.cpp" />
     <ClCompile Include="ParticleBossDefeat.cpp" />
     <ClCompile Include="ParticleEnemyAppear.cpp" />
@@ -348,6 +349,7 @@
     <ClInclude Include="EnemyBehavior.h" />
     <ClInclude Include="EnemyBehaviorWalk.h" />
     <ClInclude Include="EnemyEmitter.h" />
+    <ClInclude Include="ParticleBigExplosion.h" />
     <ClInclude Include="ParticleBossAppear.h" />
     <ClInclude Include="ParticleBossDefeat.h" />
     <ClInclude Include="ParticleEnemyAppear.h" />

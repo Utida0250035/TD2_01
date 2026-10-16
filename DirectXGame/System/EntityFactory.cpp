@@ -239,6 +239,44 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos, ::Player *
 
 }
 
+std::unique_ptr<Entity> EntityFactory::BigBoom(const Math::Vector3& pos, ::Player* player) {
+
+	std::unique_ptr<Entity> bigBoom = std::make_unique<Entity>();
+	bigBoom->SetEntityType(EntityType::PLAYER_WEAPON);
+
+	Math::TransformLH initTransform{};
+
+	initTransform.translate = pos;
+
+	bigBoom->SetInitialTransform(initTransform);
+
+	bigBoom->AddUpdCmp<CmpHitSphere>();
+	CmpHitSphere* cmpHitSphere = bigBoom->GetUpdCmp<CmpHitSphere>();
+
+	cmpHitSphere->SetSpheres({
+	    {{}, 15.0f}
+    });
+
+	if (player != nullptr) {
+		cmpHitSphere->SetPlayer(player);
+	}
+
+	bigBoom->AddUpdCmp<CmpLifeTime>();
+	CmpLifeTime* cmpLifeTime = bigBoom->GetUpdCmp<CmpLifeTime>();
+
+	cmpLifeTime->SetLifeTime(0.75f);
+
+	bigBoom->AddDrawCmp<CmpDrawHitSphere>();
+	CmpDrawHitSphere* cmpDrawHitSphere = bigBoom->GetDrawCmp<CmpDrawHitSphere>();
+
+	cmpDrawHitSphere->SetColor({0.75f, 0.1f, 0.1f, 1.0f});
+
+	bigBoom->ResolveDependences();
+	bigBoom->Initialize();
+
+	return std::move(bigBoom);
+}
+
 std::unique_ptr<Entity> EntityFactory::Parry(Entity* parent) {
 
 	std::unique_ptr<Entity> parry = std::make_unique<Entity>();
