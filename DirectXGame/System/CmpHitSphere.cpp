@@ -19,4 +19,10 @@ void CmpHitSphere::Finalize() {
 	hitJudge_->Remove(this);
 };
 
+CmpHitSphere::~CmpHitSphere() {
+
+	hitJudge_->Remove(this);
+
+}
+
 } // namespace Atrum

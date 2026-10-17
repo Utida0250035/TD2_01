@@ -53,6 +53,9 @@ public:
 	bool IsEnemy() const { return isEnemy_; }
 
 	std::vector<Entity*> GetHitEntitys();
+
+	~CmpHitSphere() override;
+
 };
 
 } // namespace Atrum
