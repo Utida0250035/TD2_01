@@ -98,6 +98,18 @@ void Player::SetArrowDireciton(const Vector2 direction) {
 
 void Player::Update() {
 
+	// 死亡終了確認
+	if (isDeath_) {
+		deathTimer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
+
+		if (deathTimer_ >= deathTime_) {
+			isDeathFinished_ = true;
+		}
+
+		return;
+
+	}
+
 	uint32_t preHealth = cmpHealthHit_->GetHealthCount();
 
 	entity_->Update();
@@ -106,7 +118,7 @@ void Player::Update() {
 
 	if (cmpHealthHit_->GetHealthCount() == 0) {
 
-		isDead_ = true;
+		isDeath_ = true;
 
 		CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 		cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
@@ -121,7 +133,7 @@ void Player::Update() {
 
 			if (cmpHealthHit_->GetHealthCount() == 0) {
 
-				isDead_ = true;
+				isDeath_ = true;
 
 				CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 				cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
@@ -140,7 +152,7 @@ void Player::Update() {
 	}
 
 	// 無敵クールダウン
-	if (!isDead_) {
+	if (!isDeath_) {
 		if (isInvincible_) {
 
 			invincibleTimer_ -= 1.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();

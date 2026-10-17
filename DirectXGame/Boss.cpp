@@ -55,13 +55,6 @@ void Boss::Initialize() {
 
 	CommandParticle::GetInstance()->Generate("bossAppear", particleAppear);
 
-	ParticleBossDefeat* particleDefeat = new ParticleBossDefeat;
-	particleDefeat->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
-	particleDefeat->Initialize();
-	particleDefeat->SetInitialPosition({});
-
-	CommandParticle::GetInstance()->Generate("bossDefeat", particleDefeat);
-
 	frameDeltaTime_ = FrameDeltaTime::GetInstance();
 
 	// 座標追加
@@ -85,82 +78,110 @@ void Boss::Update() {
 	if (CommandParticle::GetInstance()->IsExist("bossAppear"))
 		return;
 
+	// 死亡演出移行
+	if (isDeath_) {
+
+		deathTimer_ += frameDeltaTime_->GetDeltaTime();
+		
+		if (deathTimer_ >= deathTime_) {
+			isDeathFinished_ = true;
+		}
+
+	}
+
 	// 行動タイマー
 	actionTimer_ += frameDeltaTime_->GetDeltaTime();
 
 	// 行動別の更新
-	switch (currentAction_) {
+	if (!isDeath_) {
+		switch (currentAction_) {
 
-	case Move:
+		case Move:
 
-		entity_->RefTransform().translate = Interpolation::Lerp(entity_->RefTransform().translate, currentTargetPosition_, 0.05f);
+			entity_->RefTransform().translate = Interpolation::Lerp(entity_->RefTransform().translate, currentTargetPosition_, 0.05f);
 
-		// 移行
-		if (actionTimer_ >= moveActionMaxTime_) {
-			
-			actionTimer_ = 0.0f;
-			attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
-			cloudLoopTimer_ = cloudLoopTime_;
-			summonLoopTimer_ = summonLoopTime_;
+			// 移行
+			if (actionTimer_ >= moveActionMaxTime_) {
 
-			currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(EnemySummon), static_cast<int>(CloudSummon)));
+				actionTimer_ = 0.0f;
+				attackLimitTime_ = Random::Create(attackMinTime_, attackMinTime_);
+				cloudLoopTimer_ = cloudLoopTime_;
+				summonLoopTimer_ = summonLoopTime_;
 
-		}
-
-		break;
-
-	case EnemySummon:
-
-		// 取り巻き召喚
-		summonLoopTimer_ += frameDeltaTime_->GetDeltaTime();
-
-		if (summonLoopTimer_ >= summonLoopTime_) {
-			summonLoopTimer_ = 0.0f;
-			EnemyEmitter::Emit(enemies_, entity_->GetWorldPosition());
-		}
-
-		if (actionTimer_ >= attackLimitTime_) {
-		
-			actionTimer_ = 0.0f;
-
-			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
-			currentAction_ = Move;
-
-		}
-
-		break;
-
-	case CloudSummon:
-
-		// 雲召喚
-		cloudLoopTimer_ += frameDeltaTime_->GetDeltaTime();
-
-		if (cloudLoopTimer_ >= cloudLoopTime_) {
-
- 			cloudLoopTimer_ = 0.0f;
-
-			for (size_t i = 0; i < 2; ++i) {
-				clouds_.emplace_back(std::make_unique<Atrum::BossCloud>());
-				clouds_.back()->Initialize(entity_->GetWorldPosition() + lightningAttackOffsets_[i]);
+				currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(EnemySummon), static_cast<int>(CloudSummon)));
 			}
 
+			break;
+
+		case EnemySummon:
+
+			// 取り巻き召喚
+			summonLoopTimer_ += frameDeltaTime_->GetDeltaTime();
+
+			if (summonLoopTimer_ >= summonLoopTime_) {
+				summonLoopTimer_ = 0.0f;
+				EnemyEmitter::Emit(enemies_, entity_->GetWorldPosition());
+			}
+
+			if (actionTimer_ >= attackLimitTime_) {
+
+				actionTimer_ = 0.0f;
+
+				currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
+				currentAction_ = Move;
+			}
+
+			break;
+
+		case CloudSummon:
+
+			// 雲召喚
+			cloudLoopTimer_ += frameDeltaTime_->GetDeltaTime();
+
+			if (cloudLoopTimer_ >= cloudLoopTime_) {
+
+				cloudLoopTimer_ = 0.0f;
+
+				for (size_t i = 0; i < 2; ++i) {
+					clouds_.emplace_back(std::make_unique<Atrum::BossCloud>());
+					clouds_.back()->Initialize(entity_->GetWorldPosition() + lightningAttackOffsets_[i]);
+				}
+			}
+
+			if (actionTimer_ >= attackLimitTime_) {
+
+				actionTimer_ = 0.0f;
+
+				currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
+				currentAction_ = Move;
+			}
+
+			break;
 		}
-
-		if (actionTimer_ >= attackLimitTime_) {
-
-			actionTimer_ = 0.0f;
-
-			currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
-			currentAction_ = Move;
-
-		}
-
-		break;
-
 	}
 
 	// 本体更新
 	entity_->Update();
+
+	// 死亡確認
+	if (!isDeath_) {
+	
+		CmpHealthHit* cmpHealthHit = entity_->GetUpdCmp<CmpHealthHit>();
+
+		if (cmpHealthHit->GetHealthCount() <= 0) {
+
+			isDeath_ = true;
+
+			ParticleBossDefeat* particleDefeat = new ParticleBossDefeat;
+			particleDefeat->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
+			particleDefeat->SetInitialPosition(entity_->GetWorldPosition());
+			particleDefeat->Initialize();
+
+			CommandParticle::GetInstance()->Generate("bossDefeat", particleDefeat);
+
+		}
+
+	}
 
 	// 取り巻き更新
 	for (auto& enemy : enemies_) {
@@ -253,6 +274,7 @@ void Boss::Draw() {
 	}
 
 	CommandParticle::GetInstance()->Draw("bossAppear");
+	CommandParticle::GetInstance()->Draw("bossDefeat");
 }
 
 } // namespace Atrum

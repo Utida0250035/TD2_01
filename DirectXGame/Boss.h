@@ -116,6 +116,24 @@ private:
 	// 攻撃最大時間
 	float attackMaxTime_ = 5.0f;
 
+	//------------------------------------
+	//
+
+	// 死亡演出タイマー
+	float deathTimer_ = 0.0f;
+
+	// 死亡演出時間
+	float deathTime_ = 5.0f;
+
+	// 死亡状態
+	bool isDeath_ = false;
+
+	// 死亡演出終了状態
+	bool isDeathFinished_ = false;
+
+	//
+	//------------------------------------
+
 	// ダメージリアクション時間<フレーム>
 	uint32_t damageReactionTimer_ = 0;
 	uint32_t damageReactionTime_ = 5;
@@ -134,6 +152,8 @@ public:
 
 	// UI描画
 	void DrawUI();
+
+	bool IsDeathFinished() const { return isDeathFinished_; }
 
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
 	std::vector<std::unique_ptr<Enemy>>& GetEnemies() { return enemies_; }
