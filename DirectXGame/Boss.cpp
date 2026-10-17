@@ -44,7 +44,7 @@ void Boss::Initialize() {
 	std::vector<EntityType> hurterTypes;
 	hurterTypes.push_back(EntityType::PLAYER_WEAPON);
 	cmpHealthHit->SetHurterTypes(hurterTypes);
-	cmpHealthHit->SetInitialHealthCount(1);
+	cmpHealthHit->SetInitialHealthCount(200);
 
 	entity_->ResolveDependences();
 	entity_->Initialize();
