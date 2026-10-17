@@ -10,6 +10,8 @@
 #include "KeMainCamera.h"
 #include "Time/DeltaTime.h"
 
+#include "SEPlayer.h"
+
 using namespace Atrum;
 using namespace Atrum::Math;
 
@@ -17,7 +19,7 @@ void Player::Initialize() {
 
 	entity_ = std::make_unique<Entity>();
 	entity_->SetEntityType(EntityType::PLAYER);
-	entity_->SetInitialTransform({});
+	entity_->SetInitialTransform({{1.0f,1.0f,1.0f}, {}, {-20.0f, -20.0f, 0.0f}});
 
 	entity_->AddUpdCmp<CmpLhRigidBody>();
 	entity_->AddUpdCmp<CmpHitSphere>();
@@ -56,6 +58,13 @@ void Player::Initialize() {
 
 	directionArrowModel_ = KamataEngine::Model::CreateFromOBJ("directionArrow", false);
 	arrowTransform_.Initialize();
+	arrowTransform_.translation_.x = entity_.get()->RefTransform().translate.x;
+	arrowTransform_.translation_.y = entity_.get()->RefTransform().translate.y;
+	arrowTransform_.translation_.z = entity_.get()->RefTransform().translate.z;
+	arrowTransform_.rotation_.z = std::atan2(1.0f, 0.0f);
+
+	arrowTransform_.matWorld_ = MakeWorldMatrix(arrowTransform_.translation_, arrowTransform_.scale_, arrowTransform_.rotation_);
+	arrowTransform_.TransferMatrix();
 
 	healthTexture_ = KamataEngine::TextureManager::Load("white1x1.png");
 
@@ -97,6 +106,15 @@ void Player::SetArrowDireciton(const Vector2 direction) {
 }
 
 void Player::Update() {
+
+	if (CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat")) {
+
+		if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			SEPlayer::GetInstance()->Play("./Resources/seEnemyAppear.mp3");
+		}
+
+		return;
+	}
 
 	// 死亡終了確認
 	if (isDeath_) {
