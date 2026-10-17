@@ -50,8 +50,23 @@ void SceneGame::Update() {
 
 	SEPlayer::GetInstance()->Update();
 
+	#ifdef _DEBUG
+
 	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_C)) {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
+		commandParticle_->DestroyParticleAll();
+	}
+
+	#endif
+
+	if (boss_->IsDeathFinished()) {
+		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
+		commandParticle_->DestroyParticleAll();
+	}
+
+	if (player_->IsDeathFinished()) {
+		CommandChangeScene::GetInstance()->Set(SceneGame::GetInstance());
+		commandParticle_->DestroyParticleAll();
 	}
 
 #ifdef _DEBUG

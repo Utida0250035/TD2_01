@@ -21,7 +21,7 @@ private:
 	float initialSize_ = 5.0f;
 
 	// パーティクルを出せる時間
-	float timer_ = 5.0f;
+	float timer_ = 3.0f;
 
 	// 生成できるか
 	bool canCreate_ = true;

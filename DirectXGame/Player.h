@@ -76,7 +76,7 @@ private:
 	//
 
 	// 最大体力
-	static inline const uint32_t maxHealth_ = 3;
+	static inline const uint32_t maxHealth_ = 11;
 	uint32_t currentHealth_ = maxHealth_;
 
 	uint32_t healthTexture_ = 0;
@@ -95,7 +95,16 @@ private:
 	bool isInvincible_ = false;
 
 	// 死亡状態
-	bool isDead_ = false;
+	bool isDeath_ = false;
+
+	// 死亡時に加算するタイマー
+	float deathTimer_ = 0.0f;
+
+	// 死亡演出にかける時間
+	float deathTime_ = 1.0f;
+
+	// 死亡演出終了状態
+	bool isDeathFinished_ = false;
 
 	//
 	//----------------------------------
@@ -124,6 +133,7 @@ public:
 
 	uint32_t GetMaxCharge() const { return maxCharge_; }
 	uint32_t GetCharge() const { return superCharge_; }
+	bool IsDeathFinished() const { return isDeathFinished_; }
 
 	void SetCharge(uint32_t charge) { superCharge_ = charge; }
 };
