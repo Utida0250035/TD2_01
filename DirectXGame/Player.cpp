@@ -30,7 +30,7 @@ void Player::Initialize() {
 	cmpPlayer->SetAnotherOwner(this);
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
-	cmpMesh->SetModel(KamataEngine::Model::Create());
+	cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("player"));
 
 	CmpLhRigidBody* cmpLhRigidBody = entity_->GetUpdCmp<CmpLhRigidBody>();
 	cmpLhRigidBody->SetGravity({0.0f, -gravity_, 0.0f});

@@ -28,11 +28,11 @@ void Enemy::Initialize() {
 	cmpEnemy->SetAnotherOwner(this);
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
-	cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("unitSphere"));
+	cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("enemy"));
 
 	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere->SetSpheres({
-	    {{}, 3.0f}
+	    {{}, 2.0f}
     });
 	cmpHitSphere->SetIsActive(false);
 
@@ -46,12 +46,11 @@ void Enemy::Initialize() {
 	entity_->ResolveDependences();
 	entity_->Initialize();
 
-	cmpMesh->SetColor({1.0f, 0.0f, 0.0f, 0.0f});
+	cmpMesh->SetColor({1.0f, 1.0f, 1.0f, 0.0f});
 	entity_->RefTransform().scale = {0.2f, 0.2f, 0.2f};
 
-	uint32_t texture = KamataEngine::TextureManager::Load("white1x1.png");
+	uint32_t texture = KamataEngine::TextureManager::Load("warning.png");
 	spriteWarning_.reset(KamataEngine::Sprite::Create(texture, {0.0f, 0.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
-	spriteWarning_->SetSize({32.0f, 32.0f});
 
 	SEPlayer::GetInstance()->Play("./Resources/seEnemyAppear.mp3");
 }
