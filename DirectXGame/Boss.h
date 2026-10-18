@@ -134,6 +134,8 @@ private:
 	//
 	//------------------------------------
 
+	bool isSpawnSoundPlayed_ = false;
+
 	// ダメージリアクション時間<フレーム>
 	uint32_t damageReactionTimer_ = 0;
 	uint32_t damageReactionTime_ = 5;

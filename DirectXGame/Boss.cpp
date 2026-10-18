@@ -1,10 +1,10 @@
 #include "Boss.h"
 
+#include "../SEPlayer.h"
 #include "Math/Lerp.h"
 #include "Particle/CommandParticle.h"
 #include "Random.h"
 #include "System/EntityFactory.h"
-#include "../SEPlayer.h"
 
 #include "BossLightning.h"
 #include "EnemyEmitter.h"
@@ -13,7 +13,6 @@
 #include "Time/DeltaTime.h"
 
 using namespace Atrum::Math;
-
 
 namespace Atrum {
 
@@ -60,34 +59,42 @@ void Boss::Initialize() {
 
 	// 座標追加
 	movementPositions_ = {
-	    {20.0f, 15.0f, 0.0f},
-	    {0.0f, 15.0f, 0.0f},
-	    {-20.0f, 15.0f, 0.0f},
-	    {20.0f, -10.0f, 0.0f},
-	    {0.0f, -10.0f, 0.0f},
-	    {-20.0f, -10.0f, 0.0f},
-    };
+	    {20.0f,  15.0f,  0.0f},
+        {0.0f,   15.0f,  0.0f},
+        {-20.0f, 15.0f,  0.0f},
+        {20.0f,  -10.0f, 0.0f},
+        {0.0f,   -10.0f, 0.0f},
+        {-20.0f, -10.0f, 0.0f},
+	};
 
-	currentTargetPosition_ = movementPositions_[Random::Create(0,static_cast<int>(movementPositions_.size() - 1))];
+	currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
 
 	healthSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {640.0f - (healthBarWidth_ / 2.0f), 704.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f});
 	healthSprite_->SetSize({healthBarWidth_, 16.0f});
+
+
 }
 
 void Boss::Update() {
 
-	if (CommandParticle::GetInstance()->IsExist("bossAppear"))
+	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
+
+		if (!isSpawnSoundPlayed_) {
+			isSpawnSoundPlayed_ = true;
+			SEPlayer::GetInstance()->Play("./Resources/seBossSpawn.mp3");
+		}
+
 		return;
+	}
 
 	// 死亡演出移行
 	if (isDeath_) {
 
 		deathTimer_ += frameDeltaTime_->GetDeltaTime();
-		
+
 		if (deathTimer_ >= deathTime_) {
 			isDeathFinished_ = true;
 		}
-
 	}
 
 	// 行動タイマー
@@ -166,7 +173,7 @@ void Boss::Update() {
 
 	// 死亡確認
 	if (!isDeath_) {
-	
+
 		CmpHealthHit* cmpHealthHit = entity_->GetUpdCmp<CmpHealthHit>();
 
 		if (cmpHealthHit->GetHealthCount() <= 0) {
@@ -179,9 +186,7 @@ void Boss::Update() {
 			particleDefeat->Initialize();
 
 			CommandParticle::GetInstance()->Generate("bossDefeat", particleDefeat);
-
 		}
-
 	}
 
 	// 取り巻き更新
