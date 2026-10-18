@@ -108,6 +108,20 @@ private:
 	// 死亡演出終了状態
 	bool isDeathFinished_ = false;
 
+	bool onGround_ = false;
+
+	//
+	//----------------------------------
+
+	//----------------------------------
+	// 制限
+
+	// 爆弾最大回数
+	static inline const uint32_t bombMax_ = 10;
+
+	// 爆発可能回数
+	uint32_t currentBomb_ = bombMax_;
+
 	//
 	//----------------------------------
 
@@ -137,7 +151,21 @@ public:
 	uint32_t GetCharge() const { return superCharge_; }
 	bool IsDeathFinished() const { return isDeathFinished_; }
 
+	// 爆発可能か
+	bool CanExplode();
+
+	void ExplodeBombRemain() { currentBomb_--; }
+
+	void RefillBombs() { currentBomb_ = bombMax_; }
+
 	void SetCharge(uint32_t charge) { superCharge_ = charge; }
+
+	// 着地状態取得
+	bool GetOnGround() const { return onGround_; }
+
+	// 着地状態指定
+	void SetOnGround(const bool var) { onGround_ = var; }
+
 };
 
 namespace Atrum {

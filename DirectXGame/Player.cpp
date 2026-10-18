@@ -230,6 +230,17 @@ void Player::Update() {
 
 }
 
+bool Player::CanExplode() {
+
+	// 爆発可能回数が0でないかを確認する
+	if (currentBomb_ > 0) {
+		return true;
+	}
+
+	return false;
+
+}
+
 void Player::Draw() {
 
 	KamataEngine::Model::PreDraw();
@@ -347,6 +358,8 @@ namespace Atrum {
 		// 着地処理
 		if (transform.translate.y < testGroundPos) {
 
+			anotherOwner_->SetOnGround(true);
+
 			// 着地状態ならさらに減衰
 		    velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.1f);
 			velocity.y = 0.0f;
@@ -394,6 +407,12 @@ namespace Atrum {
 		// 爆発
 
 	    if (input_->TriggerKey(DIK_SPACE)) {
+
+			if (!anotherOwner_->CanExplode()) {
+			    return;
+			}
+
+			anotherOwner_->ExplodeBombRemain();
 
 		    // 無重力化
 		    noGravityTime_ = noGravityTimer_;
