@@ -9,7 +9,7 @@ class Cloud {
 
 private:
 	static inline const int kCloudNum_ = 32;
-	static inline const float kCloudspeed_ = 0.1f;
+	static inline const float kCloudspeed_ = 0.04f;
 
 	/// <summary>
 	/// ワールド変換
@@ -25,6 +25,8 @@ private:
 	/// カメラ
 	/// </summary>
 	KamataEngine::Camera* camera_ = nullptr;
+
+	KamataEngine::ObjectColor color_;
 
 public:
 	/// <summary>

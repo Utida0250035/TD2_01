@@ -6,6 +6,8 @@ void Cloud::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera)
 
 	model_ = model;
 	camera_ = camera;
+	color_.Initialize();
+	color_.SetColor({1.0f, 1.0f, 1.0f, 0.3f});
 	for (int i = 0; i < kCloudNum_; ++i) {
 		worldTransforms_[i].Initialize();
 
@@ -28,7 +30,7 @@ void Cloud::Update() {
 
 void Cloud::Draw() { 
 	for (int i = 0; i < kCloudNum_; ++i) {
-		model_->Draw(worldTransforms_[i], *camera_);
+		model_->Draw(worldTransforms_[i], *camera_, &color_);
 	}
 }
 
