@@ -43,6 +43,8 @@ private:
 
 	static inline const float chargeUIMax_ = 512.0f;
 
+	float deathVelocity_ = 0.0f;
+
 	//
 	//----------------------------------
 
@@ -101,7 +103,7 @@ private:
 	float deathTimer_ = 0.0f;
 
 	// 死亡演出にかける時間
-	float deathTime_ = 1.0f;
+	float deathTime_ = 2.0f;
 
 	// 死亡演出終了状態
 	bool isDeathFinished_ = false;

@@ -131,7 +131,8 @@ void Player::Update() {
 			isDeathFinished_ = true;
 		}
 
-		
+		deathVelocity_ += -180.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();
+		entity_->RefTransform().translate.y += deathVelocity_ * FrameDeltaTime::GetInstance()->GetDeltaTime();
 
 		return;
 
@@ -163,6 +164,7 @@ void Player::Update() {
 
 				isDeath_ = true;
 
+				deathVelocity_ = 70.0f;
 				CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 				cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
 
