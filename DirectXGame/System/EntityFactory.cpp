@@ -227,10 +227,14 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos, ::Player *
 
 	cmpLifeTime->SetLifeTime(0.5f);
 
+	#ifdef _DEBUG
+
 	boom->AddDrawCmp<CmpDrawHitSphere>();
 	CmpDrawHitSphere* cmpDrawHitSphere = boom->GetDrawCmp<CmpDrawHitSphere>();
 
 	cmpDrawHitSphere->SetColor({0.75f, 0.1f, 0.1f, 1.0f});
+
+	#endif
 
 	boom->ResolveDependences();
 	boom->Initialize();
@@ -266,10 +270,14 @@ std::unique_ptr<Entity> EntityFactory::BigBoom(const Math::Vector3& pos, ::Playe
 
 	cmpLifeTime->SetLifeTime(0.75f);
 
+	#ifdef _DEBUG
+
 	bigBoom->AddDrawCmp<CmpDrawHitSphere>();
 	CmpDrawHitSphere* cmpDrawHitSphere = bigBoom->GetDrawCmp<CmpDrawHitSphere>();
 
 	cmpDrawHitSphere->SetColor({0.75f, 0.1f, 0.1f, 1.0f});
+
+	#endif
 
 	bigBoom->ResolveDependences();
 	bigBoom->Initialize();

@@ -114,13 +114,16 @@ private:
 	//----------------------------------
 
 	//----------------------------------
-	// 制限
+	// 残弾
 
-	// 爆弾最大回数
+	// 残弾最大数
 	static inline const uint32_t bombMax_ = 10;
 
-	// 爆発可能回数
+	// 残弾数
 	uint32_t currentBomb_ = bombMax_;
+
+	// 残弾数スプライト
+	KamataEngine::Sprite* bombMeterSprite_ = nullptr;
 
 	//
 	//----------------------------------

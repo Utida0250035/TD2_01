@@ -81,6 +81,9 @@ void Player::Initialize() {
 	
 	}
 
+	bombMeterSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 200.0f}, {1.0f, 0.0f, 1.0f, 1.0f});
+
+	// 操作説明
 	inputManual_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("inputManual.png"), {16.0f, 704.0f});
 	inputManual_->SetAnchorPoint({0.0f, 1.0f});
 
@@ -231,6 +234,7 @@ void Player::Update() {
 
 	// UI
 	gaugeSprite_->SetSize({(static_cast<float>(superCharge_) / static_cast<float>(maxCharge_)) * chargeUIMax_, 32.0f});
+	bombMeterSprite_->SetSize({(static_cast<float>(currentBomb_) / static_cast<float>(bombMax_)) * 128.0f, 32.0f});
 
 }
 
@@ -274,6 +278,7 @@ void Player::DrawUI() {
 	KamataEngine::Sprite::PreDraw();
 
 	gaugeSprite_->Draw();
+	bombMeterSprite_->Draw();
 
 	for (uint32_t i = 0; i < currentHealth_; i++) {
 		healthSprites_[i]->Draw();
