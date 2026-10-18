@@ -215,7 +215,7 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos, ::Player *
 	CmpHitSphere* cmpHitSphere = boom->GetUpdCmp<CmpHitSphere>();
 
 	cmpHitSphere->SetSpheres({
-	    {{}, 3.0f}
+	    {{}, 9.0f}
     });
 
 	if (player != nullptr) {
@@ -225,7 +225,7 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos, ::Player *
 	boom->AddUpdCmp<CmpLifeTime>();
 	CmpLifeTime* cmpLifeTime = boom->GetUpdCmp<CmpLifeTime>();
 
-	cmpLifeTime->SetLifeTime(0.75f);
+	cmpLifeTime->SetLifeTime(0.5f);
 
 	boom->AddDrawCmp<CmpDrawHitSphere>();
 	CmpDrawHitSphere* cmpDrawHitSphere = boom->GetDrawCmp<CmpDrawHitSphere>();
@@ -254,7 +254,7 @@ std::unique_ptr<Entity> EntityFactory::BigBoom(const Math::Vector3& pos, ::Playe
 	CmpHitSphere* cmpHitSphere = bigBoom->GetUpdCmp<CmpHitSphere>();
 
 	cmpHitSphere->SetSpheres({
-	    {{}, 15.0f}
+	    {{}, 20.0f}
     });
 
 	if (player != nullptr) {
