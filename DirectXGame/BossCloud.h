@@ -29,10 +29,23 @@ private:
 	// メッシュコンポーネント
 	CmpMesh* cmpMesh_ = nullptr;
 
+	// アルファ値
 	float alpha_ = 0.0f;
+
+	// 消滅状態
+	bool isDisappear_ = false;
 
 	// 経過時間
 	float timer_ = 0.0f;
+
+	//---------------------------------------
+	//
+
+	// 攻撃開始までにかかる時間
+	static inline const float attackStartTime_ = 1.0f;
+
+	//
+	//---------------------------------------
 
 public:
 

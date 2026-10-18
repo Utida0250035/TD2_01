@@ -33,14 +33,14 @@ void BossCloud::Update() {
 
 	timer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
 
-	if (timer_ >= 1.0f) {
-		alpha_ = Interpolation::Lerp(alpha_, 0.0f, 0.2f);
+	if (isDisappear_) {
+		alpha_ = Interpolation::Lerp(alpha_, 0.0f, 0.1f);
 	} else {
 		alpha_ = Interpolation::Lerp(alpha_, 1.0f, 0.2f);
 	}
 
-	if (timer_ >= 0.5f) {
-		if (attack_.get() == nullptr) {
+	if (timer_ >= attackStartTime_) {
+		if (attack_ == nullptr) {
 			attack_.reset(new BossLightning());
 			attack_->Initialize(entity_->GetWorldPosition());
 		}
@@ -48,33 +48,38 @@ void BossCloud::Update() {
 
 	entity_->Update();
 
-	if (attack_.get()) {
+	if (attack_) {
 
 		attack_->Update();
 
 		if (!attack_->IsActive()) {
 			attack_->Finalize();
-			entity_->Finalize();
-			entity_->SetState(Entity::State::Sleep);
-			isActive_ = false;
+			isDisappear_ = true;
+
 		}
 
 	}
 
 	
-
+	if (isDisappear_) {
+		if (alpha_ <= 0.01f) {
+			entity_->Finalize();
+			entity_->SetState(Entity::State::Sleep);
+			isActive_ = false;
+		}
+	}
 
 }
 
 void BossCloud::Draw() {
 
-	KamataEngine::Model::PreDraw();
-
-	entity_->Draw();
-
 	if (attack_) {
 		attack_->Draw();
 	}
+
+	KamataEngine::Model::PreDraw(KamataEngine::ModelCommon::CullingMode::kBack, KamataEngine::Model::BlendMode::kNormal, KamataEngine::Model::DepthTestMode::kReadOnly);
+
+	entity_->Draw();
 
 	KamataEngine::Model::PostDraw();
 
