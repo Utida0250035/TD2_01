@@ -136,6 +136,7 @@ void CmpEnemy::Update() {
 			anotherOwner_->SetIsWarning(false);
 			isAttack_ = true;
 			attackTimer_ = 0.0f;
+			anotherOwner_->GetEntity()->SetEntityType(EntityType::ENEMY_WEAPON);
 			SEPlayer::GetInstance()->Play("./Resources/seEnemyAttack.mp3");
 		}
 	}
@@ -150,6 +151,7 @@ void CmpEnemy::Update() {
 		// 一定距離まで近づいたら終了
 		if (difference.Length() <= kAttackSpeed_) {
 			isAttack_ = false;
+			anotherOwner_->GetEntity()->SetEntityType(EntityType::ENEMY);
 		}
 	}
 

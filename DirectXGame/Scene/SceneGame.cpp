@@ -59,6 +59,11 @@ void SceneGame::Update() {
 
 	#endif
 
+	// ボス演出カメラ
+	if (boss_->GetIsDeath()) {
+		cameraController_->StartEndBoss(boss_->GetEntity()->GetWorldPosition());
+	}
+
 	if (boss_->IsDeathFinished()) {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
 		commandParticle_->DestroyParticleAll();

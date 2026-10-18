@@ -51,7 +51,7 @@ public:
 	/// <summary>
 	/// ボス撃破演出開始
 	/// </summary>
-	void StartEndBoss();
+	void StartEndBoss(const Atrum::Math::Vector3& pos);
 
 
 
