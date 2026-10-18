@@ -56,6 +56,9 @@ void Player::Initialize() {
 
 	gaugeSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 64.0f});
 
+	//-------------------------------------------
+	// 矢印方向表示
+
 	directionArrowModel_ = KamataEngine::Model::CreateFromOBJ("directionArrow", false);
 	arrowTransform_.Initialize();
 	arrowTransform_.translation_.x = entity_.get()->RefTransform().translate.x;
@@ -66,6 +69,10 @@ void Player::Initialize() {
 	arrowTransform_.matWorld_ = MakeWorldMatrix(arrowTransform_.translation_, arrowTransform_.scale_, arrowTransform_.rotation_);
 	arrowTransform_.TransferMatrix();
 
+	//
+	//-------------------------------------------
+
+	// 体力画像 (32x32)
 	healthTexture_ = KamataEngine::TextureManager::Load("white1x1.png");
 
 	for (uint32_t i = 0; i < maxHealth_; i++) {
@@ -107,6 +114,7 @@ void Player::SetArrowDireciton(const Vector2 direction) {
 
 void Player::Update() {
 
+	// 演出による一時停止
 	if (CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat")) {
 
 		if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)) {
@@ -124,6 +132,8 @@ void Player::Update() {
 			isDeathFinished_ = true;
 		}
 
+		
+
 		return;
 
 	}
@@ -140,6 +150,7 @@ void Player::Update() {
 
 		CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 		cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
+
 	}
 
 	// 被弾検知
