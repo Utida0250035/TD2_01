@@ -47,7 +47,6 @@ void Player::Initialize() {
 	std::vector<EntityType> hurterTypes;
 	cmpHealthHit_->SetInitialHealthCount(maxHealth_);
 	cmpHealthHit_->SetInvincibleTime(invincibleTime_);
-	hurterTypes.push_back(EntityType::ENEMY);
 	hurterTypes.push_back(EntityType::ENEMY_WEAPON);
 	cmpHealthHit_->SetHurterTypes(hurterTypes);
 
