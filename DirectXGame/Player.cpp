@@ -123,6 +123,10 @@ void Player::Update() {
 		return;
 	}
 
+	if (onGround_) {
+		currentBomb_ = bombMax_;
+	}
+
 	// 死亡終了確認
 	if (isDeath_) {
 		deathTimer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
@@ -409,9 +413,13 @@ namespace Atrum {
 	    if (input_->TriggerKey(DIK_SPACE)) {
 
 			if (!anotherOwner_->CanExplode()) {
+
+					SEPlayer::GetInstance()->Play("./Resources/seEnemyAppear.mp3");
+
 			    return;
 			}
 
+			anotherOwner_->SetOnGround(false);
 			anotherOwner_->ExplodeBombRemain();
 
 		    // 無重力化
