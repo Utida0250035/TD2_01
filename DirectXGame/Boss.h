@@ -157,6 +157,7 @@ public:
 
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
 	std::vector<std::unique_ptr<Enemy>>& GetEnemies() { return enemies_; }
+	bool GetIsDeath() const { return isDeath_; }
 };
 
 } // namespace Atrum
