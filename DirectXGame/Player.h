@@ -153,6 +153,12 @@ private:
 	// 無重力時間
 	static inline const float noGravityTimer_ = 0.2f;
 
+	// X軸移動制限
+	static inline const float xVectorMoveLimit_ = 40.0f;
+
+	// 上方向移動制限
+	static inline const float upperMoveLimit_ = 22.0f;
+
 	// 残り無重力時間
 	float noGravityTime_ = 0.0f;
 

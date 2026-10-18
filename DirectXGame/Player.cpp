@@ -316,6 +316,19 @@ namespace Atrum {
 
 		#pragma region update
 
+		// 移動制限
+	    if (transform.translate.x >= xVectorMoveLimit_) {
+		    transform.translate.x = xVectorMoveLimit_;
+		}
+
+		if (transform.translate.x <= -xVectorMoveLimit_) {
+		    transform.translate.x = -xVectorMoveLimit_;
+		}
+
+		if (transform.translate.y >= upperMoveLimit_) {
+		    transform.translate.y = upperMoveLimit_;
+		}
+
 		// 減衰
 		velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
 
