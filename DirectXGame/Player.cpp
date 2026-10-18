@@ -1,10 +1,12 @@
 #include "Player.h"
 
+#include <algorithm>
 #include "Math/Lerp.h"
 #include "System/EntityFactory.h"
 #include "Particle/CommandParticle.h"
 #include "ParticleExplosionRing.h"
 #include "ParticleBigExplosion.h"
+#include "Floor.h"
 
 #include "KeMatrix3D.h"
 #include "KeMainCamera.h"
@@ -37,6 +39,7 @@ void Player::Initialize() {
 	CmpLhRigidBody* cmpLhRigidBody = entity_->GetUpdCmp<CmpLhRigidBody>();
 	cmpLhRigidBody->SetGravity({0.0f, -gravity_, 0.0f});
 	cmpLhRigidBody->SetIsUseSpaceEnd(false);
+	cmpLhRigidBody->SetIsAutoMove(false);
 
 	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere->SetSpheres({
@@ -148,7 +151,7 @@ void Player::Update() {
 
 	uint32_t afterHealth = cmpHealthHit_->GetHealthCount();
 
-	if (cmpHealthHit_->GetHealthCount() == 0) {
+	if (cmpHealthHit_->GetHealthCount() == 0 || entity_->GetWorldPosition().y < -30.0f) {
 
 		isDeath_ = true;
 
@@ -301,6 +304,9 @@ namespace Atrum {
 	}
 
 	void CmpPlayer::Update() {
+
+		// 衝突情報の初期化
+	    Player::CollisionMapInfo collisionMapInfo{};
 	
 		//--------------------------
 		// 無重力時間
@@ -358,18 +364,6 @@ namespace Atrum {
 
 		// 減衰
 		velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.01f);
-
-		// 着地処理
-		if (transform.translate.y < testGroundPos) {
-
-			anotherOwner_->SetOnGround(true);
-
-			// 着地状態ならさらに減衰
-		    velocity = Atrum::Interpolation::Lerp(velocity, {}, 0.1f);
-			velocity.y = 0.0f;
-
-			transform.translate.y = testGroundPos;
-	    }
 
 		#pragma endregion
 
@@ -447,6 +441,23 @@ namespace Atrum {
 
 	    }
 
+		// 移動量に速度の値をコピー
+	    float dt = FrameDeltaTime::GetInstance()->GetDeltaTime();
+	    collisionMapInfo.moveAmount = velocity * dt;
+
+		// マップ衝突チェック
+	    CollisionMap(collisionMapInfo);
+
+	    // 移動
+	    Move(collisionMapInfo);
+
+	    // 天井
+	    HitCeilingUpdate(collisionMapInfo);
+	    // 壁
+	    HitWallUpdate(collisionMapInfo);
+	    // 床
+	    HitFloorUpdate(collisionMapInfo);
+
 		//
 	    //--------------------------
 
@@ -469,6 +480,206 @@ namespace Atrum {
 
 		//
 	    //--------------------------
+    }
+
+    void CmpPlayer::CollisionMap(Player::CollisionMapInfo& info) {
+	    for (int i = 0; i < static_cast<int>(Player::Direction::kNumDirection); i++) {
+		    Player::Direction direction = static_cast<Player::Direction>(i);
+		    CollisionMapAllDirections(info, direction);
+	    }
 	}
+
+    void CmpPlayer::CollisionMapAllDirections(Player::CollisionMapInfo& info, Player::Direction& direction) {
+	    // 方向ごとの設定
+	    Player::Corner cornerSet[2] = {Player::Corner::kLeftTop, Player::Corner::kRightTop};
+	    int sideXIndex = 0;
+	    int sideYIndex = 0;
+
+	    // それぞれの方向への移動あり?
+	    switch (direction) {
+	    case Player::Direction::kTop:
+		    if (info.moveAmount.y <= 0) {
+			    return;
+		    }
+
+		    cornerSet[0] = Player::Corner::kLeftTop;
+		    cornerSet[1] = Player::Corner::kRightTop;
+
+		    sideYIndex = 1;
+
+		    break;
+	    case Player::Direction::kBottom:
+		    if (info.moveAmount.y >= 0) {
+			    return;
+		    }
+
+		    cornerSet[0] = Player::Corner::kLeftBottom;
+		    cornerSet[1] = Player::Corner::kRightBottom;
+
+		    sideYIndex = -1;
+
+		    break;
+	    case Player::Direction::kRight:
+		    if (info.moveAmount.x <= 0) {
+			    return;
+		    }
+
+		    cornerSet[0] = Player::Corner::kRightTop;
+		    cornerSet[1] = Player::Corner::kRightBottom;
+
+		    sideXIndex = -1;
+
+		    break;
+	    case Player::Direction::kLeft:
+		    if (info.moveAmount.x >= 0) {
+			    return;
+		    }
+
+		    cornerSet[0] = Player::Corner::kLeftTop;
+		    cornerSet[1] = Player::Corner::kLeftBottom;
+
+		    sideXIndex = 1;
+
+		    break;
+	    }
+
+	    // 移動後の4つの角の座標
+	    std::array<Vector3, static_cast<size_t>(Player::Corner::kNumCorner)> positionsNew;
+
+	    for (uint32_t i = 0; i < positionsNew.size(); i++) {
+		    positionsNew[i] = CornerPosition(anotherOwner_->GetEntity()->GetWorldPosition() + info.moveAmount, static_cast<Player::Corner>(i));
+	    }
+
+	    Floor::MapChipType mapChipType;
+	    Floor::MapChipType mapChipTypeNext;
+	    Floor::IndexSet indexSet;
+	    // 当たり判定
+	    bool hit = false;
+	    for (int i = 0; i < 2; i++) {
+		    // 点の判定
+		    indexSet = anotherOwner_->GetFloor()->GetMapChipIndexSetByPosition(positionsNew[static_cast<size_t>(cornerSet[i])]);
+		    mapChipType = anotherOwner_->GetFloor()->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+		    mapChipTypeNext = anotherOwner_->GetFloor()->GetMapChipTypeByIndex(indexSet.xIndex + sideXIndex, indexSet.yIndex + sideYIndex);
+		    if (mapChipType == Floor::MapChipType::kBlock && mapChipTypeNext != Floor::MapChipType::kBlock) {
+			    hit = true;
+		    }
+	    }
+
+	    // ブロックにヒット?
+	    if (hit) {
+		    // めり込みを排除する方向に移動量を設定する
+		    indexSet = anotherOwner_->GetFloor()->GetMapChipIndexSetByPosition(positionsNew[static_cast<size_t>(cornerSet[0])]);
+		    // 現在座標が壁の外か判定
+		    Floor::IndexSet indexSetNow;
+		    indexSetNow = anotherOwner_->GetFloor()->GetMapChipIndexSetByPosition(positionsNew[static_cast<size_t>(cornerSet[0])] - info.moveAmount);
+		    if (direction == Player::Direction::kTop || direction == Player::Direction::kBottom) {
+			    if (indexSetNow.yIndex != indexSet.yIndex) {
+				    // めり込み先ブロックの範囲矩形
+				    Floor::Rect rect = anotherOwner_->GetFloor()->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+				    if (direction == Player::Direction::kTop) {
+					    info.moveAmount.y = std::max(0.0f, (rect.bottom - anotherOwner_->GetEntity()->RefTransform().translate.y) - (kHeight / 2.0f + kBlank));
+					    // 天井に当たったことを記録する
+					    info.isHitCeiling = true;
+				    } else {
+					    info.moveAmount.y = std::min(0.0f, (rect.top - anotherOwner_->GetEntity()->RefTransform().translate.y) + (kHeight / 2.0f + kBlank));
+					    // 床に当たったことを記録する
+					    info.isHitFloor = true;
+				    }
+			    }
+		    } else {
+			    if (indexSetNow.xIndex != indexSet.xIndex) {
+				    // めり込み先ブロックの範囲矩形
+				    Floor::Rect rect = anotherOwner_->GetFloor()->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+				    if (direction == Player::Direction::kRight) {
+					    info.moveAmount.x = std::max(0.0f, (rect.left - anotherOwner_->GetEntity()->RefTransform().translate.x) - (kWidth / 2.0f + kBlank));
+				    } else {
+					    info.moveAmount.x = std::min(0.0f, (rect.right - anotherOwner_->GetEntity()->RefTransform().translate.x) + (kWidth / 2.0f + kBlank));
+				    }
+				    // 壁に当たったことを記録する
+				    info.isHitWall = true;
+			    }
+		    }
+	    }
+	}
+
+    void CmpPlayer::Move(const Player::CollisionMapInfo& info) {
+	    // 移動
+	    anotherOwner_->GetEntity()->RefTransform().translate += info.moveAmount;
+	}
+
+    void CmpPlayer::HitCeilingUpdate(const Player::CollisionMapInfo& info) {
+	    // 天井に当たった?
+	    if (info.isHitCeiling) {
+		    rigidBody_->RefVelocity().y = 0;
+	    }
+	}
+
+    void CmpPlayer::HitWallUpdate(const Player::CollisionMapInfo& info) {
+	    // 壁接触による減速
+	    if (info.isHitWall) {
+		    rigidBody_->RefVelocity().x *= (1.0f - kAttenuationWall);
+	    }
+	}
+
+    void CmpPlayer::HitFloorUpdate(const Player::CollisionMapInfo& info) {
+	    // 自キャラが接地状態?
+	    if (anotherOwner_->GetOnGround()) {
+		    // ジャンプ開始
+		    if (rigidBody_->RefVelocity().y > 0.0f) {
+			    anotherOwner_->SetOnGround(false);
+		    } else {
+			    /// 落下判定と切り替え
+
+			    // 移動後の4つの角の座標
+			    std::array<Vector3, static_cast<size_t>(Player::Corner::kNumCorner)> positionsNew;
+
+			    for (uint32_t i = 0; i < positionsNew.size(); i++) {
+				    positionsNew[i] = CornerPosition(anotherOwner_->GetEntity()->GetWorldPosition(), static_cast<Player::Corner>(i));
+			    }
+
+			    Floor::MapChipType mapChipType;
+			    // 真下の当たり判定
+			    bool hit = false;
+			    // 左下点の判定
+			    Floor::IndexSet indexSet;
+			    indexSet = anotherOwner_->GetFloor()->GetMapChipIndexSetByPosition(positionsNew[static_cast<size_t>(Player::Corner::kLeftBottom)] + Vector3(0, -kBlank * 2.0f, 0));
+			    mapChipType = anotherOwner_->GetFloor()->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+			    if (mapChipType == Floor::MapChipType::kBlock) {
+				    hit = true;
+			    }
+			    // 右下点の判定
+			    indexSet = anotherOwner_->GetFloor()->GetMapChipIndexSetByPosition(positionsNew[static_cast<size_t>(Player::Corner::kRightBottom)] + Vector3(0, -kBlank - kBlank * 2.0f, 0));
+			    mapChipType = anotherOwner_->GetFloor()->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+			    if (mapChipType == Floor::MapChipType::kBlock) {
+				    hit = true;
+			    }
+
+			    // 落下開始
+			    if (!hit) {
+				    // 空中状態に切り替え
+				    anotherOwner_->SetOnGround(false);
+			    }
+		    }
+	    } else {
+		    if (info.isHitFloor) {
+			    // 着地状態に切り替え
+			    anotherOwner_->SetOnGround(true);
+			    // 着地時に減衰
+			    rigidBody_->RefVelocity() = Atrum::Interpolation::Lerp(rigidBody_->RefVelocity(), {}, 0.3f);
+			    rigidBody_->RefVelocity().y = 0.0f;
+		    }
+	    }
+	}
+
+    Vector3 CmpPlayer::CornerPosition(const Vector3& center, Player::Corner corner) {
+	    Vector3 offsetTable[static_cast<size_t>(Player::Corner::kNumCorner)] = {
+	        {+kWidth / 2.0f, -kHeight / 2.0f, 0}, // kRightBottom
+	        {-kWidth / 2.0f, -kHeight / 2.0f, 0}, // kLeftBottom
+	        {+kWidth / 2.0f, +kHeight / 2.0f, 0}, // kRightTop
+	        {-kWidth / 2.0f, +kHeight / 2.0f, 0}  // kLeftTop
+	    };
+
+	    return center + offsetTable[static_cast<uint32_t>(corner)];
+    }
 
 } // namespace Atrum

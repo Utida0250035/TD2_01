@@ -27,8 +27,39 @@
 
 #include <iostream>
 
+class Floor;
+
 // プレイヤー
 class Player final {
+public:
+	// マップとの当たり判定情報
+	struct CollisionMapInfo {
+		bool isHitCeiling = false;        // 天井
+		bool island = false;              // 着地
+		bool isHitFloor = false;          // 床
+		bool isHitWall = false;           // 壁
+		Atrum::Math::Vector3 moveAmount; // 移動量
+	};
+
+	// 方向
+	enum class Direction {
+		kTop,
+		kBottom,
+		kRight,
+		kLeft,
+
+		kNumDirection // 要素数
+	};
+
+	// 角
+	enum class Corner {
+		kRightBottom,
+		kLeftBottom,
+		kRightTop,
+		kLeftTop,
+
+		kNumCorner // 要素数
+	};
 
 private:
 
@@ -125,6 +156,8 @@ private:
 	//
 	//----------------------------------
 
+	Floor* floor_ = nullptr;
+
 public:
 	static inline const float jumpPower_ = 50.0f;
 
@@ -166,6 +199,9 @@ public:
 	// 着地状態指定
 	void SetOnGround(const bool var) { onGround_ = var; }
 
+	void SetFloor(Floor* floor) { floor_ = floor; }
+	Floor* GetFloor() { return floor_; }
+
 };
 
 namespace Atrum {
@@ -195,12 +231,31 @@ private:
 	// テスト用に用意した床判定の座標
 	static inline const float testGroundPos = -20.0f;
 
+	// 当たり判定サイズ
+	static inline const float kWidth = 2.0f;
+	static inline const float kHeight = 2.0f;
+	static inline const float kBlank = 0.1f;
+
+	// 壁接触時の減衰率
+	static inline const float kAttenuationWall = 0.3f;
+
 public:
 	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::INPUT; }
 
 	void ResolveDependence() override;
 	void Initialize() override;
 	void Update() override;
+
+	void CollisionMap(::Player::CollisionMapInfo& info);
+	void CollisionMapAllDirections(::Player::CollisionMapInfo& info, ::Player::Direction& direction);
+
+	void Move(const ::Player::CollisionMapInfo& info);
+
+	void HitCeilingUpdate(const ::Player::CollisionMapInfo& info);
+	void HitWallUpdate(const ::Player::CollisionMapInfo& info);
+	void HitFloorUpdate(const ::Player::CollisionMapInfo& info);
+
+	Math::Vector3 CornerPosition(const Math::Vector3& center, ::Player::Corner corner);
 
 	void SetAnotherOwner(::Player* owner) { anotherOwner_ = owner; }
 
