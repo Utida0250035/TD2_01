@@ -72,6 +72,8 @@ void Boss::Initialize() {
 	healthSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {640.0f - (healthBarWidth_ / 2.0f), 704.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f});
 	healthSprite_->SetSize({healthBarWidth_, 16.0f});
 
+	areaAttacks_.emplace_back(std::make_unique<Atrum::AreaAttack>());
+	areaAttacks_.back()->Initialize(entity_->GetWorldPosition());
 
 }
 
@@ -230,6 +232,20 @@ void Boss::Update() {
 		return false;
 	});
 
+	// 範囲攻撃更新
+	for (auto& attack : areaAttacks_) {
+		attack->Update();
+	}
+
+	// 範囲攻撃消去
+	std::erase_if(areaAttacks_, [](const auto& attack) {
+		if (!attack || !attack->IsActive()) {
+			return true;
+		}
+
+		return false;
+	});
+
 	for (auto& lightning : lightningAttacks_) {
 
 		if (!lightning)
@@ -296,6 +312,10 @@ void Boss::Draw() {
 
 	for (auto& cloud : clouds_) {
 		cloud->Draw();
+	}
+
+	for (auto& attack : areaAttacks_) {
+		attack->Draw();
 	}
 
 	for (auto& lightning : lightningAttacks_) {

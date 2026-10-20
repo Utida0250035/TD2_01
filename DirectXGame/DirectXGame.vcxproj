@@ -154,6 +154,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AreaAttack.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Audio\AudioDecoder.cpp" />
     <ClCompile Include="Audio\StreamingVoiceCallBack.cpp" />
@@ -329,6 +330,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="AreaAttack.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Audio\AudioDecoder.h" />
     <ClInclude Include="Audio\AudioHandle.h" />
