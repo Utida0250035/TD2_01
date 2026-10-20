@@ -69,11 +69,6 @@ private:
 	// 重力
 	static inline const float gravity_ = 50.0f;
 
-	// 最大となるチャージ量
-	static inline const uint32_t maxCharge_ = 50;
-
-	static inline const float chargeUIMax_ = 512.0f;
-
 	float deathVelocity_ = 0.0f;
 
 	//
@@ -90,11 +85,6 @@ private:
 
 	//----------------------------------
 	//
-
-	// 必殺ゲージ
-	uint32_t superCharge_ = 0;
-
-	KamataEngine::Sprite* gaugeSprite_ = nullptr;
 
 	KamataEngine::WorldTransform arrowTransform_;
 	KamataEngine::Model* directionArrowModel_ = nullptr;
@@ -176,15 +166,11 @@ public:
 	// UI描画
 	void DrawUI();
 
-	void AddCharge();
-
 	void SetArrowDireciton(const Atrum::Math::Vector2 direction);
 
 	std::vector<std::unique_ptr<Atrum::Entity>>& RefBooms() { return booms_; }
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
 
-	uint32_t GetMaxCharge() const { return maxCharge_; }
-	uint32_t GetCharge() const { return superCharge_; }
 	bool IsDeathFinished() const { return isDeathFinished_; }
 
 	// 爆発可能か
@@ -194,7 +180,6 @@ public:
 
 	void RefillBombs() { currentBomb_ = bombMax_; }
 
-	void SetCharge(uint32_t charge) { superCharge_ = charge; }
 
 	// 着地状態取得
 	bool GetOnGround() const { return onGround_; }

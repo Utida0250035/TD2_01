@@ -63,7 +63,7 @@ std::vector<Entity*> HitJudge::IsHitOthers(CmpHitSphere* cmpHitSphere) {
 						// プレイヤーにゲージ加算
 						Player* player_ = cmpHitSphere->GetPlayer();
 						if (player_) {
-							player_->AddCharge();
+							//player_->AddCharge();
 						}
 
 					}
