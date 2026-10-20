@@ -12,6 +12,8 @@
 #include "ParticleBossDefeat.h"
 #include "Time/DeltaTime.h"
 
+#include <cassert>
+
 using namespace Atrum::Math;
 
 namespace Atrum {
@@ -74,7 +76,6 @@ void Boss::Initialize() {
 
 	areaAttacks_.emplace_back(std::make_unique<Atrum::AreaAttack>());
 	areaAttacks_.back()->Initialize(entity_->GetWorldPosition());
-
 }
 
 void Boss::Update() {
@@ -90,10 +91,9 @@ void Boss::Update() {
 
 		if (!isScreamSoundPlayed_) {
 			if (appearTimer_ >= 3.0f) {
-			
+
 				isScreamSoundPlayed_ = true;
 				SEPlayer::GetInstance()->Play("./Resources/seBossScream.mp3");
-
 			}
 		}
 
@@ -129,7 +129,7 @@ void Boss::Update() {
 				cloudLoopTimer_ = cloudLoopTime_;
 				summonLoopTimer_ = summonLoopTime_;
 
-				currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(EnemySummon), static_cast<int>(CloudSummon)));
+				currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(EnemySummon), static_cast<int>(Count) - 1));
 			}
 
 			break;
@@ -178,6 +178,35 @@ void Boss::Update() {
 			}
 
 			break;
+
+		case AreaSummon:
+
+			if (!isAreaAttacked_) {
+
+				isAreaAttacked_ = true;
+
+				areaAttacks_.emplace_back(std::make_unique<Atrum::AreaAttack>());
+				areaAttacks_.back()->Initialize({-26.5f, 0.0f, 0.0f});
+				areaAttacks_.emplace_back(std::make_unique<Atrum::AreaAttack>());
+				areaAttacks_.back()->Initialize({26.5f, 0.0f, 0.0f});
+			}
+
+			if (actionTimer_ >= 3.0f) {
+
+				actionTimer_ = 0.0f;
+				isAreaAttacked_ = false;
+
+				currentTargetPosition_ = movementPositions_[Random::Create(0, static_cast<int>(movementPositions_.size() - 1))];
+				currentAction_ = Move;
+			}
+
+			break;
+
+		default:
+
+			assert(false && "currentAction_ has something wrong");
+
+			break;
 		}
 	}
 
@@ -204,7 +233,7 @@ void Boss::Update() {
 		}
 	}
 
-	#pragma region
+#pragma region
 
 	//-------------------------------
 	//
@@ -266,7 +295,7 @@ void Boss::Update() {
 	//
 	//-------------------------------
 
-	#pragma endregion
+#pragma endregion
 
 	// 体力
 	CmpHealthHit* cmpHealthHit = entity_->GetUpdCmp<CmpHealthHit>();

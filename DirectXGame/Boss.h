@@ -47,6 +47,10 @@ private:
 
 		CloudSummon,
 
+		AreaSummon,
+
+		Count,
+
 	};
 
 	// 時間計測
@@ -84,6 +88,9 @@ private:
 
 	// 1召喚ループの時間
 	float summonLoopTime_ = 0.5f;
+
+	// 範囲攻撃クラスをすでに呼び出したか
+	bool isAreaAttacked_ = false;
 
 	Math::Vector3 lightningAttackOffsets_[2] = {
 	    {2.5f,  2.5f, 0.0f},

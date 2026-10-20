@@ -17,7 +17,7 @@ private:
 	// メッシュコンポーネント
 	CmpMesh* cmpMesh_ = nullptr;
 
-	static inline const Math::Vector3 scale_ = {15, 60, 0.1f};
+	static inline const Math::Vector3 scale_ = {12, 60, 0.1f};
 
 	// 攻撃用エンティティ
 	std::unique_ptr<Entity> attackEntity_ = nullptr;
