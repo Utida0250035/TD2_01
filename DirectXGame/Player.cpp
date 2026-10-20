@@ -162,6 +162,7 @@ void Player::Update() {
 		cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
 		deathVelocity_ = 70.0f;
 
+		SEPlayer::GetInstance()->Play("./Resources/sePlayerDeath.mp3");
 	}
 
 	// 被弾検知
