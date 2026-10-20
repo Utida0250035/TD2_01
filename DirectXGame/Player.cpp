@@ -79,7 +79,7 @@ void Player::Initialize() {
 
 	for (uint32_t i = 0; i < maxHealth_; i++) {
 
-		healthSprites_[i] = KamataEngine::Sprite::Create(healthTexture_, {16.0f + (36.0f * i), 16.0f}, {1.0f, 1.0f, 0.0f, 1.0f});
+		healthSprites_[i] = KamataEngine::Sprite::Create(healthTexture_, {16.0f + (36.0f * i), 16.0f}, {0.0f, 0.0f, 0.0f, 1.0f});
 		healthSprites_[i]->SetSize({32.0f, 32.0f});
 	
 	}
