@@ -79,14 +79,20 @@ void Boss::Update() {
 
 	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
 
+		appearTimer_ += frameDeltaTime_->GetDeltaTime();
+
 		if (!isSpawnSoundPlayed_) {
 			isSpawnSoundPlayed_ = true;
 			SEPlayer::GetInstance()->Play("./Resources/seBossSpawn.mp3");
 		}
 
 		if (!isScreamSoundPlayed_) {
-			isScreamSoundPlayed_ = true;
-			SEPlayer::GetInstance()->Play("./Resources/seBossScream.mp3");
+			if (appearTimer_ >= 3.0f) {
+			
+				isScreamSoundPlayed_ = true;
+				SEPlayer::GetInstance()->Play("./Resources/seBossScream.mp3");
+
+			}
 		}
 
 		return;
