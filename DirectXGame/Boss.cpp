@@ -191,6 +191,8 @@ void Boss::Update() {
 
 			isDeath_ = true;
 
+
+
 			ParticleBossDefeat* particleDefeat = new ParticleBossDefeat;
 			particleDefeat->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
 			particleDefeat->SetInitialPosition(entity_->GetWorldPosition());
