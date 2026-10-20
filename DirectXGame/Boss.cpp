@@ -191,7 +191,7 @@ void Boss::Update() {
 
 			isDeath_ = true;
 
-
+			SEPlayer::GetInstance()->Play("./Resources/seBossDeath.mp3");
 
 			ParticleBossDefeat* particleDefeat = new ParticleBossDefeat;
 			particleDefeat->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
