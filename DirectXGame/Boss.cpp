@@ -341,6 +341,11 @@ void Boss::Update() {
 		entity_->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
 		SEPlayer::GetInstance()->Play("./Resources/seBossHit.mp3");
 		damageReactionTimer_ = damageReactionTime_;
+
+		if (cameraController_) {
+			cameraController_->Shake(0.2f, 0.5f);
+		}
+
 	}
 }
 

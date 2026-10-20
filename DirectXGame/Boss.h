@@ -30,6 +30,8 @@
 #include "BossCloud.h"
 #include "AreaAttack.h"
 
+#include "../Camera/CameraController.h"
+
 namespace Atrum {
 
 class FrameDeltaTime;
@@ -155,6 +157,9 @@ private:
 	uint32_t damageReactionTimer_ = 0;
 	uint32_t damageReactionTime_ = 5;
 
+	// カメラコントローラ
+	CameraController* cameraController_ = nullptr;
+
 public:
 	~Boss();
 
@@ -175,6 +180,9 @@ public:
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
 	std::vector<std::unique_ptr<Enemy>>& GetEnemies() { return enemies_; }
 	bool GetIsDeath() const { return isDeath_; }
+
+	void SetCameraController(CameraController* control) { cameraController_ = control; }
+
 };
 
 } // namespace Atrum

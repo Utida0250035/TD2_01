@@ -41,6 +41,7 @@ void SceneGame::EnterScene() {
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
 	cameraController_->StartBeginBoss();
+	boss_->SetCameraController(cameraController_);
 
 	commandParticle_ = CommandParticle::GetInstance();
 
