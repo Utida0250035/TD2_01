@@ -26,7 +26,7 @@ void SceneGame::EnterScene() {
 	boss_->Initialize();
 
 	skyDome_ = new Skydome;
-	skyDome_->Initialize(KamataEngine::Model::CreateFromOBJ("skyDome"), KeMainCamera::GetInstance()->camera_);
+	skyDome_->Initialize(KamataEngine::Model::CreateFromOBJ("skyDome", true), KeMainCamera::GetInstance()->camera_);
 
 	cloud_ = new Cloud;
 	cloud_->Initialize(KamataEngine::Model::CreateFromOBJ("cloud"), KeMainCamera::GetInstance()->camera_);
