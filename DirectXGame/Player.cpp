@@ -440,6 +440,11 @@ namespace Atrum {
 		// マップ衝突チェック
 	    CollisionMap(collisionMapInfo);
 
+		// 着地中は減衰
+		if (anotherOwner_->GetOnGround()) {
+		    rigidBody_->RefVelocity() = Atrum::Interpolation::Lerp(rigidBody_->RefVelocity(), {}, 0.25f);
+	    }
+
 	    // 移動
 	    Move(collisionMapInfo);
 
@@ -644,7 +649,6 @@ namespace Atrum {
 			    anotherOwner_->SetOnGround(true);
 			    rigidBody_->SetIsUseGravity(false);
 			    // 着地時に減衰
-			    rigidBody_->RefVelocity() = Atrum::Interpolation::Lerp(rigidBody_->RefVelocity(), {}, 0.3f);
 			    rigidBody_->RefVelocity().y = 0.0f;
 		    }
 	    }
