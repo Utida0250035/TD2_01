@@ -18,6 +18,7 @@
 #include "../System/Entity.h"
 #include "../System/Playable/CmpMoveByInput.h"
 #include "../System/CmpLifeTime.h"
+#include "../SEPlayer.h"
 #include <numbers>
 #include <stdlib.h>
 #include <time.h>
@@ -238,6 +239,8 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos, ::Player *
 
 	boom->ResolveDependences();
 	boom->Initialize();
+
+	SEPlayer::GetInstance()->Play("./Resources/sePlayerBoom.mp3");
 
 	return std::move(boom);
 
