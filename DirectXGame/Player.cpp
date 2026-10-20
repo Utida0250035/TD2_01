@@ -321,7 +321,7 @@ namespace Atrum {
 
 		noGravityTime_ -= 1.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();
 
-	    if (noGravityTime_ <= 0.0f) {
+	    if (noGravityTime_ <= 0.0f && !anotherOwner_->GetOnGround()) {
 		    rigidBody_->SetIsUseGravity(true);
 		}
 
@@ -610,7 +610,13 @@ namespace Atrum {
 	    }
 	}
 
-    void CmpPlayer::Move(const Player::CollisionMapInfo& info) {
+    void CmpPlayer::Move(Player::CollisionMapInfo& info) {
+		// 速度制限
+	    if (info.moveAmount.Length() >= kLimitSpeed_) {
+		    info.moveAmount.Normalize();
+		    info.moveAmount *= kLimitSpeed_;
+		}
+
 	    // 移動
 	    anotherOwner_->GetEntity()->RefTransform().translate += info.moveAmount;
 	}
@@ -672,6 +678,7 @@ namespace Atrum {
 		    if (info.isHitFloor) {
 			    // 着地状態に切り替え
 			    anotherOwner_->SetOnGround(true);
+			    rigidBody_->SetIsUseGravity(false);
 			    // 着地時に減衰
 			    rigidBody_->RefVelocity() = Atrum::Interpolation::Lerp(rigidBody_->RefVelocity(), {}, 0.3f);
 			    rigidBody_->RefVelocity().y = 0.0f;

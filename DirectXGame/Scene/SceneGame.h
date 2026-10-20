@@ -8,6 +8,7 @@
 #include "../Skydome.h"
 #include "../Cloud.h"
 #include "../Floor.h"
+#include "../Audio/Audio.h"
 
 namespace Atrum {
 
@@ -41,6 +42,8 @@ class SceneGame final : public Scene {
 
 		// パーティクルマネージャ
 		CommandParticle* commandParticle_ = nullptr;
+
+		Audio::AudioHandle bgmHandle_;
 
 public:
 	void EnterScene() override;

@@ -2,6 +2,7 @@
 
 #include <KamataEngine.h>
 #include "Scene.h"
+#include "../Audio/Audio.h"
 
 namespace Atrum {
 
@@ -16,6 +17,8 @@ private:
 	KamataEngine::Vector3 buttonTranslate_ = {0.0f, 0.0f, 0.0f};
 	KamataEngine::Vector4 buttonColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	bool isToAlpha_ = true;
+
+	Audio::AudioHandle bgmHandle_;
 
 public:
 	void EnterScene() override;

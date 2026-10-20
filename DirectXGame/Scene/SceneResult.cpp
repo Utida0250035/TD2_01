@@ -15,6 +15,7 @@ void SceneResult::EnterScene() {
 
 	std::cout << "key Space to go nextLevel\n" << std::endl;
 
+	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmResult.mp3", true);
 }
 
 void SceneResult::Update() {
@@ -101,6 +102,6 @@ void SceneResult::Update() {
 
 void SceneResult::Draw() {}
 
-void SceneResult::ExitScene() {}
+void SceneResult::ExitScene() { Audio::Manager::GetInstance()->Stop(bgmHandle_); }
 
 } // namespace Atrum

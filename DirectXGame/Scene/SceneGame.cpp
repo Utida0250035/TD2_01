@@ -44,6 +44,7 @@ void SceneGame::EnterScene() {
 
 	commandParticle_ = CommandParticle::GetInstance();
 
+	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmGame.mp3", true);
 }
 
 void SceneGame::Update() {
@@ -139,6 +140,8 @@ void SceneGame::ExitScene() {
 	delete cloud_;
 
 	commandParticle_ = nullptr;
+
+	Audio::Manager::GetInstance()->Stop(bgmHandle_);
 }
 
 void SceneGame::GenerateFieldObjects() {

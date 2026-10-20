@@ -18,6 +18,8 @@ void SceneTitle::EnterScene() {
 
 	spriteTitle_->SetSize({400.0f, 100.0f});
 	spriteButton_->SetSize({200.0f, 80.0f});
+
+	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmTitle.mp3", true);
 }
 
 void SceneTitle::Update() {
@@ -54,6 +56,6 @@ void SceneTitle::Draw() {
 	KamataEngine::Sprite::PostDraw();
 }
 
-void SceneTitle::ExitScene() {}
+void SceneTitle::ExitScene() { Audio::Manager::GetInstance()->Stop(bgmHandle_); }
 
 } // namespace Atrum
