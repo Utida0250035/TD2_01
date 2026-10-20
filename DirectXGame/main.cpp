@@ -73,10 +73,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// 音源の読み込み
 	audio->Load("./Resources/seHit.mp3");
-	audio->Load("./Resources/seStep.mp3");
-	audio->Load("./Resources/seSwingWeapon.mp3");
+	audio->Load("./Resources/sePlayerBoom.mp3");
 	audio->Load("./Resources/sePlayerDeath.mp3");
-	audio->Load("./Resources/seEnemyShot.mp3");
 	audio->Load("./Resources/seEnemyAppear.mp3");
 	audio->Load("./Resources/seEnemyAttack.mp3");
 	audio->Load("./Resources/seEnemyHit.mp3");
