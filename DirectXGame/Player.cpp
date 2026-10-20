@@ -56,8 +56,6 @@ void Player::Initialize() {
 	entity_->ResolveDependences();
 	entity_->Initialize();
 
-	gaugeSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 64.0f});
-
 	//-------------------------------------------
 	// 矢印方向表示
 
@@ -79,7 +77,7 @@ void Player::Initialize() {
 
 	for (uint32_t i = 0; i < maxHealth_; i++) {
 
-		healthSprites_[i] = KamataEngine::Sprite::Create(healthTexture_, {16.0f + (36.0f * i), 16.0f}, {1.0f, 1.0f, 0.0f, 1.0f});
+		healthSprites_[i] = KamataEngine::Sprite::Create(healthTexture_, {16.0f + (36.0f * i), 16.0f}, {0.0f, 0.0f, 0.0f, 1.0f});
 		healthSprites_[i]->SetSize({32.0f, 32.0f});
 	
 	}
@@ -90,18 +88,6 @@ void Player::Initialize() {
 	inputManual_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("inputManual.png"), {16.0f, 704.0f});
 	inputManual_->SetAnchorPoint({0.0f, 1.0f});
 
-
-}
-
-void Player::AddCharge() {
-
-	superCharge_++;
-
-	if (superCharge_ > maxCharge_) {
-		superCharge_ = maxCharge_;
-	}
-
-	std::cout << superCharge_ << std::endl;
 
 }
 
@@ -162,6 +148,7 @@ void Player::Update() {
 		cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
 		deathVelocity_ = 70.0f;
 
+		SEPlayer::GetInstance()->Play("./Resources/sePlayerDeath.mp3");
 	}
 
 	// 被弾検知
@@ -237,9 +224,7 @@ void Player::Update() {
 	}
 
 	// UI
-	gaugeSprite_->SetSize({(static_cast<float>(superCharge_) / static_cast<float>(maxCharge_)) * chargeUIMax_, 32.0f});
 	bombMeterSprite_->SetSize({(static_cast<float>(currentBomb_) / static_cast<float>(bombMax_)) * 128.0f, 32.0f});
-
 }
 
 bool Player::CanExplode() {
@@ -283,7 +268,6 @@ void Player::DrawUI() {
 
 	KamataEngine::Sprite::PreDraw();
 
-	gaugeSprite_->Draw();
 	bombMeterSprite_->Draw();
 
 	for (uint32_t i = 0; i < currentHealth_; i++) {
@@ -465,26 +449,6 @@ namespace Atrum {
 	    HitWallUpdate(collisionMapInfo);
 	    // 床
 	    HitFloorUpdate(collisionMapInfo);
-
-		//
-	    //--------------------------
-
-		//--------------------------
-	    // 必殺技
-
-		if (anotherOwner_->GetCharge() >= anotherOwner_->GetMaxCharge()) {
-		    anotherOwner_->SetCharge(0);
-
-			// 大爆発
-		    anotherOwner_->RefBooms().emplace_back(Atrum::EntityFactory::BigBoom(RefOwner().GetWorldPosition(), anotherOwner_));
-
-		    ParticleBigExplosion* particle = new ParticleBigExplosion;
-		    particle->SetInitialTranslation(RefOwner().GetWorldPosition());
-		    particle->SetModel(explosionFireModel_, explosionSmokeModel_, explosionRingModel_);
-		    particle->Initialize();
-
-		    CommandParticle::GetInstance()->Generate("bigExplosion", particle);
-	    }
 
 		//
 	    //--------------------------
