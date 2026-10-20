@@ -45,6 +45,9 @@ void SceneGame::EnterScene() {
 	commandParticle_ = CommandParticle::GetInstance();
 
 	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmGame.mp3", true);
+
+	Update();
+
 }
 
 void SceneGame::Update() {
