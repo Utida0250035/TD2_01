@@ -15,11 +15,11 @@ void SceneTitle::EnterScene() {
 
 	// タイトルロゴの初期化
 	uint32_t texture = KamataEngine::TextureManager::Load("white1x1.png");
-	spriteTitle_.reset(KamataEngine::Sprite::Create(texture, {640.0f, 150.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
+	spriteTitle_.reset(KamataEngine::Sprite::Create(texture, {640.0f, 300.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
 	uint32_t textureButton = KamataEngine::TextureManager::Load("white1x1.png");
 	spriteButton_.reset(KamataEngine::Sprite::Create(textureButton, {640.0f, 650.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
 
-	spriteTitle_->SetSize({400.0f, 100.0f});
+	spriteTitle_->SetSize({1024.0f, 256.0f});
 	spriteButton_->SetSize({200.0f, 80.0f});
 
 	//-------------------
