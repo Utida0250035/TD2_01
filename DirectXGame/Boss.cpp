@@ -183,6 +183,8 @@ void Boss::Update() {
 
 				isAreaAttacked_ = true;
 
+				SEPlayer::GetInstance()->Play("./Resources/seAreaWarning.mp3");
+
 				switch (Random::Create(0, 2)) {
 
 					case 0:

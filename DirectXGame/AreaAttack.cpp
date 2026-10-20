@@ -4,6 +4,8 @@
 #include "../KeMatrix3D.h"
 #include "Time/DeltaTime.h"
 
+#include "SEPlayer.h"
+
 using namespace Atrum;
 using namespace Atrum::Math;
 
@@ -76,6 +78,8 @@ void AreaAttack::Update() {
 			entity_->SetState(Entity::State::Sleep);
 			entity_->Finalize();
 			delete warnSprite_;
+
+			SEPlayer::GetInstance()->Play("./Resources/seAreaAttack.mp3");
 
 		}
 	}
