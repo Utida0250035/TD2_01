@@ -472,6 +472,13 @@ namespace Atrum {
 	    float dt = FrameDeltaTime::GetInstance()->GetDeltaTime();
 	    collisionMapInfo.moveAmount = velocity * dt;
 
+		// 速度制限
+	    if (collisionMapInfo.moveAmount.Length() >= kLimitSpeed_) {
+		    collisionMapInfo.moveAmount.Normalize();
+		    collisionMapInfo.moveAmount *= kLimitSpeed_;
+	    }
+
+
 		// マップ衝突チェック
 	    CollisionMap(collisionMapInfo);
 
@@ -615,12 +622,6 @@ namespace Atrum {
 	}
 
     void CmpPlayer::Move(Player::CollisionMapInfo& info) {
-		// 速度制限
-	    if (info.moveAmount.Length() >= kLimitSpeed_) {
-		    info.moveAmount.Normalize();
-		    info.moveAmount *= kLimitSpeed_;
-		}
-
 	    // 移動
 	    anotherOwner_->GetEntity()->RefTransform().translate += info.moveAmount;
 	}
