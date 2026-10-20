@@ -19,6 +19,9 @@ private:
 
 	static inline constexpr int32_t kChoiceMax = 2;
 
+	std::unique_ptr<KamataEngine::Sprite> spriteResult_;
+	std::unique_ptr<KamataEngine::Sprite> spriteButton_;
+
 	//---------------------
 	// 背景
 
