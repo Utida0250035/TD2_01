@@ -10,6 +10,8 @@
 #include "../Floor.h"
 #include "../Audio/Audio.h"
 
+#include "ChangeSceneFade.h"
+
 namespace Atrum {
 
 class Entity;

@@ -6,6 +6,9 @@
 #include <KamataEngine.h>
 #include <iostream>
 
+#include "../KeMainCamera.h"
+#include "../KeMatrix3D.h"
+
 namespace Atrum {
 
 void SceneResult::EnterScene() { 
@@ -14,6 +17,18 @@ void SceneResult::EnterScene() {
 	std::cout << "key A,D to select destination\n" << std::endl;
 
 	std::cout << "key Space to go nextLevel\n" << std::endl;
+
+	//-------------------
+	// 背景
+
+	skydome_ = new Skydome;
+	skydome_->Initialize(KamataEngine::Model::CreateFromOBJ("skyDome"), KeMainCamera::GetInstance()->camera_);
+
+	cloud_ = new Cloud;
+	cloud_->Initialize(KamataEngine::Model::CreateFromOBJ("cloud"), KeMainCamera::GetInstance()->camera_);
+
+	//
+	//-------------------
 
 	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmResult.mp3", true);
 }
@@ -98,10 +113,30 @@ void SceneResult::Update() {
 			break;
 		}
 	}
+
+	skydome_->Update();
+	cloud_->Update();
+
 }
 
-void SceneResult::Draw() {}
+void SceneResult::Draw() {
 
-void SceneResult::ExitScene() { Audio::Manager::GetInstance()->Stop(bgmHandle_); }
+	KamataEngine::Model::PreDraw();
+
+	skydome_->Draw();
+	cloud_->Draw();
+
+	KamataEngine::Model::PostDraw();
+
+}
+
+void SceneResult::ExitScene() {
+
+	Audio::Manager::GetInstance()->Stop(bgmHandle_);
+
+	delete skydome_;
+	delete cloud_;
+
+}
 
 } // namespace Atrum

@@ -4,6 +4,10 @@
 #include "Scene.h"
 #include "../Audio/Audio.h"
 
+#include "../Cloud.h"
+#include "../Skydome.h"
+
+
 namespace Atrum {
 
 class Entity;
@@ -17,6 +21,18 @@ private:
 	KamataEngine::Vector3 buttonTranslate_ = {0.0f, 0.0f, 0.0f};
 	KamataEngine::Vector4 buttonColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	bool isToAlpha_ = true;
+
+	//---------------------
+	// 背景
+
+	// 天球
+	Skydome* skydome_ = nullptr;
+
+	// 雲
+	Cloud* cloud_ = nullptr;
+
+	//
+	//---------------------
 
 	Audio::AudioHandle bgmHandle_;
 
