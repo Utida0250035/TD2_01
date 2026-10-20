@@ -72,8 +72,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	audio->Initialize();
 
 	// 音源の読み込み
-	audio->Load("./Resources/bgmYasha.mp3");
-	audio->Load("./Resources/seParry.mp3");
 	audio->Load("./Resources/seHit.mp3");
 	audio->Load("./Resources/seStep.mp3");
 	audio->Load("./Resources/seSwingWeapon.mp3");
@@ -82,10 +80,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	audio->Load("./Resources/seEnemyAttack.mp3");
 	audio->Load("./Resources/seEnemyHit.mp3");
 	audio->Load("./Resources/seBossHit.mp3");
-
-	// エンティティの作成
-
-	Atrum::EntityStorage::GetInstance()->Register("playerMononofu", Atrum::EntityFactory::PlayerMononofu());
+	audio->Load("./Resources/seBossSpawn.mp3");
+	audio->Load("./Resources/seBossScream.mp3");
+	audio->Load("./Resources/seBossDeath.mp3");
 
 	// ゲーム実行インスタンスの取得
 	Atrum::GameOrder* order = Atrum::GameOrder::GetInstance();
