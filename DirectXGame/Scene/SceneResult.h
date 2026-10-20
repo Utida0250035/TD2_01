@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include <cstdint>
+#include "../Audio/Audio.h"
 
 namespace Atrum {
 
@@ -14,6 +15,8 @@ private:
 	int32_t choice_ = 0;
 
 	static inline constexpr int32_t kChoiceMax = 2;
+
+	Audio::AudioHandle bgmHandle_;
 
 public:
 	void EnterScene() override;
