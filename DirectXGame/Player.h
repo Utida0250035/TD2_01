@@ -91,6 +91,13 @@ private:
 
 	// 操作方法
 	KamataEngine::Sprite* inputManual_ = nullptr;
+	
+	//残弾数
+	std::vector<KamataEngine::Sprite*> numbers_;
+	uint32_t bombCount_;
+	uint32_t bombNum_[2];
+	Atrum::Math::Vector3 bombNumPos_;
+	static inline const Atrum::Math::Vector3 bombNumOffset_ = {-2.0f, -1.0f, 0.0f};
 
 	//
 	//----------------------------------
@@ -142,9 +149,6 @@ private:
 
 	// 残弾数
 	uint32_t currentBomb_ = bombMax_;
-
-	// 残弾数スプライト
-	KamataEngine::Sprite* bombMeterSprite_ = nullptr;
 
 	//
 	//----------------------------------
