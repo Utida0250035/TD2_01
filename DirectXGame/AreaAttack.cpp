@@ -20,7 +20,7 @@ void AreaAttack::Initialize(const Math::Vector3& emitPos) {
 	entity_->AddDrawCmp<CmpMesh>();
 	cmpMesh_ = entity_->GetDrawCmp<CmpMesh>();
 	cmpMesh_->SetModel(KamataEngine::Model::CreateFromOBJ("blockRounded", true));
-	cmpMesh_->SetColor({1.0f, 1.0f, 0.1f, 0.2f});
+	cmpMesh_->SetColor({1.0f, 1.0f, 0.1f, 0.3f});
 
 	warnSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("warning.png"), {}, {1, 1, 1, 1}, {0.5f, 0.5f});
 
@@ -54,7 +54,7 @@ void AreaAttack::Update() {
 			attackEntity_ = std::make_unique<Entity>();
 			attackEntity_->SetEntityType(EntityType::ENEMY_WEAPON);
 			attackEntity_->SetInitialTransform({
-			    {scale_.x / 2.0f, scale_.x / 2.0f, 0.1f},
+			    {scale_.x / 2.0f, scale_.x / 2.0f, scale_.x / 2.0f},
                 {},
                 {entity_->RefTransform().translate.x, entity_->RefTransform().translate.y + (entity_->RefTransform().scale.y / 2.0f), 0.0f}
             });
@@ -72,12 +72,27 @@ void AreaAttack::Update() {
 			attackEntity_->ResolveDependences();
 			attackEntity_->Initialize();
 
+			// もう使わないものはあらかじめ消しておく
+			entity_->SetState(Entity::State::Sleep);
+			entity_->Finalize();
+			delete warnSprite_;
+
 		}
 	}
 
 	if (attackEntity_) {
 		attackEntity_->RefTransform().translate.y -= 50.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();
 		attackEntity_->Update();
+
+		// 消去
+		if (attackEntity_->RefTransform().translate.y <= -40.0f) {
+		
+			//entity_->Finalize();
+			attackEntity_->Finalize();
+			isActive_ = false;
+
+		}
+
 	}
 
 }

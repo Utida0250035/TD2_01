@@ -204,6 +204,11 @@ void Boss::Update() {
 		}
 	}
 
+	#pragma region
+
+	//-------------------------------
+	//
+
 	// 取り巻き更新
 	for (auto& enemy : enemies_) {
 		enemy->Update();
@@ -217,6 +222,12 @@ void Boss::Update() {
 		}
 		return false;
 	});
+
+	//
+	//-------------------------------
+
+	//-------------------------------
+	//
 
 	// 曇更新
 	for (auto& cloud : clouds_) {
@@ -232,6 +243,12 @@ void Boss::Update() {
 		return false;
 	});
 
+	//
+	//-------------------------------
+
+	//-------------------------------
+	//
+
 	// 範囲攻撃更新
 	for (auto& attack : areaAttacks_) {
 		attack->Update();
@@ -246,24 +263,10 @@ void Boss::Update() {
 		return false;
 	});
 
-	for (auto& lightning : lightningAttacks_) {
+	//
+	//-------------------------------
 
-		if (!lightning)
-			continue;
-
-		lightning->Update();
-		if (lightning && !lightning->IsActive()) {
-			lightning->Finalize();
-		}
-	}
-
-	std::erase_if(lightningAttacks_, [](const auto& lightning) {
-		if (!lightning || !lightning->IsActive()) {
-			return true;
-		}
-
-		return false;
-	});
+	#pragma endregion
 
 	// 体力
 	CmpHealthHit* cmpHealthHit = entity_->GetUpdCmp<CmpHealthHit>();
