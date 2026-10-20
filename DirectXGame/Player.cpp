@@ -21,7 +21,11 @@ void Player::Initialize() {
 
 	entity_ = std::make_unique<Entity>();
 	entity_->SetEntityType(EntityType::PLAYER);
-	entity_->SetInitialTransform({{1.0f,1.0f,1.0f}, {}, {0.0f, -15.0f, 0.0f}});
+	entity_->SetInitialTransform({
+	    {1.0f, 1.0f, 1.0f},
+        {},
+        {0.0f, -15.0f, 0.0f}
+    });
 
 	entity_->AddUpdCmp<CmpLhRigidBody>();
 	entity_->AddUpdCmp<CmpHitSphere>();
@@ -79,16 +83,23 @@ void Player::Initialize() {
 
 		healthSprites_[i] = KamataEngine::Sprite::Create(healthTexture_, {16.0f + (36.0f * i), 16.0f}, {0.0f, 0.0f, 0.0f, 1.0f});
 		healthSprites_[i]->SetSize({32.0f, 32.0f});
-	
 	}
-
-	bombMeterSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {16.0f, 200.0f}, {1.0f, 0.0f, 1.0f, 1.0f});
 
 	// 操作説明
 	inputManual_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("inputManual.png"), {16.0f, 704.0f});
 	inputManual_->SetAnchorPoint({0.0f, 1.0f});
 
-
+	// 残弾数
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("0.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("1.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("2.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("3.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("4.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("5.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("6.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("7.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("8.png"), {-100.0f, -100.0f}));
+	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("9.png"), {-100.0f, -100.0f}));
 }
 
 void Player::SetArrowDireciton(const Vector2 direction) {
@@ -223,8 +234,20 @@ void Player::Update() {
 
 	}
 
-	// UI
-	bombMeterSprite_->SetSize({(static_cast<float>(currentBomb_) / static_cast<float>(bombMax_)) * 128.0f, 32.0f});
+
+	//--------------------------
+	// 残弾数
+
+	// ビューポート
+	Matrix4x4 matViewport = Matrix4x4::Viewport(0.0f, 0.0f, float(KamataEngine::WinApp::kWindowWidth), float(KamataEngine::WinApp::kWindowHeight), 0.0f, 1.0f);
+
+	// 合成
+	Matrix4x4 matView = FromKamataEngine(KeMainCamera::GetInstance()->camera_->matView);
+	Matrix4x4 matProjection = FromKamataEngine(KeMainCamera::GetInstance()->camera_->matProjection);
+	Matrix4x4 matViewProjection = matView * matProjection;
+
+	// 座標変換
+	bombNumPos_ = Matrix4x4::ScreenTransform(entity_->GetTransform().translate + bombNumOffset_, matViewProjection, matViewport);
 }
 
 bool Player::CanExplode() {
@@ -268,13 +291,25 @@ void Player::DrawUI() {
 
 	KamataEngine::Sprite::PreDraw();
 
-	bombMeterSprite_->Draw();
 
 	for (uint32_t i = 0; i < currentHealth_; i++) {
 		healthSprites_[i]->Draw();
 	}
 
 	inputManual_->Draw();
+
+	// 残弾数
+	bombCount_ = currentBomb_;
+	bombNum_[0] = bombCount_ / 10;
+	bombCount_ %= 10;
+	bombNum_[1] = bombCount_ / 1;
+
+	if (!CommandParticle::GetInstance()->IsExist("bossAppear") && !CommandParticle::GetInstance()->IsExist("bossDefeat")) {
+		for (int i = 0; i < 2; i++) {
+			numbers_[bombNum_[i]]->SetPosition({bombNumPos_.x + i * 24.0f, bombNumPos_.y});
+			numbers_[bombNum_[i]]->Draw();
+		}
+	}
 
 	KamataEngine::Sprite::PostDraw();
 
