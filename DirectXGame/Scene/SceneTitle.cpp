@@ -1,6 +1,6 @@
 #include "../Scene/SceneTitle.h"
 #include "../Scene/CommandChangeScene.h"
-#include "../Scene/SceneSelect.h"
+#include "../Scene/SceneGame.h"
 #include <iostream>
 
 namespace Atrum {
@@ -23,8 +23,7 @@ void SceneTitle::EnterScene() {
 void SceneTitle::Update() {
 
 	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-
-		CommandChangeScene::GetInstance()->Set(SceneSelect::GetInstance());
+		CommandChangeScene::GetInstance()->Set(SceneGame::GetInstance());
 	}
 
 	// 透明度
