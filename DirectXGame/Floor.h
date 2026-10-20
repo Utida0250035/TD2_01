@@ -37,7 +37,7 @@ private:
 
 	// マップの開始基準座標（左下基準）
 	static inline const float kOriginX = -45.0f;
-	static inline const float kOriginY = -25.0f;
+	static inline const float kOriginY = -20.0f;
 
 	// マップチップCSVの文字番号
 	enum MapChipCharIndex {

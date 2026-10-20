@@ -21,7 +21,7 @@ void Player::Initialize() {
 
 	entity_ = std::make_unique<Entity>();
 	entity_->SetEntityType(EntityType::PLAYER);
-	entity_->SetInitialTransform({{1.0f,1.0f,1.0f}, {}, {-20.0f, -20.0f, 0.0f}});
+	entity_->SetInitialTransform({{1.0f,1.0f,1.0f}, {}, {0.0f, -15.0f, 0.0f}});
 
 	entity_->AddUpdCmp<CmpLhRigidBody>();
 	entity_->AddUpdCmp<CmpHitSphere>();
