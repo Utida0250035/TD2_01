@@ -17,7 +17,9 @@ void CmpLhRigidBody::Update() {
 		velocity_ += gravity_ * frameDeltaTime_->GetDeltaTime();
 	}
 
-	translate += velocity_ * frameDeltaTime_->GetDeltaTime();
+	if (isAutoMove_) {
+		translate += velocity_ * frameDeltaTime_->GetDeltaTime();
+	}
 
 	if (isUseSpaceEnd_) {
 		if (translate.y <= kGroundHeight) {
