@@ -3,6 +3,9 @@
 #include "../Scene/SceneGame.h"
 #include <iostream>
 
+#include "../KeMainCamera.h"
+#include "../KeMatrix3D.h"
+
 namespace Atrum {
 
 void SceneTitle::EnterScene() {
@@ -18,6 +21,18 @@ void SceneTitle::EnterScene() {
 
 	spriteTitle_->SetSize({400.0f, 100.0f});
 	spriteButton_->SetSize({200.0f, 80.0f});
+
+	//-------------------
+	// 背景
+
+	skydome_ = new Skydome;
+	skydome_->Initialize(KamataEngine::Model::CreateFromOBJ("skyDome"), KeMainCamera::GetInstance()->camera_);
+
+	cloud_ = new Cloud;
+	cloud_->Initialize(KamataEngine::Model::CreateFromOBJ("cloud"), KeMainCamera::GetInstance()->camera_);
+
+	//
+	//-------------------
 
 	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmTitle.mp3", true);
 }
@@ -43,10 +58,21 @@ void SceneTitle::Update() {
 		}
 	}
 
+	skydome_->Update();
+	cloud_->Update();
+
 	spriteButton_->SetColor(buttonColor_);
 }
 
 void SceneTitle::Draw() {
+
+	KamataEngine::Model::PreDraw();
+
+	skydome_->Draw();
+	cloud_->Draw();
+
+	KamataEngine::Model::PostDraw();
+
 	KamataEngine::Sprite::PreDraw();
 
 	spriteTitle_->Draw();
@@ -56,6 +82,13 @@ void SceneTitle::Draw() {
 	KamataEngine::Sprite::PostDraw();
 }
 
-void SceneTitle::ExitScene() { Audio::Manager::GetInstance()->Stop(bgmHandle_); }
+void SceneTitle::ExitScene() {
+
+	Audio::Manager::GetInstance()->Stop(bgmHandle_);
+
+	delete skydome_;
+	delete cloud_;
+
+}
 
 } // namespace Atrum

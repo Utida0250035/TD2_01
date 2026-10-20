@@ -4,6 +4,9 @@
 #include <cstdint>
 #include "../Audio/Audio.h"
 
+#include "../Cloud.h"
+#include "../Skydome.h"
+
 namespace Atrum {
 
 class Entity;
@@ -15,6 +18,18 @@ private:
 	int32_t choice_ = 0;
 
 	static inline constexpr int32_t kChoiceMax = 2;
+
+	//---------------------
+	// 背景
+
+	// 天球
+	Skydome* skydome_ = nullptr;
+
+	// 雲
+	Cloud* cloud_ = nullptr;
+
+	//
+	//---------------------
 
 	Audio::AudioHandle bgmHandle_;
 
