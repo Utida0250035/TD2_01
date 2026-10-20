@@ -134,6 +134,12 @@ private:
 	//
 	//------------------------------------
 
+	bool isSpawnSoundPlayed_ = false;
+	bool isScreamSoundPlayed_ = false;
+
+	// 出現タイマー
+	float appearTimer_ = 0.0f;
+
 	// ダメージリアクション時間<フレーム>
 	uint32_t damageReactionTimer_ = 0;
 	uint32_t damageReactionTime_ = 5;
