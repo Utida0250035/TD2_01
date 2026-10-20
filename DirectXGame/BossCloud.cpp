@@ -2,6 +2,7 @@
 
 #include "Time/DeltaTime.h"
 #include "Math/Lerp.h"
+#include "../SEPlayer.h"
 
 using namespace Atrum;
 
@@ -43,6 +44,7 @@ void BossCloud::Update() {
 		if (attack_ == nullptr) {
 			attack_.reset(new BossLightning());
 			attack_->Initialize(entity_->GetWorldPosition());
+			SEPlayer::GetInstance()->Play("./Resources/seBossAttackLightning.mp3");
 		}
 	}
 
@@ -55,7 +57,6 @@ void BossCloud::Update() {
 		if (!attack_->IsActive()) {
 			attack_->Finalize();
 			isDisappear_ = true;
-
 		}
 
 	}

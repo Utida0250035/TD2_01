@@ -83,6 +83,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	audio->Load("./Resources/seBossSpawn.mp3");
 	audio->Load("./Resources/seBossScream.mp3");
 	audio->Load("./Resources/seBossDeath.mp3");
+	audio->Load("./Resources/seBossAttackLightning.mp3");
 	audio->Load("./Resources/bgmTitle.mp3");
 	audio->Load("./Resources/bgmGame.mp3");
 	audio->Load("./Resources/bgmResult.mp3");
