@@ -160,6 +160,7 @@ void Player::Update() {
 
 		CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 		cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
+		deathVelocity_ = 70.0f;
 
 	}
 
@@ -266,7 +267,9 @@ void Player::Draw() {
 
 	KamataEngine::Model::PreDraw(KamataEngine::ModelCommon::CullingMode::kBack, KamataEngine::Model::BlendMode::kNormal, KamataEngine::Model::DepthTestMode::kReadOnly);
 
-	directionArrowModel_->Draw(arrowTransform_, *KeMainCamera::GetInstance()->camera_);
+	if (!isDeath_) {
+		directionArrowModel_->Draw(arrowTransform_, *KeMainCamera::GetInstance()->camera_);
+	}
 
 	KamataEngine::Model::PostDraw();
 
