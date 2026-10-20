@@ -135,6 +135,9 @@ private:
 	//------------------------------------
 
 	bool isSpawnSoundPlayed_ = false;
+	bool isScreamSoundPlayed_ = false;
+
+
 
 	// ダメージリアクション時間<フレーム>
 	uint32_t damageReactionTimer_ = 0;

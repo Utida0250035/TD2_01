@@ -84,6 +84,11 @@ void Boss::Update() {
 			SEPlayer::GetInstance()->Play("./Resources/seBossSpawn.mp3");
 		}
 
+		if (!isScreamSoundPlayed_) {
+			isScreamSoundPlayed_ = true;
+			SEPlayer::GetInstance()->Play("./Resources/seBossScream.mp3");
+		}
+
 		return;
 	}
 
