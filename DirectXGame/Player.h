@@ -204,7 +204,6 @@ public:
 
 	void SetFloor(Floor* floor) { floor_ = floor; }
 	Floor* GetFloor() { return floor_; }
-
 };
 
 namespace Atrum {
@@ -242,6 +241,9 @@ private:
 	// 壁接触時の減衰率
 	static inline const float kAttenuationWall = 0.3f;
 
+	// 最大速度
+	static inline const float kLimitSpeed_ = 1.0f;
+
 public:
 	constexpr UpdCmpGroup UpdGroup() const override { return UpdCmpGroup::INPUT; }
 
@@ -252,7 +254,7 @@ public:
 	void CollisionMap(::Player::CollisionMapInfo& info);
 	void CollisionMapAllDirections(::Player::CollisionMapInfo& info, ::Player::Direction& direction);
 
-	void Move(const ::Player::CollisionMapInfo& info);
+	void Move(::Player::CollisionMapInfo& info);
 
 	void HitCeilingUpdate(const ::Player::CollisionMapInfo& info);
 	void HitWallUpdate(const ::Player::CollisionMapInfo& info);
