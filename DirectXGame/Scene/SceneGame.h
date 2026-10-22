@@ -21,6 +21,7 @@ class SceneGame final : public Scene {
 	private:
 
 		KamataEngine::Model* modelBlock_ = nullptr;
+	    KamataEngine::ObjectColor* blockColor_ = nullptr;
 
 		// プレイヤー
 	    Player* player_ = nullptr;
