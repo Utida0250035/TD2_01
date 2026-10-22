@@ -196,7 +196,7 @@ void Player::Update() {
 	if (!isInvincible_) {
 		if (afterHealth != preHealth) {
 
-			currentHealth_--;
+			currentHealth_ -= preHealth - afterHealth;
 			isInvincible_ = true;
 
 			flashAlpha_ = 1.0f;
