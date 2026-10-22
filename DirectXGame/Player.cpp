@@ -419,6 +419,7 @@ namespace Atrum {
 
 		if (transform.translate.y >= upperMoveLimit_) {
 		    transform.translate.y = upperMoveLimit_;
+		    velocity.y = -0.1f;
 		}
 
 		// 減衰
