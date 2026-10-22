@@ -118,6 +118,7 @@ private:
 
 	// 現在の行動
 	Actions currentAction_ = Move;
+	uint32_t actionNum = 1;
 
 	// 移動最大時間
 	static inline const float moveActionMaxTime_ = 1.5f;
