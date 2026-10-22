@@ -69,7 +69,7 @@ void AreaAttack::Update() {
 
 			attackEntity_->AddDrawCmp<CmpMesh>();
 			CmpMesh* cmpMesh = attackEntity_->GetDrawCmp<CmpMesh>();
-			cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("unitSphere", true));
+			cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("fallCloud", true));
 			cmpMesh->SetColor({1.0f, 1.0f, 0.3f, 1.0f});
 
 			attackEntity_->ResolveDependences();
