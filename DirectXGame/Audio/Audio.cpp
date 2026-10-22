@@ -157,6 +157,8 @@ size_t AudioManager::SetupStreaming(const char* filePath) {
 
 	soundData->wfEx = StandardWaveFormatEx();
 
+	soundIndexMap_.emplace(Hash64(filePath), soundDataStorage_.size() - 1);
+
 	return soundDataStorage_.size() - 1;
 }
 
