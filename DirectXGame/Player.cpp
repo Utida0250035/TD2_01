@@ -86,7 +86,17 @@ void Player::Initialize() {
 	}
 
 	// 操作説明
-	inputManual_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("inputManual.png"), {16.0f, 704.0f});
+	input_ = KamataEngine::Input::GetInstance();
+
+	keyboardManual_ = KamataEngine::TextureManager::Load("inputManual.png");
+	xboxControllerManual_ = KamataEngine::TextureManager::Load("controllerManual.png");
+
+	if (input_->GetNumberOfJoysticks()) {
+		inputManual_ = KamataEngine::Sprite::Create(xboxControllerManual_, {16.0f, 704.0f});
+	} else {
+		inputManual_ = KamataEngine::Sprite::Create(keyboardManual_, {16.0f, 704.0f});
+	}
+
 	inputManual_->SetAnchorPoint({0.0f, 1.0f});
 
 	// 残弾数

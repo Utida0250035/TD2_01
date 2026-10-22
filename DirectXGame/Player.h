@@ -89,6 +89,9 @@ private:
 	KamataEngine::WorldTransform arrowTransform_;
 	KamataEngine::Model* directionArrowModel_ = nullptr;
 
+	uint32_t keyboardManual_ = 0;
+	uint32_t xboxControllerManual_ = 0;
+
 	// 操作方法
 	KamataEngine::Sprite* inputManual_ = nullptr;
 	
