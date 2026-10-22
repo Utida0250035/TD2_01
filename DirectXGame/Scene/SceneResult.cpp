@@ -20,11 +20,10 @@ void SceneResult::EnterScene() {
 
 	uint32_t texture = KamataEngine::TextureManager::Load("white1x1.png");
 	spriteResult_.reset(KamataEngine::Sprite::Create(texture, {640.0f, 150.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.5f, 0.5f}));
-	uint32_t textureButton = KamataEngine::TextureManager::Load("white1x1.png");
+	uint32_t textureButton = KamataEngine::TextureManager::Load("navigationSpaceKey.png");
 	spriteButton_.reset(KamataEngine::Sprite::Create(textureButton, {640.0f, 650.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.5f, 0.5f}));
 
 	spriteResult_->SetSize({400.0f, 100.0f});
-	spriteButton_->SetSize({200.0f, 80.0f});
 
 	//-------------------
 	// 背景
