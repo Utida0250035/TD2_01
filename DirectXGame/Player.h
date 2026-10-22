@@ -106,7 +106,7 @@ private:
 	//
 
 	// 最大体力
-	static inline const uint32_t maxHealth_ = 11;
+	static inline const uint32_t maxHealth_ = 5;
 	uint32_t currentHealth_ = maxHealth_;
 
 	uint32_t healthTexture_ = 0;
