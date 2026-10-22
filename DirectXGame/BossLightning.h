@@ -24,7 +24,9 @@ private:
 	size_t sphereCount_ = 0;
 
 	std::vector<Math::Vector3> offsets_{
-		{1.0f, -1.5f, 0.0f}, {0.0f, -1.5f, 0.0f}, {-0.6f, -1.5f, 0.0f}, {-0.4f, -1.5f, 0.0f}
+	    {1.0f, -2.5f, 0.0f},
+        {-0.7f, -3.0f, 0.0f},
+        {-0.3f, -4.0f, 0.0f}
 	};
 
 	inline static constexpr float kSphereRadius = 1.0f;

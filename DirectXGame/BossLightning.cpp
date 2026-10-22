@@ -48,7 +48,7 @@ void BossLightning::Update() {
 
 			if (cmpHitSphere_->GetSpheres().size() > 0) {
 
-				cmpHitSphere_->RefSpheres().push_back({cmpHitSphere_->GetSpheres().back().localOffset + offsets_[sphereCount_ % 4], kSphereRadius});
+				cmpHitSphere_->RefSpheres().push_back({cmpHitSphere_->GetSpheres().back().localOffset + offsets_[sphereCount_ % offsets_.size()], kSphereRadius});
 			} else {
 
 				cmpHitSphere_->RefSpheres().push_back({{}, kSphereRadius});
