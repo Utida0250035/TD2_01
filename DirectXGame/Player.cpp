@@ -184,13 +184,17 @@ void Player::Update() {
 
 	// 落下ダメージ
 	if (entity_->GetWorldPosition().y < -30.0f) {
-		cmpHealthHit_->SetHealthCount(cmpHealthHit_->GetHealthCount() - 1);
-		afterHealth--;
+		if (!isInvincible_) {
+			cmpHealthHit_->SetHealthCount(cmpHealthHit_->GetHealthCount() - 1);
+			afterHealth--;
+		}
+		entity_->RefTransform().translate.y = -30.0f;
 		entity_->GetUpdCmp<CmpLhRigidBody>()->RefVelocity().y = 70.0f;
 		if (currentBomb_ <= 4) {
 			currentBomb_ = 4;
 		}
 	}
+	
 
 	// 被弾検知
 	if (!isInvincible_) {
@@ -538,7 +542,9 @@ namespace Atrum {
 
 
 		// マップ衝突チェック
-	    CollisionMap(collisionMapInfo);
+	    if (collisionMapInfo.moveAmount.y <= 0.0f) {
+		    CollisionMap(collisionMapInfo);
+	    }
 
 		// 着地中は減衰
 		if (anotherOwner_->GetOnGround()) {
@@ -560,10 +566,8 @@ namespace Atrum {
     }
 
     void CmpPlayer::CollisionMap(Player::CollisionMapInfo& info) {
-	    for (int i = 0; i < static_cast<int>(Player::Direction::kNumDirection); i++) {
-		    Player::Direction direction = static_cast<Player::Direction>(i);
-		    CollisionMapAllDirections(info, direction);
-	    }
+	    Player::Direction direction = Player::Direction::kBottom;
+	    CollisionMapAllDirections(info, direction);
 	}
 
     void CmpPlayer::CollisionMapAllDirections(Player::CollisionMapInfo& info, Player::Direction& direction) {
