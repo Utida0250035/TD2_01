@@ -20,7 +20,7 @@ private:
 	float growTimer_ = 0.0f;
 	float growTime_ = 0.01562f;
 
-	size_t sphereMax_ = 16;
+	size_t sphereMax_ = 6;
 	size_t sphereCount_ = 0;
 
 	std::vector<Math::Vector3> offsets_{
