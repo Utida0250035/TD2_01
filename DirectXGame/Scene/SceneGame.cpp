@@ -82,7 +82,7 @@ void SceneGame::Update() {
 	}
 
 	if (boss_->IsDeathFinished()) {
-		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance(), new ChangeSceneFade());
+		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
 		commandParticle_->DestroyParticleAll();
 	}
 
