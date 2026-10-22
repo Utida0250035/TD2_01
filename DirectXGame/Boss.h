@@ -101,6 +101,8 @@ private:
 
 	// 体力バースプライト
 	KamataEngine::Sprite* healthSprite_ = nullptr;
+	// 体力バー裏地スプライト
+	KamataEngine::Sprite* hpBarLining_ = nullptr;
 
 	// 体力バー長さ
 	static inline const float healthBarWidth_ = 512.0f;

@@ -73,6 +73,8 @@ void Boss::Initialize() {
 
 	healthSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {640.0f - (healthBarWidth_ / 2.0f), 704.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f});
 	healthSprite_->SetSize({healthBarWidth_, 16.0f});
+	hpBarLining_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {640.0f - (healthBarWidth_ / 2.0f) - 4.0f, 708.0f}, {0.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f});
+	hpBarLining_->SetSize({healthBarWidth_ + 8.0f, 24.0f});
 
 }
 
@@ -352,6 +354,8 @@ void Boss::Update() {
 void Boss::DrawUI() {
 
 	KamataEngine::Sprite::PreDraw();
+
+	hpBarLining_->Draw();
 
 	healthSprite_->Draw();
 
