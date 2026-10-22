@@ -37,7 +37,7 @@ void SceneTitle::EnterScene() {
 void SceneTitle::Update() {
 
 	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		CommandChangeScene::GetInstance()->Set(SceneGame::GetInstance());
+		CommandChangeScene::GetInstance()->Set(SceneGame::GetInstance(), new ChangeSceneFade());
 	}
 
 	// 透明度
