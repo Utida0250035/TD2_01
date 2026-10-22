@@ -46,8 +46,25 @@ void SceneResult::Update() {
 		CommandChangeScene::GetInstance()->Set(SceneTitle::GetInstance(), new ChangeSceneFade());
 	}
 
+	// 透明度
+	if (isToAlpha_) {
+		buttonColor_.w -= 0.7f / 90.0f;
+		if (buttonColor_.w <= 0.3f) {
+			buttonColor_.w = 0.3f;
+			isToAlpha_ = false;
+		}
+	} else {
+		buttonColor_.w += 0.7f / 90.0f;
+		if (buttonColor_.w >= 1.0f) {
+			buttonColor_.w = 1.0f;
+			isToAlpha_ = true;
+		}
+	}
+
 	skydome_->Update();
 	cloud_->Update();
+
+	spriteButton_->SetColor(buttonColor_);
 }
 
 void SceneResult::Draw() {
