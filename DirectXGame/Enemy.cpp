@@ -138,7 +138,7 @@ void CmpEnemy::Update() {
 			attackTimer_ = 0.0f;
 			anotherOwner_->GetEntity()->SetEntityType(EntityType::ENEMY_WEAPON);
 			SEPlayer::GetInstance()->Play("./Resources/seEnemyAttack.mp3");
-			anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 1.0f, 0.3f, 1.0f});
+			anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 1.0f, 0.1f, 1.0f});
 		}
 	}
 
