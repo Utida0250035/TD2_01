@@ -138,6 +138,12 @@ private:
 
 	bool onGround_ = false;
 
+	// 被弾時の閃光スプライト
+	KamataEngine::Sprite* damagedFlash_ = nullptr;
+
+	// 閃光アルファ値
+	float flashAlpha_ = 0.0f;
+
 	//
 	//----------------------------------
 
