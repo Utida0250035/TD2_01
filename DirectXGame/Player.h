@@ -113,6 +113,7 @@ private:
 	uint32_t healthTexture_ = 0;
 
 	KamataEngine::Sprite* healthSprites_[maxHealth_];
+	KamataEngine::Sprite* healthNoneSprites_[maxHealth_];
 
 	Atrum::CmpHealthHit* cmpHealthHit_ = nullptr;
 

@@ -81,6 +81,8 @@ void Player::Initialize() {
 
 	for (uint32_t i = 0; i < maxHealth_; i++) {
 		healthSprites_[i] = KamataEngine::Sprite::Create(healthTexture_, {16.0f + (36.0f * i), 16.0f});
+		healthNoneSprites_[i] = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("healthNoneIcon.png"), {16.0f + (36.0f * i), 16.0f});
+		healthNoneSprites_[i]->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
 	}
 
 	// 操作説明
@@ -321,6 +323,10 @@ void Player::DrawUI() {
 	KamataEngine::Sprite::PreDraw();
 
 	damagedFlash_->Draw();
+
+	for (uint32_t i = 0; i < maxHealth_; i++) {
+		healthNoneSprites_[i]->Draw();
+	}
 
 	for (uint32_t i = 0; i < currentHealth_; i++) {
 		healthSprites_[i]->Draw();
