@@ -166,6 +166,15 @@ void Player::Update() {
 		deathVelocity_ = 70.0f;
 
 		SEPlayer::GetInstance()->Play("./Resources/sePlayerDeath.mp3");
+
+		for (size_t i = 0; i < booms_.size(); ++i) {
+
+			booms_[i]->Finalize();
+
+			// 寿命を終えた爆発エンティティを削除
+			booms_.erase(booms_.begin() + i);
+
+		}
 	}
 
 	// 被弾検知
