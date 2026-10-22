@@ -24,6 +24,8 @@ private:
 	/// </summary>
 	KamataEngine::Camera* camera_ = nullptr;
 
+	KamataEngine::ObjectColor objectColor_;
+
 public:
 
 	/// <summary>
