@@ -23,29 +23,33 @@ void Atrum::ParticleBossAppear::Update() {
 
 	if (canCreate_) {
 	
-		// 方向
-		Math::Vector3 direction = {};
-		direction.x = Random::Create(-1.0f, 1.0f);
-		direction.y = Random::Create(-1.0f, 1.0f);
-		direction.z = Random::Create(-1.0f, 1.0f);
+		for (uint8_t i = 0; i < 3; i++) {
+		
+			// 方向
+			Math::Vector3 direction = {};
+			direction.x = Random::Create(-1.0f, 1.0f);
+			direction.y = Random::Create(-1.0f, 1.0f);
+			direction.z = Random::Create(-1.0f, 1.0f);
 
-		float length = direction.Length();
+			float length = direction.Length();
 
-		ParticleData* newParticle = new ParticleData;
-		newParticle->worldTransform_.Initialize();
-		newParticle->objectColor_.Initialize();
+			ParticleData* newParticle = new ParticleData;
+			newParticle->worldTransform_.Initialize();
+			newParticle->objectColor_.Initialize();
 
-		newParticle->worldTransform_.translation_.x = (direction.x / length) * radius_;
-		newParticle->worldTransform_.translation_.y = (direction.y / length) * radius_;
-		newParticle->worldTransform_.translation_.z = (direction.z / length) * radius_;
+			newParticle->worldTransform_.translation_.x = (direction.x / length) * radius_;
+			newParticle->worldTransform_.translation_.y = (direction.y / length) * radius_;
+			newParticle->worldTransform_.translation_.z = (direction.z / length) * radius_;
 
-		newParticle->worldTransform_.rotation_.x = Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f);
-		newParticle->worldTransform_.rotation_.y = Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f);
-		newParticle->worldTransform_.rotation_.z = Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f);
+			newParticle->worldTransform_.rotation_.x = Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f);
+			newParticle->worldTransform_.rotation_.y = Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f);
+			newParticle->worldTransform_.rotation_.z = Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f);
 
-		newParticle->acceleration_ = -direction.Normalized() * 20.0f;
+			newParticle->acceleration_ = -direction.Normalized() * 20.0f;
 
-		particles_.push_back(newParticle);
+			particles_.push_back(newParticle);
+
+		}
 
 	}
 
@@ -88,9 +92,9 @@ void Atrum::ParticleBossAppear::Update() {
 	//------------------
 	// 生成タイマー
 
-	timer_ -= 1.0f * FrameDeltaTime::GetInstance()->GetDeltaTime();
+	timer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
 
-	if (timer_ <= 0.0f) {
+	if (timer_ >= createTime_) {
 		canCreate_ = false;
 	}
 
@@ -123,9 +127,14 @@ void Atrum::ParticleBossAppear::Update() {
 
 	// 生成出来ない状態で、particles_が空であると判断したら削除申請を行う
 	if (!canCreate_) {
-		if (particles_.empty()) {
+		//if (particles_.empty()) {
+		//	isFinish_ = true;
+		//}
+
+		if (timer_ >= enableTime_) {
 			isFinish_ = true;
 		}
+
 	}
 
 	///
