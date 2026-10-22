@@ -145,7 +145,12 @@ void Boss::Update() {
 				cloudLoopTimer_ = cloudLoopTime_;
 				summonLoopTimer_ = summonLoopTime_;
 
-				currentAction_ = static_cast<Actions>(Random::Create(static_cast<int>(EnemySummon), static_cast<int>(Count) - 1));
+				currentAction_ = static_cast<Actions>(actionNum);
+
+				actionNum++;
+				if (actionNum > 3) {
+					actionNum = 1;
+				}
 			}
 
 			break;
