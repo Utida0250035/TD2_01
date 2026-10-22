@@ -165,18 +165,19 @@ void Player::Update() {
 		flashAlpha_ = 1.0f;
 		CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 		cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
-		deathVelocity_ = 70.0f;
+		
+		if (entity_->GetWorldPosition().y < -30.0f) {
+			deathVelocity_ = 120.0f;
+		}
 
 		SEPlayer::GetInstance()->Play("./Resources/sePlayerDeath.mp3");
 
-		for (size_t i = 0; i < booms_.size(); ++i) {
-
+		for (size_t i = 0; i < booms_.size(); i++) {
 			booms_[i]->Finalize();
-
-			// 寿命を終えた爆発エンティティを削除
 			booms_.erase(booms_.begin() + i);
-
+			--i;
 		}
+
 	}
 
 	// 被弾検知
