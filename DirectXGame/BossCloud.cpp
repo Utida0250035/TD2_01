@@ -17,7 +17,7 @@ void BossCloud::Initialize(const Math::Vector3& pos) {
 	entity_->AddDrawCmp<CmpMesh>();
 
 	cmpMesh_ = entity_->GetDrawCmp<CmpMesh>();
-	cmpMesh_->SetModel(KamataEngine::Model::CreateFromOBJ("unitSphere", true));
+	cmpMesh_->SetModel(KamataEngine::Model::CreateFromOBJ("fallCloud", true));
 	cmpMesh_->SetColor({0.1f, 0.1f, 0.1f, 0.0f});
 
 	entity_->Update();
