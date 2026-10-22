@@ -120,7 +120,7 @@ void Player::Update() {
 	if (CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat")) {
 
 		if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			SEPlayer::GetInstance()->Play("./Resources/seEnemyAppear.mp3");
+			SEPlayer::GetInstance()->Play("./Resources/sePlayerSkip.mp3");
 		}
 
 		return;
