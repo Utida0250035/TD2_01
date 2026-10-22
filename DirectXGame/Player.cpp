@@ -285,7 +285,14 @@ void Player::Draw() {
 
 	KamataEngine::Model::PreDraw(KamataEngine::ModelCommon::CullingMode::kBack, KamataEngine::Model::BlendMode::kNormal, KamataEngine::Model::DepthTestMode::kReadOnly);
 
+
+
 	if (!isDeath_) {
+
+		if (CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat")) {
+			return;
+		}
+
 		directionArrowModel_->Draw(arrowTransform_, *KeMainCamera::GetInstance()->camera_);
 	}
 
