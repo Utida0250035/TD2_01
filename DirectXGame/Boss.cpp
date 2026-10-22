@@ -28,7 +28,7 @@ void Boss::Initialize() {
 
 	entity_ = std::make_unique<Entity>();
 	entity_->SetEntityType(EntityType::ENEMY);
-	entity_->SetInitialTransform({});
+	entity_->SetInitialTransform({{}, {}, {}});
 
 	entity_->AddUpdCmp<CmpHitSphere>();
 	entity_->AddUpdCmp<CmpHealthHit>();
@@ -77,6 +77,8 @@ void Boss::Initialize() {
 	hpBarLining_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("white1x1.png"), {640.0f - (healthBarWidth_ / 2.0f) - 4.0f, 708.0f}, {0.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f});
 	hpBarLining_->SetSize({healthBarWidth_ + 8.0f, 24.0f});
 
+	impactLine_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("impactLine.png"), {640.0f, 320.0f}, {0.0f, 0.0f, 0.0f, 1.0f}, {0.5f, 0.5f});
+
 }
 
 void Boss::Update() {
@@ -84,6 +86,14 @@ void Boss::Update() {
 	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
 
 		appearTimer_ += frameDeltaTime_->GetDeltaTime();
+
+		if (appearTimer_ >= 1.0f) {
+			if (appearTimer_ < 3.0f) {
+			
+				entity_->RefTransform().scale = {(appearTimer_ - 1.0f) / 2.0f, (appearTimer_ - 1.0f) / 2.0f, (appearTimer_ - 1.0f) / 2.0f};
+
+			}
+		}
 
 		if (!isSpawnSoundPlayed_) {
 			isSpawnSoundPlayed_ = true;
@@ -95,8 +105,13 @@ void Boss::Update() {
 
 				isScreamSoundPlayed_ = true;
 				SEPlayer::GetInstance()->Play("./Resources/seBossScream.mp3");
+
+				entity_->RefTransform().scale = {1.0f, 1.0f, 1.0f};
+
 			}
 		}
+
+		impactLine_->SetRotation(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
 
 		return;
 	}
@@ -359,6 +374,12 @@ void Boss::DrawUI() {
 	hpBarLining_->Draw();
 
 	healthSprite_->Draw();
+
+	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
+		if (appearTimer_ >= 3.0f) {
+			impactLine_->Draw();
+		}
+	}
 
 	KamataEngine::Sprite::PostDraw();
 }

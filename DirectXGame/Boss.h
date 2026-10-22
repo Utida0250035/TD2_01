@@ -162,6 +162,9 @@ private:
 	// カメラコントローラ
 	CameraController* cameraController_ = nullptr;
 
+	// 集中線
+	KamataEngine::Sprite* impactLine_ = nullptr;
+
 public:
 	~Boss();
 
