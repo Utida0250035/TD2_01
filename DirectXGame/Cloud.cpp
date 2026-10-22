@@ -13,6 +13,8 @@ void Cloud::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera)
 
 		InitializeCloud(worldTransforms_[i]);
 		worldTransforms_[i].translation_.x = Random::Create(-145.0f, 145.0f);
+
+		UpdateWorldTransform(worldTransforms_[i]);
 	}
 }
 
