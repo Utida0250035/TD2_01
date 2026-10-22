@@ -494,8 +494,11 @@ namespace Atrum {
 	    }
 
 		XINPUT_STATE state{};
+	    XINPUT_STATE preState{};
 	    if (input_->GetJoystickState(0, state)) {
 	    
+			input_->GetJoystickStatePrevious(0, preState);
+
 			int stickX = state.Gamepad.sThumbLX;
 		    int stickY = state.Gamepad.sThumbLY;
 
@@ -524,7 +527,7 @@ namespace Atrum {
 		//--------------------------
 		// 爆発
 
-	    if (input_->TriggerKey(DIK_SPACE)) {
+	    if (input_->TriggerKey(DIK_SPACE) || (state.Gamepad.wButtons == XINPUT_GAMEPAD_A && preState.Gamepad.wButtons != XINPUT_GAMEPAD_A)) {
 
 			if (!anotherOwner_->CanExplode()) {
 
