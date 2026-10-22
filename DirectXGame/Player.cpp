@@ -339,6 +339,12 @@ void Player::DrawUI() {
 		bombSprite_->Draw();
 
 		for (int i = 0; i < 2; i++) {
+			if (currentBomb_ <= 4) {
+				numbers_[bombNum_[i]]->SetColor({1.0f, 0.1f, 0.1f, 1.0f});
+			} else {
+				numbers_[bombNum_[i]]->SetColor({1.0f, 1.0f, 1.0f, 1.0f});
+			}
+
 			numbers_[bombNum_[i]]->SetPosition({bombNumPos_.x + (i + 1) * 24.0f, bombNumPos_.y});
 			numbers_[bombNum_[i]]->Draw();
 		}
