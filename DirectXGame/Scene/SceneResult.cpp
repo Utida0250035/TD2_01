@@ -12,7 +12,6 @@
 namespace Atrum {
 
 void SceneResult::EnterScene() {
-	choice_ = 0;
 
 	std::cout << "key A,D to select destination\n" << std::endl;
 
