@@ -499,13 +499,13 @@ namespace Atrum {
 	    
 			input_->GetJoystickStatePrevious(0, preState);
 
-			int stickX = state.Gamepad.sThumbLX;
-		    int stickY = state.Gamepad.sThumbLY;
+			float stickX = (float)state.Gamepad.sThumbLX / SHRT_MAX;
+		    float stickY = (float)state.Gamepad.sThumbLY / SHRT_MAX;
 
-			if (stickX != 0 || stickY != 0) {
+			if (stickX != 0.0f || stickY != 0.0f) {
 
-			    moveDirection.x = static_cast<float>(stickX);
-			    moveDirection.y = static_cast<float>(stickY);
+			    moveDirection.x = stickX;
+			    moveDirection.y = stickY;
 
 			    if (anotherOwner_->GetOnGround()) {
 				    if (moveDirection.y < 0.0f) {
