@@ -493,6 +493,27 @@ namespace Atrum {
 		    moveDirection.x += 1.0f;
 	    }
 
+		XINPUT_STATE state{};
+	    if (input_->GetJoystickState(0, state)) {
+	    
+			int stickX = state.Gamepad.sThumbLX;
+		    int stickY = state.Gamepad.sThumbLY;
+
+			if (stickX != 0 || stickY != 0) {
+
+			    moveDirection.x = static_cast<float>(stickX);
+			    moveDirection.y = static_cast<float>(stickY);
+
+			    if (anotherOwner_->GetOnGround()) {
+				    if (moveDirection.y < 0.0f) {
+					    moveDirection.y = 0.0f;
+				    }
+			    }
+
+		    }
+
+		}
+
 		anotherOwner_->SetArrowDireciton(moveDirection);
 
 		#pragma endregion
