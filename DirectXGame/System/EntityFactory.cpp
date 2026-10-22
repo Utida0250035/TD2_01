@@ -233,7 +233,7 @@ std::unique_ptr<Entity> EntityFactory::Boom(const Math::Vector3& pos, ::Player *
 	boom->AddDrawCmp<CmpDrawHitSphere>();
 	CmpDrawHitSphere* cmpDrawHitSphere = boom->GetDrawCmp<CmpDrawHitSphere>();
 
-	cmpDrawHitSphere->SetColor({0.75f, 0.1f, 0.1f, 1.0f});
+	cmpDrawHitSphere->SetColor({0.75f, 0.1f, 0.1f, 0.7f});
 
 	#endif
 

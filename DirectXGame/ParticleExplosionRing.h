@@ -74,6 +74,25 @@ private:
 	//
 	//-----------------
 
+	//-----------------
+	// 判定可視化リング
+
+	#pragma region
+
+	// 判定可視化リングの大きさ線形補間割合
+	static inline const float collisionRingSizeLerp_ = 0.3f;
+
+	// リングの目標大きさ
+	static inline const float collisionRingTargetSize_ = 20.0f;
+
+	// リングのアルファ値線形補間割合
+	static inline const float collisionRingAlphaLerp_ = 0.1f;
+
+	#pragma endregion
+
+	//
+	//-----------------
+
 	#pragma endregion
 
 	//
@@ -107,6 +126,9 @@ private:
 
 	// リング
 	ExplosionStruct ring_{};
+
+	// 判定可視化リング
+	ExplosionStruct collisionRing_{};
 
 	//
 	//---------------------------------
@@ -152,7 +174,7 @@ public:
 	/// <param name="fireModel">火モデル</param>
 	/// <param name="smokeModel">煙モデル</param>
 	/// <param name="ringModel">リングモデル</param>
-	void SetModel(KamataEngine::Model* fireModel, KamataEngine::Model* smokeModel, KamataEngine::Model* ringModel);
+	void SetModel(KamataEngine::Model* fireModel, KamataEngine::Model* smokeModel, KamataEngine::Model* ringModel, KamataEngine::Model* collisionRingModel);
 
 };
 

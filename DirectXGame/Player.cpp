@@ -372,7 +372,7 @@ namespace Atrum {
 		explosionFireModel_ = KamataEngine::Model::CreateFromOBJ("explosionFire", false);
 		explosionSmokeModel_ = KamataEngine::Model::CreateFromOBJ("explosionSmoke", false);
 		explosionRingModel_ = KamataEngine::Model::CreateFromOBJ("explosionRing", false);
-
+	    collisionRingModel_ = KamataEngine::Model::CreateFromOBJ("collisionRing", false);
 	}
 
 	void CmpPlayer::Update() {
@@ -509,7 +509,7 @@ namespace Atrum {
 
 		    ParticleExplosion* particle = new ParticleExplosion;
 		    particle->SetInitialTranslation(RefOwner().GetWorldPosition());
-		    particle->SetModel(explosionFireModel_, explosionSmokeModel_, explosionRingModel_);
+		    particle->SetModel(explosionFireModel_, explosionSmokeModel_, explosionRingModel_, collisionRingModel_);
 		    particle->Initialize();
 
 			CommandParticle::GetInstance()->Generate("explosion", particle);

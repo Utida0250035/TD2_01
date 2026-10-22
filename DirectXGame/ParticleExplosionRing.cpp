@@ -24,15 +24,16 @@ void ParticleExplosion::Initialize() {
 	fire_.worldTransform_.Initialize();
 	smoke_.worldTransform_.Initialize();
 	ring_.worldTransform_.Initialize();
+	collisionRing_.worldTransform_.Initialize();
 
 	//----------
 
 	fire_.worldTransform_.translation_ = initialTranslation_;
 	smoke_.worldTransform_.translation_ = initialTranslation_;
 	ring_.worldTransform_.translation_ = initialTranslation_;
+	collisionRing_.worldTransform_.translation_ = initialTranslation_;
 
 	//----------
-
 
 	fire_.worldTransform_.rotation_.x = static_cast<float>(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
 	fire_.worldTransform_.rotation_.y = static_cast<float>(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
@@ -48,6 +49,7 @@ void ParticleExplosion::Initialize() {
 	fire_.objectColor_.Initialize();
 	smoke_.objectColor_.Initialize();
 	ring_.objectColor_.Initialize();
+	collisionRing_.objectColor_.Initialize();
 
 	//
 	//-------------------------------------------
@@ -140,6 +142,27 @@ void ParticleExplosion::Update() {
 	//
 	//--------------------------------------
 
+	//--------------------------------------
+	// 判定可視化リング
+
+	#pragma region collisionRing
+
+	collisionRing_.worldTransform_.scale_.x = Lerp(collisionRing_.worldTransform_.scale_.x, collisionRingTargetSize_, collisionRingSizeLerp_);
+	collisionRing_.worldTransform_.scale_.y = collisionRing_.worldTransform_.scale_.x;
+
+	collisionRing_.worldTransform_.matWorld_ = MakeWorldMatrix(collisionRing_.worldTransform_.translation_, collisionRing_.worldTransform_.scale_, collisionRing_.worldTransform_.rotation_);
+	collisionRing_.worldTransform_.TransferMatrix();
+
+	//----------------
+
+	collisionRing_.alpha_ = Lerp(collisionRing_.alpha_, 0.0f, collisionRingAlphaLerp_);
+	collisionRing_.objectColor_.SetColor({1.0f, 1.0f, 1.0f, collisionRing_.alpha_});
+
+	#pragma endregion
+
+	//
+	//--------------------------------------
+
 	#pragma endregion
 
 	///
@@ -153,6 +176,7 @@ void ParticleExplosion::Draw() {
 
 	fire_.model_->Draw(fire_.worldTransform_, *camera_, &fire_.objectColor_);
 	ring_.model_->Draw(ring_.worldTransform_, *camera_, &ring_.objectColor_);
+	collisionRing_.model_->Draw(collisionRing_.worldTransform_, *camera_, &collisionRing_.objectColor_);
 
 	KamataEngine::Model::PostDraw();
 
@@ -163,7 +187,7 @@ void ParticleExplosion::Draw() {
 	KamataEngine::Model::PostDraw();
 }
 
-void ParticleExplosion::SetModel(KamataEngine::Model* fireModel, KamataEngine::Model* smokeModel, KamataEngine::Model* ringModel) {
+void ParticleExplosion::SetModel(KamataEngine::Model* fireModel, KamataEngine::Model* smokeModel, KamataEngine::Model* ringModel, KamataEngine::Model* collisionRingModel) {
 
 	// 引数の欠落を確認
 	assert(fireModel && "No FireModel!");
@@ -173,6 +197,7 @@ void ParticleExplosion::SetModel(KamataEngine::Model* fireModel, KamataEngine::M
 	fire_.model_ = fireModel;
 	smoke_.model_ = smokeModel;
 	ring_.model_ = ringModel;
+	collisionRing_.model_ = collisionRingModel;
 }
 
 void ParticleExplosion::Finalize() {}

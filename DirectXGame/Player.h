@@ -221,6 +221,7 @@ private:
 	KamataEngine::Model* explosionFireModel_ = nullptr;
 	KamataEngine::Model* explosionSmokeModel_ = nullptr;
 	KamataEngine::Model* explosionRingModel_ = nullptr;
+	KamataEngine::Model* collisionRingModel_ = nullptr;
 
 	// 無重力時間
 	static inline const float noGravityTimer_ = 0.2f;
