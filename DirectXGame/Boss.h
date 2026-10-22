@@ -136,7 +136,7 @@ private:
 	float deathTimer_ = 0.0f;
 
 	// 死亡演出時間
-	float deathTime_ = 5.0f;
+	float deathTime_ = 3.5f;
 
 	// 死亡状態
 	bool isDeath_ = false;
