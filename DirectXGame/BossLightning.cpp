@@ -20,7 +20,7 @@ void BossLightning::Initialize(const Math::Vector3& emitPos) {
 	entity_->AddDrawCmp<CmpDrawHitSphere>();
 
 	CmpDrawHitSphere* cmpDrawHitSphere = entity_->GetDrawCmp<CmpDrawHitSphere>();
-	cmpDrawHitSphere->SetColor({0.75f, 0.75f, 0.1f, 1.0f});
+	cmpDrawHitSphere->SetColor({1.0f, 1.0f, 0.3f, 1.0f});
 
 	entity_->AddUpdCmp<CmpHitSphere>();
 	cmpHitSphere_ = entity_->GetUpdCmp<CmpHitSphere>();
