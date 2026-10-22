@@ -70,10 +70,19 @@ void AudioManager::Update() {
 			}
 		}
 
+		if (streamingVoice->state == VoiceState::Playing && !streamingVoice->isLoop) {
+			XAUDIO2_VOICE_STATE xaudioState;
+			streamingVoice->pVoice->GetState(&xaudioState);
+			if (xaudioState.BuffersQueued == 0) {
+				streamingVoice->state = VoiceState::Waiting;
+			}
+		}
+
 		if (streamingVoice->state == VoiceState::Waiting) {
 
 			streamingVoice->pVoice->Stop();
 			streamingVoice->pVoice->FlushSourceBuffers();
+			streamingVoice->pReader.Reset();
 
 			streamingVoice->state = VoiceState::Stopped;
 		}
@@ -402,6 +411,25 @@ bool AudioManager::RefillBuffer(StreamingSourceVoice& voice) {
 
 		if (voice.isLoop) {
 
+			voice.pReader.Reset(); // 古いリーダーを破棄
+
+			// ファイルパスから再度リーダーを作成する処理を呼び出す
+			auto& path = soundDataStorage_[voice.soundIndex]->filePath;
+			[[maybe_unused]] HRESULT hr = MFCreateSourceReaderFromURL(path.c_str(), nullptr, &voice.pReader);
+			assert(SUCCEEDED(hr));
+
+			// メディアタイプを再設定
+			ComPtr<IMFMediaType> pPCMType;
+			MFCreateMediaType(&pPCMType);
+			pPCMType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+			pPCMType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+			pPCMType->SetUINT32(MF_MT_AUDIO_NUM_CHANNELS, 2);
+			pPCMType->SetUINT32(MF_MT_AUDIO_SAMPLES_PER_SECOND, 44100);
+			pPCMType->SetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, 16);
+			pPCMType->SetUINT32(MF_MT_AUDIO_BLOCK_ALIGNMENT, 4);
+			pPCMType->SetUINT32(MF_MT_AUDIO_AVG_BYTES_PER_SECOND, 44100 * 4);
+			voice.pReader->SetCurrentMediaType(static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), nullptr, pPCMType.Get());
+
 			AudioDecoder::Seek(voice, voice.startTime100ns);
 
 			bool isSuccess1 = AudioDecoder::ReadNextChunk(voice, voice.pBuffers[currentBufferIndex].data(), StreamingSourceVoice::kBufferSize, &bytesRead);
@@ -442,13 +470,13 @@ AudioHandle AudioManager::Play(const std::string& filePath, const bool isLoop, c
 
 void AudioManager::Stop(const AudioHandle& handle) {
 
-	if (handle.voiceIndex >= kSourceVoiceMax) {
-		assert(false && "Invalid voice index");
-
-		return;
-	}
-
 	if (handle.isStreaming) {
+
+		if (handle.voiceIndex >= streamingSourceVoicePool_.size()) {
+			assert(false && "Invalid stream voice index");
+
+			return;
+		}
 
 		auto& sSrcVoice = streamingSourceVoicePool_[handle.voiceIndex];
 
@@ -456,10 +484,18 @@ void AudioManager::Stop(const AudioHandle& handle) {
 
 			sSrcVoice->pVoice->Stop();
 			sSrcVoice->pVoice->FlushSourceBuffers();
+			sSrcVoice->pReader.Reset();
 
 			sSrcVoice->state = VoiceState::Stopped;
 			sSrcVoice->playId = 65536;
+			sSrcVoice->isLoop = false;
 		}
+
+		return;
+	}
+
+	if (handle.voiceIndex >= sourceVoicePool_.size()) {
+		assert(false && "Invalid voice index");
 
 		return;
 	}
