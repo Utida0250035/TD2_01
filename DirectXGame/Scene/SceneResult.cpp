@@ -43,11 +43,14 @@ void SceneResult::EnterScene() {
 }
 
 void SceneResult::Update() {
+	XINPUT_STATE state{};
+	XINPUT_STATE preState{};
 
-	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		// タイトルへ
+	if (KamataEngine::Input::GetInstance()->GetJoystickState(0, state)) {
+		KamataEngine::Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+	}
 
-		// SceneTitleへの遷移
+	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE) || (state.Gamepad.wButtons == XINPUT_GAMEPAD_A && preState.Gamepad.wButtons != XINPUT_GAMEPAD_A)) {
 		CommandChangeScene::GetInstance()->Set(SceneTitle::GetInstance(), new ChangeSceneFade());
 	}
 
