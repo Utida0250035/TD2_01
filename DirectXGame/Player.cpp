@@ -98,6 +98,11 @@ void Player::Initialize() {
 	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("7.png"), {-100.0f, -100.0f}));
 	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("8.png"), {-100.0f, -100.0f}));
 	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("9.png"), {-100.0f, -100.0f}));
+
+	// 被弾閃光
+	damagedFlash_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("playerDamagedFlash.png"), {});
+	damagedFlash_->SetColor({1.0f, 1.0f, 1.0f, 0.0f});
+
 }
 
 void Player::SetArrowDireciton(const Vector2 direction) {
@@ -128,6 +133,8 @@ void Player::Update() {
 		currentBomb_ = bombMax_;
 	}
 
+	flashAlpha_ = Interpolation::Lerp(flashAlpha_, 0.0f, 0.1f);
+
 	// 死亡終了確認
 	if (isDeath_) {
 		deathTimer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
@@ -153,6 +160,7 @@ void Player::Update() {
 
 		isDeath_ = true;
 
+		flashAlpha_ = 1.0f;
 		CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 		cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
 		deathVelocity_ = 70.0f;
@@ -166,6 +174,8 @@ void Player::Update() {
 
 			currentHealth_--;
 			isInvincible_ = true;
+
+			flashAlpha_ = 1.0f;
 
 			if (cmpHealthHit_->GetHealthCount() == 0) {
 
@@ -187,6 +197,8 @@ void Player::Update() {
 
 		}
 	}
+
+	damagedFlash_->SetColor({1.0f, 1.0f, 1.0f, flashAlpha_});
 
 	// 無敵クールダウン
 	if (!isDeath_) {
@@ -289,6 +301,7 @@ void Player::DrawUI() {
 
 	KamataEngine::Sprite::PreDraw();
 
+	damagedFlash_->Draw();
 
 	for (uint32_t i = 0; i < currentHealth_; i++) {
 		healthSprites_[i]->Draw();
@@ -408,7 +421,9 @@ namespace Atrum {
 	    }
 
 	    if (input_->PushKey(DIK_S) || input_->PushKey(DIK_DOWN)) {
-		    moveDirection.y -= 1.0f;
+		    if (!anotherOwner_->GetOnGround()) {
+			    moveDirection.y -= 1.0f;
+		    }
 	    }
 
 	    if (input_->PushKey(DIK_A) || input_->PushKey(DIK_LEFT)) {

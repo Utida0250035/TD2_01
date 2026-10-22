@@ -5,6 +5,8 @@
 #include "System/CmpMesh.h"
 #include "Time/DeltaTime.h"
 
+#include "Random.h"
+#include <numbers>
 #include <iostream>
 
 using namespace Atrum;
@@ -31,13 +33,14 @@ void ParticleExplosion::Initialize() {
 
 	//----------
 
-	fire_.worldTransform_.rotation_.x = static_cast<float>(rand() & 360);
-	fire_.worldTransform_.rotation_.y = static_cast<float>(rand() & 360);
-	fire_.worldTransform_.rotation_.z = static_cast<float>(rand() & 360);
 
-	smoke_.worldTransform_.rotation_.x = static_cast<float>(rand() & 360);
-	smoke_.worldTransform_.rotation_.y = static_cast<float>(rand() & 360);
-	smoke_.worldTransform_.rotation_.z = static_cast<float>(rand() & 360);
+	fire_.worldTransform_.rotation_.x = static_cast<float>(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
+	fire_.worldTransform_.rotation_.y = static_cast<float>(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
+	fire_.worldTransform_.rotation_.z = static_cast<float>(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
+
+	smoke_.worldTransform_.rotation_.x = static_cast<float>(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
+	smoke_.worldTransform_.rotation_.y = static_cast<float>(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
+	smoke_.worldTransform_.rotation_.z = static_cast<float>(Random::Create(0.0f, std::numbers::pi_v<float> * 2.0f));
 
 	//
 	//--------------------
