@@ -82,6 +82,7 @@ void SceneGame::Update() {
 	// ボス演出カメラ
 	if (boss_->GetIsDeath()) {
 		cameraController_->StartEndBoss(boss_->GetEntity()->GetWorldPosition());
+		player_->SetIsDeathBoss(true);
 	}
 
 	if (boss_->IsDeathFinished()) {

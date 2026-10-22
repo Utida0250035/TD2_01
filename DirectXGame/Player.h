@@ -137,6 +137,8 @@ private:
 	// 死亡演出終了状態
 	bool isDeathFinished_ = false;
 
+	bool isDeathBoss_ = false;
+
 	bool onGround_ = false;
 
 	// 被弾時の閃光スプライト
@@ -200,6 +202,8 @@ public:
 
 	void SetFloor(Floor* floor) { floor_ = floor; }
 	Floor* GetFloor() { return floor_; }
+
+	void SetIsDeathBoss(bool isDeathBoss) { isDeathBoss_ = isDeathBoss; }
 };
 
 namespace Atrum {

@@ -300,7 +300,7 @@ void Player::Draw() {
 
 	if (!isDeath_) {
 
-		if (CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat")) {
+		if (CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat") || isDeathBoss_) {
 			return;
 		}
 
@@ -333,7 +333,7 @@ void Player::DrawUI() {
 	bombCount_ %= 10;
 	bombNum_[1] = bombCount_ / 1;
 
-	if (!CommandParticle::GetInstance()->IsExist("bossAppear") && !CommandParticle::GetInstance()->IsExist("bossDefeat") && !isDeath_) {
+	if (!CommandParticle::GetInstance()->IsExist("bossAppear") && !CommandParticle::GetInstance()->IsExist("bossDefeat") && !isDeath_ && !isDeathBoss_) {
 		bombSprite_->SetPosition({bombNumPos_.x - 5.0f, bombNumPos_.y + 5.0f});
 		bombSprite_->Draw();
 
