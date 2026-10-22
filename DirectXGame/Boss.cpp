@@ -36,6 +36,7 @@ void Boss::Initialize() {
 
 	CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 	cmpMesh->SetModel(KamataEngine::Model::CreateFromOBJ("boss"));
+	cmpMesh->SetColor({0.125f, 0.125f, 0.125f, 1.0f});
 
 	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere->SetSpheres({
@@ -336,7 +337,7 @@ void Boss::Update() {
 	if (damageReactionTimer_ > 0) {
 		damageReactionTimer_--;
 	} else {
-		entity_->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 1.0f, 1.0f, 1.0f});
+		entity_->GetDrawCmp<CmpMesh>()->SetColor({0.125f, 0.125f, 0.125f, 1.0f});
 	}
 
 	if (cmpHealthHit->GetIsHurt()) {

@@ -18,6 +18,9 @@ void SceneGame::EnterScene() {
 	std::cout << "key C to go Result\n" << std::endl;
 
 	modelBlock_ = Model::CreateFromOBJ("blockRounded", true);
+	blockColor_ = new KamataEngine::ObjectColor();
+	blockColor_->Initialize();
+	blockColor_->SetColor({0.5f, 0.5f, 0.5f, 0.75f});
 
 	player_ = new Player;
 	player_->Initialize();
@@ -112,7 +115,7 @@ void SceneGame::Draw() {
 				continue;
 			}
 
-			modelBlock_->Draw(*worldTransformBlock, *KeMainCamera::GetInstance()->camera_);
+			modelBlock_->Draw(*worldTransformBlock, *KeMainCamera::GetInstance()->camera_, blockColor_);
 		}
 	}
 
@@ -140,10 +143,15 @@ void SceneGame::ExitScene() {
 	player_ = nullptr;
 
 	delete skyDome_;
+	skyDome_ = nullptr;
 
 	delete cloud_;
+	cloud_ = nullptr;
 
 	commandParticle_ = nullptr;
+
+	delete blockColor_;
+	blockColor_ = nullptr;
 
 	Audio::Manager::GetInstance()->Stop(bgmHandle_);
 }
