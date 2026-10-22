@@ -408,7 +408,9 @@ namespace Atrum {
 	    }
 
 	    if (input_->PushKey(DIK_S) || input_->PushKey(DIK_DOWN)) {
-		    moveDirection.y -= 1.0f;
+		    if (!anotherOwner_->GetOnGround()) {
+			    moveDirection.y -= 1.0f;
+		    }
 	    }
 
 	    if (input_->PushKey(DIK_A) || input_->PushKey(DIK_LEFT)) {
