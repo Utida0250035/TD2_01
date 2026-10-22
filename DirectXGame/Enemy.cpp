@@ -116,7 +116,7 @@ void CmpEnemy::Update() {
 		attackTimer_ += 1.0f / 60.0f;
 	}
 
-	// 攻撃開始
+	// 予備動作開始
 	if (!isAttack_ && attackTimer_ >= kAttackTime_) {
 		isBack_ = true;
 		anotherOwner_->SetIsWarning(true);
@@ -138,6 +138,7 @@ void CmpEnemy::Update() {
 			attackTimer_ = 0.0f;
 			anotherOwner_->GetEntity()->SetEntityType(EntityType::ENEMY_WEAPON);
 			SEPlayer::GetInstance()->Play("./Resources/seEnemyAttack.mp3");
+			anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 1.0f, 0.1f, 1.0f});
 		}
 	}
 
@@ -152,6 +153,7 @@ void CmpEnemy::Update() {
 		if (difference.Length() <= kAttackSpeed_) {
 			isAttack_ = false;
 			anotherOwner_->GetEntity()->SetEntityType(EntityType::ENEMY);
+			anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 1.0f, 1.0f, 1.0f});
 		}
 	}
 
