@@ -14,12 +14,10 @@ void SceneTitle::EnterScene() {
 	std::cout << "key Space to go Select\n" << std::endl;
 
 	// タイトルロゴの初期化
-	uint32_t texture = KamataEngine::TextureManager::Load("white1x1.png");
+	uint32_t texture = KamataEngine::TextureManager::Load("titleLogo.png");
 	spriteTitle_.reset(KamataEngine::Sprite::Create(texture, {640.0f, 300.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
 	uint32_t textureButton = KamataEngine::TextureManager::Load("navigationSpaceKey.png");
 	spriteButton_.reset(KamataEngine::Sprite::Create(textureButton, {640.0f, 650.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
-
-	spriteTitle_->SetSize({1024.0f, 256.0f});
 
 	//-------------------
 	// 背景
