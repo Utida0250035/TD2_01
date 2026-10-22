@@ -16,8 +16,13 @@ void SceneTitle::EnterScene() {
 	// タイトルロゴの初期化
 	uint32_t texture = KamataEngine::TextureManager::Load("titleLogo.png");
 	spriteTitle_.reset(KamataEngine::Sprite::Create(texture, {640.0f, 300.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
-	uint32_t textureButton = KamataEngine::TextureManager::Load("navigationSpaceKey.png");
-	spriteButton_.reset(KamataEngine::Sprite::Create(textureButton, {640.0f, 650.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
+	textureKeyboard_ = KamataEngine::TextureManager::Load("navigationSpaceKey.png");
+	textureController_ = KamataEngine::TextureManager::Load("navigationA.png");
+	if (KamataEngine::Input::GetInstance()->GetNumberOfJoysticks()) {
+		spriteButton_.reset(KamataEngine::Sprite::Create(textureController_, {640.0f, 650.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
+	} else {
+		spriteButton_.reset(KamataEngine::Sprite::Create(textureKeyboard_, {640.0f, 650.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
+	}
 
 	//-------------------
 	// 背景
@@ -59,6 +64,12 @@ void SceneTitle::Update() {
 	cloud_->Update();
 
 	spriteButton_->SetColor(buttonColor_);
+
+	if (KamataEngine::Input::GetInstance()->GetNumberOfJoysticks()) {
+		spriteButton_->SetTextureHandle(textureController_);
+	} else {
+		spriteButton_->SetTextureHandle(textureKeyboard_);
+	}
 }
 
 void SceneTitle::Draw() {

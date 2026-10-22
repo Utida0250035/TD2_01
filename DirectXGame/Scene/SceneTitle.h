@@ -18,6 +18,9 @@ private:
 	std::unique_ptr<KamataEngine::Sprite> spriteTitle_;
 	std::unique_ptr<KamataEngine::Sprite> spriteButton_;
 
+	uint32_t textureKeyboard_;
+	uint32_t textureController_;
+
 	KamataEngine::Vector3 buttonTranslate_ = {0.0f, 0.0f, 0.0f};
 	KamataEngine::Vector4 buttonColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	bool isToAlpha_ = true;
