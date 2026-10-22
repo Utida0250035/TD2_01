@@ -322,7 +322,7 @@ void Player::DrawUI() {
 	bombCount_ %= 10;
 	bombNum_[1] = bombCount_ / 1;
 
-	if (!CommandParticle::GetInstance()->IsExist("bossAppear") && !CommandParticle::GetInstance()->IsExist("bossDefeat")) {
+	if (!CommandParticle::GetInstance()->IsExist("bossAppear") && !CommandParticle::GetInstance()->IsExist("bossDefeat") && !isDeath_) {
 		for (int i = 0; i < 2; i++) {
 			numbers_[bombNum_[i]]->SetPosition({bombNumPos_.x + i * 24.0f, bombNumPos_.y});
 			numbers_[bombNum_[i]]->Draw();
