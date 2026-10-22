@@ -204,6 +204,9 @@ public:
 	Floor* GetFloor() { return floor_; }
 
 	void SetIsDeathBoss(bool isDeathBoss) { isDeathBoss_ = isDeathBoss; }
+
+	Atrum::Math::Vector3* GetTranslatePointer() { return &entity_->RefTransform().translate; }
+
 };
 
 namespace Atrum {

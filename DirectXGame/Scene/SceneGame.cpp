@@ -50,6 +50,8 @@ void SceneGame::EnterScene() {
 
 	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmGame.mp3", true);
 
+	boss_->SetPlayerTranslate(player_->GetTranslatePointer());
+
 	Update();
 
 }

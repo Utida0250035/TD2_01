@@ -166,6 +166,9 @@ private:
 	// 集中線
 	KamataEngine::Sprite* impactLine_ = nullptr;
 
+	// プレイヤー座標
+	Math::Vector3* playerTranslate_ = nullptr;
+
 public:
 	~Boss();
 
@@ -188,6 +191,8 @@ public:
 	bool GetIsDeath() const { return isDeath_; }
 
 	void SetCameraController(CameraController* control) { cameraController_ = control; }
+
+	void SetPlayerTranslate(Math::Vector3* translate) { playerTranslate_ = translate; }
 
 };
 
