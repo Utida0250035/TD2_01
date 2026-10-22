@@ -15,8 +15,6 @@ class SceneResult final : public Scene {
 
 private:
 
-	int32_t choice_ = 0;
-
 	static inline constexpr int32_t kChoiceMax = 2;
 
 	std::unique_ptr<KamataEngine::Sprite> spriteResult_;
