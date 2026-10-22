@@ -80,7 +80,7 @@ void Atrum::ParticleBossAppear::Update() {
 		    powf(particle->worldTransform_.translation_.z - targetPosition_.z, 2.0f));
 
 		particle->alpha_ = Lerp(particle->alpha_, 1.0f, 0.05f);
-		particle->objectColor_.SetColor({0.125f, 0.125f, 0.125f, particle->alpha_});
+		particle->objectColor_.SetColor({1.0f, 1.0f, 1.0f, particle->alpha_});
 
 		// 終了
 		if (translationToDistance <= 0.9f) {
