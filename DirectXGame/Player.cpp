@@ -160,7 +160,7 @@ void Player::Update() {
 
 	uint32_t afterHealth = cmpHealthHit_->GetHealthCount();
 
-	if (cmpHealthHit_->GetHealthCount() == 0 || entity_->GetWorldPosition().y < -30.0f) {
+	if (cmpHealthHit_->GetHealthCount() == 0) {
 
 		isDeath_ = true;
 
@@ -182,11 +182,21 @@ void Player::Update() {
 
 	}
 
+	// 落下ダメージ
+	if (entity_->GetWorldPosition().y < -30.0f) {
+		cmpHealthHit_->SetHealthCount(cmpHealthHit_->GetHealthCount() - 1);
+		afterHealth--;
+		entity_->GetUpdCmp<CmpLhRigidBody>()->RefVelocity().y = 70.0f;
+		if (currentBomb_ <= 4) {
+			currentBomb_ = 4;
+		}
+	}
+
 	// 被弾検知
 	if (!isInvincible_) {
 		if (afterHealth != preHealth) {
 
-			currentHealth_--;
+			currentHealth_ -= preHealth - afterHealth;
 			isInvincible_ = true;
 
 			flashAlpha_ = 1.0f;
