@@ -94,6 +94,7 @@ private:
 	
 	//残弾数
 	std::vector<KamataEngine::Sprite*> numbers_;
+	KamataEngine::Sprite* bombSprite_ = nullptr;
 	uint32_t bombCount_;
 	uint32_t bombNum_[2];
 	Atrum::Math::Vector3 bombNumPos_;

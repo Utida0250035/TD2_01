@@ -99,6 +99,8 @@ void Player::Initialize() {
 	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("8.png"), {-100.0f, -100.0f}));
 	numbers_.push_back(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("9.png"), {-100.0f, -100.0f}));
 
+	bombSprite_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("bomb.png"), {-100.0f, -100.0f});
+
 	// 被弾閃光
 	damagedFlash_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("playerDamagedFlash.png"), {});
 	damagedFlash_->SetColor({1.0f, 1.0f, 1.0f, 0.0f});
@@ -332,8 +334,11 @@ void Player::DrawUI() {
 	bombNum_[1] = bombCount_ / 1;
 
 	if (!CommandParticle::GetInstance()->IsExist("bossAppear") && !CommandParticle::GetInstance()->IsExist("bossDefeat") && !isDeath_) {
+		bombSprite_->SetPosition({bombNumPos_.x - 5.0f, bombNumPos_.y + 5.0f});
+		bombSprite_->Draw();
+
 		for (int i = 0; i < 2; i++) {
-			numbers_[bombNum_[i]]->SetPosition({bombNumPos_.x + i * 24.0f, bombNumPos_.y});
+			numbers_[bombNum_[i]]->SetPosition({bombNumPos_.x + (i + 1) * 24.0f, bombNumPos_.y});
 			numbers_[bombNum_[i]]->Draw();
 		}
 	}
