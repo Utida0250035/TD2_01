@@ -33,10 +33,10 @@ private:
 	static inline const float kBlockHeight = 2.0f;
 	// ブロックの個数
 	static inline const uint32_t kNumBlockVirtical = 25;
-	static inline const uint32_t kNumBlockHorizontal = 45;
+	static inline const uint32_t kNumBlockHorizontal = 50;
 
 	// マップの開始基準座標（左下基準）
-	static inline const float kOriginX = -45.0f;
+	static inline const float kOriginX = -50.0f;
 	static inline const float kOriginY = -20.0f;
 
 	// マップチップCSVの文字番号
