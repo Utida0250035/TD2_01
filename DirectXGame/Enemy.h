@@ -75,7 +75,7 @@ private:
 	float beginTimer_ = 0.0f;
 	static inline const float kEndTime_ = 0.5f;
 	float endTimer_ = 0.0f;
-	Math::Vector4 entityColor_ = {1.0f, 1.0f, 1.0f, 0.0f};
+	Math::Vector4 entityColor_ = {0.0f, 0.0f, 0.0f, 0.0f};
 
 	// 攻撃間隔<秒>
 	static inline const float kAttackTime_ = 1.5f;

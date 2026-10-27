@@ -32,7 +32,7 @@ void Enemy::Initialize() {
 
 	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere->SetSpheres({
-	    {{}, 2.0f}
+	    {{}, 1.0f}
     });
 	cmpHitSphere->SetIsActive(false);
 
@@ -46,7 +46,7 @@ void Enemy::Initialize() {
 	entity_->ResolveDependences();
 	entity_->Initialize();
 
-	cmpMesh->SetColor({1.0f, 1.0f, 1.0f, 0.0f});
+	cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 0.0f});
 	entity_->RefTransform().scale = {0.2f, 0.2f, 0.2f};
 
 	uint32_t texture = KamataEngine::TextureManager::Load("warning.png");
@@ -150,10 +150,12 @@ void CmpEnemy::Update() {
 		anotherOwner_->GetEntity()->RefTransform().translate += t * difference;
 		
 		// 一定距離まで近づいたら終了
-		if (difference.Length() <= kAttackSpeed_) {
-			isAttack_ = false;
+		if (difference.Length() <= kAttackSpeed_ * 1.0f) {
+			if (difference.Length() <= kAttackSpeed_) {
+				isAttack_ = false;
+			}
 			anotherOwner_->GetEntity()->SetEntityType(EntityType::ENEMY);
-			anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor({1.0f, 1.0f, 1.0f, 1.0f});
+			anotherOwner_->GetEntity()->GetDrawCmp<CmpMesh>()->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
 		}
 	}
 

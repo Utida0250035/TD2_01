@@ -47,7 +47,7 @@ void Player::Initialize() {
 
 	CmpHitSphere* cmpHitSphere = entity_->GetUpdCmp<CmpHitSphere>();
 	cmpHitSphere->SetSpheres({
-	    {{}, 2.0f}
+	    {{}, 1.0f}
     });
 
 	cmpHealthHit_ = entity_->GetUpdCmp<CmpHealthHit>();
