@@ -197,6 +197,8 @@ public:
 
 	void SetPlayerTranslate(Math::Vector3* translate) { playerTranslate_ = translate; }
 
+	bool Is2ndMode();
+
 };
 
 } // namespace Atrum

@@ -429,4 +429,19 @@ void Boss::Draw() {
 	CommandParticle::GetInstance()->Draw("bossDefeat");
 }
 
+bool Boss::Is2ndMode() {
+
+	// 体力
+	CmpHealthHit* cmpHealthHit = entity_->GetUpdCmp<CmpHealthHit>();
+
+	float current = static_cast<float>(cmpHealthHit->GetHealthCount());
+	float initial = static_cast<float>(cmpHealthHit->GetInitialHealthCount());
+
+	if (current <= initial / 2.0f) {
+		return true;
+	}
+
+	return false;
+}
+
 } // namespace Atrum

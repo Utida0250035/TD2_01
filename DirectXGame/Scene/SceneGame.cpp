@@ -36,10 +36,12 @@ void SceneGame::EnterScene() {
 
 	// 床
 	floor_ = new Floor;
-	floor_->LoadMapChipCsv("./Resources/field.csv");
+	floor_->LoadMapChipCsv("./Resources/flatField.csv");
 	player_->SetFloor(floor_);
-
 	GenerateFieldObjects();
+
+	CreateField("./Resources/flatField.csv");
+	isBoss2nd_ = false;
 
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
@@ -69,6 +71,15 @@ void SceneGame::Update() {
 	player_->Update();
 
 	boss_->Update();
+
+	if (boss_->Is2ndMode()) {
+		if (!isBoss2nd_) {
+		
+			isBoss2nd_ = true;
+			CreateField("./Resources/field.csv");
+
+		}
+	}
 
 	skyDome_->Update();
 
@@ -188,6 +199,14 @@ void SceneGame::ExitScene() {
 	Audio::Manager::GetInstance()->Stop(bgmHandle_);
 }
 
+void SceneGame::CreateField(const std::string& filePath) {
+
+	RemoveFieldObjects();
+	floor_->LoadMapChipCsv(filePath);
+	GenerateFieldObjects();
+
+}
+
 void SceneGame::GenerateFieldObjects() {
 	// 要素数
 	uint32_t kNumBlockVirtical = floor_->GetNumBlockVirtical();
@@ -217,6 +236,28 @@ void SceneGame::GenerateFieldObjects() {
 			}
 		}
 	}
+}
+
+void SceneGame::RemoveFieldObjects() {
+
+	// 要素数
+	uint32_t kNumBlockVirtical = floor_->GetNumBlockVirtical();
+	uint32_t kNumBlockHorizontal = floor_->GetNumBlockHorizontal();
+
+	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
+		for (uint32_t j = 0; j < kNumBlockHorizontal; j++) {
+
+			delete worldTransformBlocks_[i][j];
+
+		}
+	}
+
+	worldTransformBlocks_.resize(0);
+	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
+		// 1列の要素数
+		worldTransformBlocks_[i].resize(0);
+	}
+
 }
 
 } // namespace Atrum
