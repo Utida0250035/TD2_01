@@ -56,7 +56,7 @@ private:
 
 	bool isBoss2nd_ = false;
 	float scaffoldCrushTimer_ = 0.0f;
-	float scaffoldCrushTime_ = 2.0f;
+	float scaffoldCrushTime_ = 0.5f;
 
 public:
 
