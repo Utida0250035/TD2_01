@@ -1,15 +1,38 @@
 #include "../Scene/SceneGame.h"
-#include "../Scene/CommandChangeScene.h"
-#include "../Scene/SceneResult.h"
-#include "../SEPlayer.h"
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
+#include "../SEPlayer.h"
+#include "../Scene/CommandChangeScene.h"
+#include "../Scene/SceneResult.h"
+#include "../Time/DeltaTime.h"
+#include "../Particle/CommandParticle.h"
+#include "../ParticleEnemyAppear.h"
 #include <KamataEngine.h>
 #include <iostream>
 
 using namespace KamataEngine;
 
 namespace Atrum {
+
+bool SceneGame::ScaffoldCrushEffect() {
+
+	if (scaffoldCrushTimer_ >= scaffoldCrushTime_)
+		return false;
+
+	if (scaffoldCrushTimer_ <= 0.0f) {
+		cameraController_->Shake(scaffoldCrushTime_, 1.5f);
+	}
+	
+	scaffoldCrushTimer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
+
+	if (scaffoldCrushTimer_ >= scaffoldCrushTime_) {
+
+		scaffoldCrushTimer_ = scaffoldCrushTime_;
+		return false;
+	}
+
+	return true;
+}
 
 void SceneGame::EnterScene() {
 
@@ -62,8 +85,9 @@ void SceneGame::EnterScene() {
 		spriteSkipButton_.reset(KamataEngine::Sprite::Create(textureKeyboard_, {1050.0f, 50.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
 	}
 
-	Update();
+	scaffoldCrushTimer_ = 0.0f;
 
+	Update();
 }
 
 void SceneGame::Update() {
@@ -74,10 +98,10 @@ void SceneGame::Update() {
 
 	if (boss_->Is2ndMode()) {
 		if (!isBoss2nd_) {
-		
-			isBoss2nd_ = true;
-			CreateField("./Resources/field.csv");
-
+			if (!ScaffoldCrushEffect()) {
+				isBoss2nd_ = true;
+				CreateField("./Resources/field.csv");
+			}
 		}
 	}
 
@@ -91,14 +115,14 @@ void SceneGame::Update() {
 
 	SEPlayer::GetInstance()->Update();
 
-	#ifdef _DEBUG
+#ifdef _DEBUG
 
 	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_C)) {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance());
 		commandParticle_->DestroyParticleAll();
 	}
 
-	#endif
+#endif
 
 	XINPUT_STATE state{};
 	XINPUT_STATE preState{};
@@ -134,8 +158,6 @@ void SceneGame::Update() {
 	}
 
 #ifdef _DEBUG
-
-	
 
 #endif // _DEBUG
 }
@@ -204,7 +226,6 @@ void SceneGame::CreateField(const std::string& filePath) {
 	RemoveFieldObjects();
 	floor_->LoadMapChipCsv(filePath);
 	GenerateFieldObjects();
-
 }
 
 void SceneGame::GenerateFieldObjects() {
@@ -231,17 +252,13 @@ void SceneGame::GenerateFieldObjects() {
 				worldTransformBlocks_[i][j] = worldTransform;
 				worldTransformBlocks_[i][j]->translation_ = ToKamataEngine(floor_->GetMapChipPositionByIndex(j, i));
 				worldTransformBlocks_[i][j]->scale_ = {2.0f, 2.0f, 2.0f};
-				UpdateWorldTransform(*worldTransform); 
+				UpdateWorldTransform(*worldTransform);
 				break;
 			}
 		}
 	}
 }
 
-void SceneGame::RemoveFieldObjects() {
-
-	worldTransformBlocks_.clear();
-
-}
+void SceneGame::RemoveFieldObjects() { worldTransformBlocks_.clear(); }
 
 } // namespace Atrum
