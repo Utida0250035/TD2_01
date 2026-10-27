@@ -121,7 +121,7 @@ private:
 	uint32_t actionNum = 1;
 
 	// 移動最大時間
-	static inline const float moveActionMaxTime_ = 1.5f;
+	static inline const float moveActionMaxTime_ = 0.5f;
 
 	// 乱数で指定する攻撃時間
 	float attackLimitTime_ = 0.0f;

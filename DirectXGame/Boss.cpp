@@ -135,7 +135,7 @@ void Boss::Update() {
 
 		case Move:
 
-			entity_->RefTransform().translate = Interpolation::Lerp(entity_->RefTransform().translate, currentTargetPosition_, 0.05f);
+			entity_->RefTransform().translate = Interpolation::Lerp(entity_->RefTransform().translate, currentTargetPosition_, 0.1f);
 
 			// 移行
 			if (actionTimer_ >= moveActionMaxTime_) {
