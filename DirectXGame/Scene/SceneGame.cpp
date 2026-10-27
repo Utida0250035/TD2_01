@@ -253,10 +253,6 @@ void SceneGame::RemoveFieldObjects() {
 	}
 
 	worldTransformBlocks_.resize(0);
-	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
-		// 1列の要素数
-		worldTransformBlocks_[i].resize(0);
-	}
 
 }
 
