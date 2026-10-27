@@ -389,6 +389,14 @@ void Boss::DrawUI() {
 	KamataEngine::Sprite::PostDraw();
 }
 
+void Boss::SkipBegin() { 
+	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
+		cameraController_->SkipBeginBoss();
+		entity_->RefTransform().scale = {1.0f, 1.0f, 1.0f};
+		CommandParticle::GetInstance()->DestroyParticle("bossAppear");
+	}
+}
+
 void Boss::Draw() {
 
 	KamataEngine::Model::PreDraw();
@@ -419,6 +427,21 @@ void Boss::Draw() {
 
 	CommandParticle::GetInstance()->Draw("bossAppear");
 	CommandParticle::GetInstance()->Draw("bossDefeat");
+}
+
+bool Boss::Is2ndMode() {
+
+	// 体力
+	CmpHealthHit* cmpHealthHit = entity_->GetUpdCmp<CmpHealthHit>();
+
+	float current = static_cast<float>(cmpHealthHit->GetHealthCount());
+	float initial = static_cast<float>(cmpHealthHit->GetInitialHealthCount());
+
+	if (current <= initial / 2.0f) {
+		return true;
+	}
+
+	return false;
 }
 
 } // namespace Atrum

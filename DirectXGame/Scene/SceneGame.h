@@ -1,5 +1,7 @@
 #pragma once
 
+#include <KamataEngine.h>
+
 #include "Scene.h"
 #include "../Player.h"
 #include "../Boss.h"
@@ -48,6 +50,13 @@ class SceneGame final : public Scene {
 
 		Audio::AudioHandle bgmHandle_;
 
+		std::unique_ptr<KamataEngine::Sprite> spriteSkipButton_;
+
+	    uint32_t textureKeyboard_;
+	    uint32_t textureController_;
+
+		bool isBoss2nd_ = false;
+
 public:
 	void EnterScene() override;
 	void Update() override;
@@ -61,8 +70,14 @@ public:
 		return &instance;
 	}
 
+	// フィールド生成をまとめた関数
+	void CreateField(const std::string& filePath);
+
 	// フィールドオブジェクトの生成
 	void GenerateFieldObjects();
+
+	// フィールドオブジェクトの削除
+	void RemoveFieldObjects();
 
 	Player* GetPlayer() { return player_; }
 

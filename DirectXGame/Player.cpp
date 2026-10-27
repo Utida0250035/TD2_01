@@ -203,6 +203,7 @@ void Player::Update() {
 		if (currentBomb_ <= 4) {
 			currentBomb_ = 4;
 		}
+
 	}
 	
 
@@ -219,7 +220,12 @@ void Player::Update() {
 
 				isDeath_ = true;
 
-				deathVelocity_ = 70.0f;
+				if (entity_->RefTransform().translate.y == -30.0f) {
+					deathVelocity_ = 120.0f;
+				} else {
+					deathVelocity_ = 70.0f;
+				}
+				
 				CmpMesh* cmpMesh = entity_->GetDrawCmp<CmpMesh>();
 				cmpMesh->SetColor({0.0f, 0.0f, 0.0f, 1.0f});
 

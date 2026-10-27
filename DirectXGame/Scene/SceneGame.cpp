@@ -36,10 +36,12 @@ void SceneGame::EnterScene() {
 
 	// 床
 	floor_ = new Floor;
-	floor_->LoadMapChipCsv("./Resources/field.csv");
+	floor_->LoadMapChipCsv("./Resources/flatField.csv");
 	player_->SetFloor(floor_);
-
 	GenerateFieldObjects();
+
+	CreateField("./Resources/flatField.csv");
+	isBoss2nd_ = false;
 
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
@@ -52,6 +54,14 @@ void SceneGame::EnterScene() {
 
 	boss_->SetPlayerTranslate(player_->GetTranslatePointer());
 
+	textureKeyboard_ = KamataEngine::TextureManager::Load("skipManualK.png");
+	textureController_ = KamataEngine::TextureManager::Load("skipManualC.png");
+	if (KamataEngine::Input::GetInstance()->GetNumberOfJoysticks()) {
+		spriteSkipButton_.reset(KamataEngine::Sprite::Create(textureController_, {1050.0f, 50.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
+	} else {
+		spriteSkipButton_.reset(KamataEngine::Sprite::Create(textureKeyboard_, {1050.0f, 50.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
+	}
+
 	Update();
 
 }
@@ -61,6 +71,15 @@ void SceneGame::Update() {
 	player_->Update();
 
 	boss_->Update();
+
+	if (boss_->Is2ndMode()) {
+		if (!isBoss2nd_) {
+		
+			isBoss2nd_ = true;
+			CreateField("./Resources/field.csv");
+
+		}
+	}
 
 	skyDome_->Update();
 
@@ -81,6 +100,17 @@ void SceneGame::Update() {
 
 	#endif
 
+	XINPUT_STATE state{};
+	XINPUT_STATE preState{};
+	if (KamataEngine::Input::GetInstance()->GetJoystickState(0, state)) {
+		KamataEngine::Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+	}
+
+	// 演出スキップ
+	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE) || (state.Gamepad.wButtons == XINPUT_GAMEPAD_A && preState.Gamepad.wButtons != XINPUT_GAMEPAD_A)) {
+		boss_->SkipBegin();
+	}
+
 	// ボス演出カメラ
 	if (boss_->GetIsDeath()) {
 		cameraController_->StartEndBoss(boss_->GetEntity()->GetWorldPosition());
@@ -97,6 +127,12 @@ void SceneGame::Update() {
 		commandParticle_->DestroyParticleAll();
 	}
 
+	if (KamataEngine::Input::GetInstance()->GetNumberOfJoysticks()) {
+		spriteSkipButton_->SetTextureHandle(textureController_);
+	} else {
+		spriteSkipButton_->SetTextureHandle(textureKeyboard_);
+	}
+
 #ifdef _DEBUG
 
 	
@@ -104,7 +140,7 @@ void SceneGame::Update() {
 #endif // _DEBUG
 }
 
-void SceneGame::Draw() { 
+void SceneGame::Draw() {
 	KamataEngine::Model::PreDraw();
 
 	skyDome_->Draw();
@@ -128,10 +164,14 @@ void SceneGame::Draw() {
 
 	boss_->Draw();
 
-
 	player_->DrawUI();
 	boss_->DrawUI();
 
+	KamataEngine::Sprite::PreDraw();
+	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
+		spriteSkipButton_->Draw();
+	}
+	KamataEngine::Sprite::PostDraw();
 }
 
 void SceneGame::ExitScene() {
@@ -157,6 +197,14 @@ void SceneGame::ExitScene() {
 	blockColor_ = nullptr;
 
 	Audio::Manager::GetInstance()->Stop(bgmHandle_);
+}
+
+void SceneGame::CreateField(const std::string& filePath) {
+
+	RemoveFieldObjects();
+	floor_->LoadMapChipCsv(filePath);
+	GenerateFieldObjects();
+
 }
 
 void SceneGame::GenerateFieldObjects() {
@@ -188,6 +236,12 @@ void SceneGame::GenerateFieldObjects() {
 			}
 		}
 	}
+}
+
+void SceneGame::RemoveFieldObjects() {
+
+	worldTransformBlocks_.clear();
+
 }
 
 } // namespace Atrum

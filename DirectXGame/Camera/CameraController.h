@@ -53,6 +53,7 @@ public:
 	/// </summary>
 	void StartEndBoss(const Atrum::Math::Vector3& pos);
 
+	void SkipBeginBoss();
 
 
 	// ゲッター

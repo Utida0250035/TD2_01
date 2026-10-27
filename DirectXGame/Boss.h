@@ -184,6 +184,9 @@ public:
 	// UI描画
 	void DrawUI();
 
+	// 演出スキップ
+	void SkipBegin();
+
 	bool IsDeathFinished() const { return isDeathFinished_; }
 
 	Atrum::Entity* GetEntity() const { return entity_.get(); }
@@ -193,6 +196,8 @@ public:
 	void SetCameraController(CameraController* control) { cameraController_ = control; }
 
 	void SetPlayerTranslate(Math::Vector3* translate) { playerTranslate_ = translate; }
+
+	bool Is2ndMode();
 
 };
 
