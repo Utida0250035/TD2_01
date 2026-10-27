@@ -184,6 +184,9 @@ public:
 	// UI描画
 	void DrawUI();
 
+	// 演出スキップ
+	void SkipBegin();
+
 	bool IsDeathFinished() const { return isDeathFinished_; }
 
 	Atrum::Entity* GetEntity() const { return entity_.get(); }

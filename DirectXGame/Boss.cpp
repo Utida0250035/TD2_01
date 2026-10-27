@@ -389,6 +389,14 @@ void Boss::DrawUI() {
 	KamataEngine::Sprite::PostDraw();
 }
 
+void Boss::SkipBegin() { 
+	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
+		cameraController_->SkipBeginBoss();
+		entity_->RefTransform().scale = {1.0f, 1.0f, 1.0f};
+		CommandParticle::GetInstance()->DestroyParticle("bossAppear");
+	}
+}
+
 void Boss::Draw() {
 
 	KamataEngine::Model::PreDraw();
