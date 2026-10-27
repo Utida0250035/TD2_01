@@ -1,12 +1,12 @@
 #include "../Scene/SceneGame.h"
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
+#include "../Particle/CommandParticle.h"
+#include "../ParticleEnemyAppear.h"
 #include "../SEPlayer.h"
 #include "../Scene/CommandChangeScene.h"
 #include "../Scene/SceneResult.h"
 #include "../Time/DeltaTime.h"
-#include "../Particle/CommandParticle.h"
-#include "../ParticleEnemyAppear.h"
 #include <KamataEngine.h>
 #include <iostream>
 
@@ -20,14 +20,32 @@ bool SceneGame::ScaffoldCrushEffect() {
 		return false;
 
 	if (scaffoldCrushTimer_ <= 0.0f) {
+
+		for (std::vector<KamataEngine::WorldTransform*> vec : worldTransformBlocks_) {
+			for (KamataEngine::WorldTransform* worldTransform : vec) {
+				if (!worldTransform)
+					continue;
+
+				std::unique_ptr<ParticleEnemyAppear> particle = std::make_unique<ParticleEnemyAppear>();
+				particle->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
+				particle->SetTargetPosition(FromKamataEngine((*worldTransform).translation_));
+				particle->Initialize();
+				CommandParticle::GetInstance()->Generate("crush", particle.release());
+			}
+		}
+
 		cameraController_->Shake(scaffoldCrushTime_, 1.5f);
 	}
-	
+
 	scaffoldCrushTimer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
 
 	if (scaffoldCrushTimer_ >= scaffoldCrushTime_) {
 
 		scaffoldCrushTimer_ = scaffoldCrushTime_;
+
+		isBoss2nd_ = true;
+		CreateField("./Resources/field.csv");
+
 		return false;
 	}
 
@@ -98,10 +116,7 @@ void SceneGame::Update() {
 
 	if (boss_->Is2ndMode()) {
 		if (!isBoss2nd_) {
-			if (!ScaffoldCrushEffect()) {
-				isBoss2nd_ = true;
-				CreateField("./Resources/field.csv");
-			}
+			ScaffoldCrushEffect();
 		}
 	}
 
@@ -185,6 +200,7 @@ void SceneGame::Draw() {
 	player_->Draw();
 
 	boss_->Draw();
+	commandParticle_->Draw("crush");
 
 	player_->DrawUI();
 	boss_->DrawUI();
