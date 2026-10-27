@@ -36,7 +36,7 @@ void SceneGame::EnterScene() {
 
 	// 床
 	floor_ = new Floor;
-	floor_->LoadMapChipCsv("./Resources/field.csv");
+	floor_->LoadMapChipCsv("./Resources/flatField.csv");
 	player_->SetFloor(floor_);
 
 	GenerateFieldObjects();
