@@ -21,7 +21,7 @@
 
 */
 
-const wchar_t* kWindowTitle = L"2103_ゲームタイトル";
+const wchar_t* kWindowTitle = L"2103_天空花火師";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
