@@ -240,19 +240,7 @@ void SceneGame::GenerateFieldObjects() {
 
 void SceneGame::RemoveFieldObjects() {
 
-	// 要素数
-	uint32_t kNumBlockVirtical = floor_->GetNumBlockVirtical();
-	uint32_t kNumBlockHorizontal = floor_->GetNumBlockHorizontal();
-
-	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
-		for (uint32_t j = 0; j < kNumBlockHorizontal; j++) {
-
-			delete worldTransformBlocks_[i][j];
-
-		}
-	}
-
-	worldTransformBlocks_.resize(0);
+	worldTransformBlocks_.clear();
 
 }
 
