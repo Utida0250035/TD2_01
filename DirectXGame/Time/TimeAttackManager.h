@@ -5,7 +5,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <nlohmann/json.hpp>
 
 namespace Atrum {
 
@@ -82,16 +81,11 @@ public:
 		if (rankingList_.size() > rankingMaxCount_) {
 			rankingList_.resize(rankingMaxCount_);
 		}
-
 	}
 
-	void ToJson(const std::string& filePath) {
+	void ToJson(const std::string& filePath) const;
 
-	}
-
-	void FromJson(const std::string& filePath) {
-
-	}
+	void FromJson(const std::string& filePath);
 
 	SplitTime ToSplitTime() const { return SplitTime::FromSeconds(elapsedTime_, TimeFormatMode::MinuteSecond); }
 

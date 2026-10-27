@@ -8,7 +8,7 @@
 namespace Atrum::Json {
 
 /// <summary>
-/// JSON操作クラス 汎用 シリアライズ定義済み前提
+/// JSON操作クラス 汎用 シリアライズ定義済ｖｐみ前提
 /// </summary>
 class JsonHandler {
 

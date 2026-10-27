@@ -230,6 +230,7 @@
     <ClCompile Include="System\Playable\CmpInput.cpp" />
     <ClCompile Include="System\Playable\CmpMoveByInput.cpp" />
     <ClCompile Include="Time\DeltaTime.cpp" />
+    <ClCompile Include="Time\TimeAttackManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
@@ -433,6 +434,7 @@
     <ClInclude Include="System\Playable\CmpInput.h" />
     <ClInclude Include="System\Playable\CmpMoveByInput.h" />
     <ClInclude Include="Time\DeltaTime.h" />
+    <ClInclude Include="Time\TimeAttackManager.h" />
     <ClInclude Include="WindowSize.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
