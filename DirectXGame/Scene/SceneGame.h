@@ -1,5 +1,7 @@
 #pragma once
 
+#include <KamataEngine.h>
+
 #include "Scene.h"
 #include "../Player.h"
 #include "../Boss.h"
@@ -47,6 +49,11 @@ class SceneGame final : public Scene {
 		CommandParticle* commandParticle_ = nullptr;
 
 		Audio::AudioHandle bgmHandle_;
+
+		std::unique_ptr<KamataEngine::Sprite> spriteSkipButton_;
+
+	    uint32_t textureKeyboard_;
+	    uint32_t textureController_;
 
 public:
 	void EnterScene() override;
