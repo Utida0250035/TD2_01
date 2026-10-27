@@ -54,6 +54,14 @@ void SceneGame::EnterScene() {
 
 	boss_->SetPlayerTranslate(player_->GetTranslatePointer());
 
+	textureKeyboard_ = KamataEngine::TextureManager::Load("skipManualK.png");
+	textureController_ = KamataEngine::TextureManager::Load("skipManualC.png");
+	if (KamataEngine::Input::GetInstance()->GetNumberOfJoysticks()) {
+		spriteSkipButton_.reset(KamataEngine::Sprite::Create(textureController_, {1050.0f, 50.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
+	} else {
+		spriteSkipButton_.reset(KamataEngine::Sprite::Create(textureKeyboard_, {1050.0f, 50.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
+	}
+
 	Update();
 
 }
@@ -119,6 +127,12 @@ void SceneGame::Update() {
 		commandParticle_->DestroyParticleAll();
 	}
 
+	if (KamataEngine::Input::GetInstance()->GetNumberOfJoysticks()) {
+		spriteSkipButton_->SetTextureHandle(textureController_);
+	} else {
+		spriteSkipButton_->SetTextureHandle(textureKeyboard_);
+	}
+
 #ifdef _DEBUG
 
 	
@@ -126,7 +140,7 @@ void SceneGame::Update() {
 #endif // _DEBUG
 }
 
-void SceneGame::Draw() { 
+void SceneGame::Draw() {
 	KamataEngine::Model::PreDraw();
 
 	skyDome_->Draw();
@@ -150,10 +164,14 @@ void SceneGame::Draw() {
 
 	boss_->Draw();
 
-
 	player_->DrawUI();
 	boss_->DrawUI();
 
+	KamataEngine::Sprite::PreDraw();
+	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
+		spriteSkipButton_->Draw();
+	}
+	KamataEngine::Sprite::PostDraw();
 }
 
 void SceneGame::ExitScene() {
