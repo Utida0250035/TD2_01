@@ -81,6 +81,17 @@ void SceneGame::Update() {
 
 	#endif
 
+	XINPUT_STATE state{};
+	XINPUT_STATE preState{};
+	if (KamataEngine::Input::GetInstance()->GetJoystickState(0, state)) {
+		KamataEngine::Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+	}
+
+	// 演出スキップ
+	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE) || (state.Gamepad.wButtons == XINPUT_GAMEPAD_A && preState.Gamepad.wButtons != XINPUT_GAMEPAD_A)) {
+		boss_->SkipBegin();
+	}
+
 	// ボス演出カメラ
 	if (boss_->GetIsDeath()) {
 		cameraController_->StartEndBoss(boss_->GetEntity()->GetWorldPosition());
