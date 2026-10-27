@@ -48,6 +48,8 @@ class SceneGame final : public Scene {
 
 		Audio::AudioHandle bgmHandle_;
 
+		bool isBoss2nd_ = false;
+
 public:
 	void EnterScene() override;
 	void Update() override;
@@ -61,8 +63,14 @@ public:
 		return &instance;
 	}
 
+	// フィールド生成をまとめた関数
+	void CreateField(const std::string& filePath);
+
 	// フィールドオブジェクトの生成
 	void GenerateFieldObjects();
+
+	// フィールドオブジェクトの削除
+	void RemoveFieldObjects();
 
 	Player* GetPlayer() { return player_; }
 
