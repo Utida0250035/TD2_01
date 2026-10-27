@@ -21,12 +21,12 @@ bool SceneGame::ScaffoldCrushEffect() {
 
 	if (scaffoldCrushTimer_ <= 0.0f) {
 
+		SEPlayer::GetInstance()->Play("./Resources/seFieldPreChange.mp3");
+
 		for (std::vector<KamataEngine::WorldTransform*> vec : worldTransformBlocks_) {
 			for (KamataEngine::WorldTransform* worldTransform : vec) {
 				if (!worldTransform)
 					continue;
-				
-				SEPlayer::GetInstance()->Play("./Resources/seFieldPreChange.mp3");
 
 				std::unique_ptr<ParticleEnemyAppear> particle = std::make_unique<ParticleEnemyAppear>();
 				particle->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
