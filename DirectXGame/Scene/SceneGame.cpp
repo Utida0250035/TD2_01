@@ -25,7 +25,7 @@ bool SceneGame::ScaffoldCrushEffect() {
 			for (KamataEngine::WorldTransform* worldTransform : vec) {
 				if (!worldTransform)
 					continue;
-
+				
 				std::unique_ptr<ParticleEnemyAppear> particle = std::make_unique<ParticleEnemyAppear>();
 				particle->SetModel(KamataEngine::Model::CreateFromOBJ("cloudParticle", false));
 				particle->SetTargetPosition(FromKamataEngine((*worldTransform).translation_));
@@ -34,7 +34,7 @@ bool SceneGame::ScaffoldCrushEffect() {
 			}
 		}
 
-		cameraController_->Shake(scaffoldCrushTime_, 1.5f);
+		cameraController_->Shake(scaffoldCrushTime_, 3.0f);
 	}
 
 	scaffoldCrushTimer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
