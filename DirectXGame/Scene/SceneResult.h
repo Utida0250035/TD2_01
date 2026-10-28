@@ -7,6 +7,8 @@
 #include "../Cloud.h"
 #include "../Skydome.h"
 
+#include "../Time/TimeAttackManager.h"
+
 namespace Atrum {
 
 class Entity;
@@ -40,6 +42,18 @@ private:
 	//---------------------
 
 	Audio::AudioHandle bgmHandle_;
+
+	TimeAttackManager* timeAttackManager_ = nullptr;
+	std::vector<float> rankingLists_{};
+	KamataEngine::Sprite* numbers_[6];
+	KamataEngine::Sprite* spriteColon_;
+	KamataEngine::Sprite* spriteDot_;
+	int32_t timeCount_;
+	int32_t minutesNum_[2] = {0, 0};
+	int32_t secondsNum_[2] = {0, 0};
+	int32_t centiSecondsNum_[2] = {0, 0};
+	SplitTime time_;
+	uint32_t textureNums_[10];
 
 public:
 	void EnterScene() override;

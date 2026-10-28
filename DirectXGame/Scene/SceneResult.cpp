@@ -39,6 +39,31 @@ void SceneResult::EnterScene() {
 	//
 	//-------------------
 
+	// ランキング
+	timeAttackManager_ = new TimeAttackManager;
+	rankingLists_ = timeAttackManager_->GetRankingList();
+
+	textureNums_[0] = KamataEngine::TextureManager::Load("0.png");
+	textureNums_[1] = KamataEngine::TextureManager::Load("1.png");
+	textureNums_[2] = KamataEngine::TextureManager::Load("2.png");
+	textureNums_[3] = KamataEngine::TextureManager::Load("3.png");
+	textureNums_[4] = KamataEngine::TextureManager::Load("4.png");
+	textureNums_[5] = KamataEngine::TextureManager::Load("5.png");
+	textureNums_[6] = KamataEngine::TextureManager::Load("6.png");
+	textureNums_[7] = KamataEngine::TextureManager::Load("7.png");
+	textureNums_[8] = KamataEngine::TextureManager::Load("8.png");
+	textureNums_[9] = KamataEngine::TextureManager::Load("9.png");
+
+	numbers_[0] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
+	numbers_[1] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
+	numbers_[2] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
+	numbers_[3] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
+	numbers_[4] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
+	numbers_[5] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
+
+	spriteColon_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("colon.png"), {-100.0f, -100.0f});
+	spriteDot_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("dot.png"), {-100.0f, -100.0f});
+
 	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmResult.mp3", true);
 }
 
@@ -95,6 +120,54 @@ void SceneResult::Draw() {
 	spriteResult_->Draw();
 
 	spriteButton_->Draw();
+
+	int32_t rankingNum = 0;
+
+	//for (auto& ranking : rankingLists_) {
+		//ranking;
+		time_ = SplitTime::FromSeconds(900.28f);
+
+		timeCount_ = time_.minutes_;
+		minutesNum_[0] = timeCount_ / 10;
+		timeCount_ %= 10;
+		minutesNum_[1] = timeCount_ / 1;
+
+		timeCount_ = time_.seconds_;
+		secondsNum_[0] = timeCount_ / 10;
+		timeCount_ %= 10;
+		secondsNum_[1] = timeCount_ / 1;
+
+		timeCount_ = time_.centiseconds_;
+		centiSecondsNum_[0] = timeCount_ / 10;
+		timeCount_ %= 10;
+		centiSecondsNum_[1] = timeCount_ / 1;
+
+		for (int i = 0; i < 2; i++) {
+		    numbers_[i]->SetTextureHandle(textureNums_[minutesNum_[i]]);
+			numbers_[i]->SetPosition({i * 24.0f, 40.0f * rankingNum});
+			numbers_[i]->Draw();
+		}
+
+		for (int i = 0; i < 2; i++) {
+		    numbers_[i + 2]->SetTextureHandle(textureNums_[secondsNum_[i]]);
+		    numbers_[i + 2]->SetPosition({(i + 3) * 24.0f, 40.0f * rankingNum});
+		    numbers_[i + 2]->Draw();
+		}
+
+		for (int i = 0; i < 2; i++) {
+		    numbers_[i + 4]->SetTextureHandle(textureNums_[centiSecondsNum_[i]]);
+		    numbers_[i + 4]->SetPosition({(i + 6) * 24.0f, 40.0f * rankingNum});
+		    numbers_[i + 4]->Draw();
+		}
+
+		spriteColon_->SetPosition({2 * 24.0f, 40.0f * rankingNum});
+	    spriteColon_->Draw();
+
+	    spriteDot_->SetPosition({5 * 24.0f, 40.0f * rankingNum});
+	    spriteDot_->Draw();
+
+		rankingNum++;
+	//}
 
 	KamataEngine::Sprite::PostDraw();
 }
