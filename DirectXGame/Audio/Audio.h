@@ -3,8 +3,8 @@
 #include "../Audio/AudioHandle.h"
 #include "../Audio/SourceVoice.h"
 #include "../Audio/StreamingSourceVoice.h"
-#include <memory>
 #include <algorithm>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -13,8 +13,10 @@ namespace Atrum::Audio {
 
 class AudioManager {
 
-private:
+public:
 	~AudioManager();
+
+private:
 	AudioManager() = default;
 
 	static std::unique_ptr<AudioManager> instance_;

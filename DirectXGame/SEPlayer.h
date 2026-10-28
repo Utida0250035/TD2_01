@@ -1,7 +1,7 @@
 #pragma once
-#include <unordered_map>
-#include <string>
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 class SEPlayer {
 private:
@@ -9,11 +9,15 @@ private:
 
 	// コンストラクタとデストラクタの隠蔽
 	SEPlayer() = default;
+
+public:
 	~SEPlayer() = default;
+
+private:
+	
 	// コピーコンストラクタと代入演算子を無効化
 	SEPlayer(const SEPlayer&) = delete;
 	SEPlayer& operator=(const SEPlayer&) = delete;
-
 
 	std::unordered_map<size_t, bool> sounds;
 
