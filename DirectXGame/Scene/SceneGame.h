@@ -10,9 +10,9 @@
 #include "../Particle/CommandParticle.h"
 #include "../Player.h"
 #include "../Skydome.h"
-#include "Scene.h"
-
+#include "../Time/TimeAttackManager.h"
 #include "ChangeSceneFade.h"
+#include "Scene.h"
 
 namespace Atrum {
 
@@ -23,6 +23,12 @@ class SceneGame final : public Scene {
 private:
 	KamataEngine::Model* modelBlock_ = nullptr;
 	KamataEngine::ObjectColor* blockColor_ = nullptr;
+
+	// タイムアタックマネージャ
+	std::unique_ptr<TimeAttackManager> timeAttack_ = nullptr;
+
+	// rta記録ファイルパス
+	static inline const char* kRtaRecordFilePath = "./Resources/rtaRecord.json";
 
 	// プレイヤー
 	Player* player_ = nullptr;
@@ -37,7 +43,7 @@ private:
 	Cloud* cloud_ = nullptr;
 
 	// ブロック
-	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
+	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_{};
 
 	Floor* floor_ = nullptr;
 
@@ -47,12 +53,12 @@ private:
 	// パーティクルマネージャ
 	CommandParticle* commandParticle_ = nullptr;
 
-	Audio::AudioHandle bgmHandle_;
+	Audio::AudioHandle bgmHandle_{};
 
-	std::unique_ptr<KamataEngine::Sprite> spriteSkipButton_;
+	std::unique_ptr<KamataEngine::Sprite> spriteSkipButton_ = nullptr;
 
-	uint32_t textureKeyboard_;
-	uint32_t textureController_;
+	uint32_t textureKeyboard_ = 0;
+	uint32_t textureController_ = 0;
 
 	bool isBoss2nd_ = false;
 	float scaffoldCrushTimer_ = 0.0f;
@@ -88,6 +94,8 @@ public:
 	void RemoveFieldObjects();
 
 	Player* GetPlayer() { return player_; }
+	TimeAttackManager* GetRtaManager() { return timeAttack_.get(); }
+
 };
 
 } // namespace Atrum

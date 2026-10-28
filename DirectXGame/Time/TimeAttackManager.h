@@ -95,6 +95,10 @@ public:
 
 	void SetRankingList(const std::vector<float>& rankingList) { rankingList_ = rankingList; }
 	void SetRankingMax(const size_t max) { rankingMaxCount_ = max; }
+
+	TimeAttackManager() = default;
+	~TimeAttackManager() = default;
+
 };
 
 } // namespace Atrum
