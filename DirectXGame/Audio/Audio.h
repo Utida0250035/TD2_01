@@ -3,7 +3,7 @@
 #include "../Audio/AudioHandle.h"
 #include "../Audio/SourceVoice.h"
 #include "../Audio/StreamingSourceVoice.h"
-
+#include <memory>
 #include <algorithm>
 #include <string>
 #include <unordered_map>
@@ -17,7 +17,7 @@ private:
 	~AudioManager();
 	AudioManager() = default;
 
-	static AudioManager* instance_;
+	static std::unique_ptr<AudioManager> instance_;
 
 	template<typename T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
@@ -132,19 +132,16 @@ public:
 
 		if (!instance_) {
 
-			instance_ = new AudioManager();
+			instance_ = std::unique_ptr<AudioManager>(new AudioManager());
 		}
 
-		return instance_;
+		return instance_.get();
 	}
 
 	static void Destroy() {
 
 		if (instance_) {
-
-			delete instance_;
-
-			instance_ = nullptr;
+			instance_.reset();
 		}
 	}
 

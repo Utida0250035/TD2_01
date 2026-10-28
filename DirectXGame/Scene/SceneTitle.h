@@ -6,6 +6,7 @@
 
 #include "../Cloud.h"
 #include "../Skydome.h"
+#include <memory>
 
 
 namespace Atrum {
@@ -29,10 +30,10 @@ private:
 	// 背景
 
 	// 天球
-	Skydome* skydome_ = nullptr;
+	std::unique_ptr<Skydome> skydome_ = nullptr;
 
 	// 雲
-	Cloud* cloud_ = nullptr;
+	std::unique_ptr<Cloud> cloud_ = nullptr;
 
 	//
 	//---------------------

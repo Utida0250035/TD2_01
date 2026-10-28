@@ -1,10 +1,11 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <memory>
 
 class SEPlayer {
 private:
-	static SEPlayer* instance_;
+	static std::unique_ptr<SEPlayer> instance_;
 
 	// コンストラクタとデストラクタの隠蔽
 	SEPlayer() = default;
