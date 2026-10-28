@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include <cstdint>
 #include "../Audio/Audio.h"
+#include "../Math/Vector2.h"
 
 #include "../Cloud.h"
 #include "../Skydome.h"
@@ -45,15 +46,19 @@ private:
 
 	TimeAttackManager* timeAttackManager_ = nullptr;
 	std::vector<float> rankingLists_{};
-	KamataEngine::Sprite* numbers_[6];
-	KamataEngine::Sprite* spriteColon_;
-	KamataEngine::Sprite* spriteDot_;
+	std::unique_ptr<KamataEngine::Sprite> numbers_[6][3];
+	std::unique_ptr<KamataEngine::Sprite> spriteColon_[3];
+	std::unique_ptr<KamataEngine::Sprite> spriteDot_[3];
+	std::unique_ptr<KamataEngine::Sprite> spriteRankingDot_[3];
+	std::unique_ptr<KamataEngine::Sprite> spriteRankingNum_[3];
 	int32_t timeCount_;
 	int32_t minutesNum_[2] = {0, 0};
 	int32_t secondsNum_[2] = {0, 0};
 	int32_t centiSecondsNum_[2] = {0, 0};
 	SplitTime time_;
 	uint32_t textureNums_[10];
+
+	Atrum::Math::Vector2 numOffset_ = {640.0f - 96.0f, 300.0f};
 
 public:
 	void EnterScene() override;

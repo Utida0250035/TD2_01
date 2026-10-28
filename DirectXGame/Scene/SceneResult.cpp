@@ -40,8 +40,10 @@ void SceneResult::EnterScene() {
 	//-------------------
 
 	// ランキング
-	timeAttackManager_ = new TimeAttackManager;
+	timeAttackManager_ = SceneGame::GetInstance()->GetRtaManager();
 	rankingLists_ = timeAttackManager_->GetRankingList();
+
+	
 
 	textureNums_[0] = KamataEngine::TextureManager::Load("0.png");
 	textureNums_[1] = KamataEngine::TextureManager::Load("1.png");
@@ -54,15 +56,26 @@ void SceneResult::EnterScene() {
 	textureNums_[8] = KamataEngine::TextureManager::Load("8.png");
 	textureNums_[9] = KamataEngine::TextureManager::Load("9.png");
 
-	numbers_[0] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
-	numbers_[1] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
-	numbers_[2] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
-	numbers_[3] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
-	numbers_[4] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
-	numbers_[5] = KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f});
+	for (int i = 0; i < 6; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			numbers_[i][j].reset(KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f}));
+		}
+	}
 
-	spriteColon_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("colon.png"), {-100.0f, -100.0f});
-	spriteDot_ = KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("dot.png"), {-100.0f, -100.0f});
+	for (int i = 0; i < 3; ++i) {
+		spriteColon_[i].reset(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("colon.png"), {-100.0f, -100.0f}));
+		spriteDot_[i].reset(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("dot.png"), {-100.0f, -100.0f}));
+	}
+
+	spriteRankingNum_[0].reset(KamataEngine::Sprite::Create(textureNums_[1], {-100.0f, -100.0f}, {1.0f, 1.0f, 0.1f, 1.0f}));
+	spriteRankingDot_[0].reset(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("dot.png"), {-100.0f, -100.0f}, {1.0f, 1.0f, 0.1f, 1.0f}));
+	
+	spriteRankingNum_[1].reset(KamataEngine::Sprite::Create(textureNums_[2], {-100.0f, -100.0f}, {0.5f, 0.5f, 0.5f, 1.0f}));
+	spriteRankingDot_[1].reset(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("dot.png"), {-100.0f, -100.0f}, {0.5f, 0.5f, 0.5f, 1.0f}));
+
+	spriteRankingNum_[2].reset(KamataEngine::Sprite::Create(textureNums_[3], {-100.0f, -100.0f}, {0.7f, 0.3f, 0.15f, 1.0f}));
+	spriteRankingDot_[2].reset(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("dot.png"), {-100.0f, -100.0f}, {0.7f, 0.3f, 0.15f, 1.0f}));
+
 
 	bgmHandle_ = Audio::Manager::GetInstance()->Play("./Resources/bgmResult.mp3", true);
 }
@@ -123,9 +136,8 @@ void SceneResult::Draw() {
 
 	int32_t rankingNum = 0;
 
-	//for (auto& ranking : rankingLists_) {
-		//ranking;
-		time_ = SplitTime::FromSeconds(900.28f);
+	for (auto& ranking : rankingLists_) {
+		time_ = SplitTime::FromSeconds(ranking);
 
 		timeCount_ = time_.minutes_;
 		minutesNum_[0] = timeCount_ / 10;
@@ -143,31 +155,38 @@ void SceneResult::Draw() {
 		centiSecondsNum_[1] = timeCount_ / 1;
 
 		for (int i = 0; i < 2; i++) {
-		    numbers_[i]->SetTextureHandle(textureNums_[minutesNum_[i]]);
-			numbers_[i]->SetPosition({i * 24.0f, 40.0f * rankingNum});
-			numbers_[i]->Draw();
+		    numbers_[i][rankingNum]->SetTextureHandle(textureNums_[minutesNum_[i]]);
+			numbers_[i][rankingNum]->SetPosition({i * 24.0f + numOffset_.x, 60.0f * rankingNum + numOffset_.y});
+			numbers_[i][rankingNum]->Draw();
 		}
 
 		for (int i = 0; i < 2; i++) {
-		    numbers_[i + 2]->SetTextureHandle(textureNums_[secondsNum_[i]]);
-		    numbers_[i + 2]->SetPosition({(i + 3) * 24.0f, 40.0f * rankingNum});
-		    numbers_[i + 2]->Draw();
+		    numbers_[i + 2][rankingNum]->SetTextureHandle(textureNums_[secondsNum_[i]]);
+			numbers_[i + 2][rankingNum]->SetPosition({(i + 3) * 24.0f + numOffset_.x, 60.0f * rankingNum + numOffset_.y});
+		    numbers_[i + 2][rankingNum]->Draw();
 		}
 
 		for (int i = 0; i < 2; i++) {
-		    numbers_[i + 4]->SetTextureHandle(textureNums_[centiSecondsNum_[i]]);
-		    numbers_[i + 4]->SetPosition({(i + 6) * 24.0f, 40.0f * rankingNum});
-		    numbers_[i + 4]->Draw();
+		    numbers_[i + 4][rankingNum]->SetTextureHandle(textureNums_[centiSecondsNum_[i]]);
+			numbers_[i + 4][rankingNum]->SetPosition({(i + 6) * 24.0f + numOffset_.x, 60.0f * rankingNum + numOffset_.y});
+		    numbers_[i + 4][rankingNum]->Draw();
 		}
 
-		spriteColon_->SetPosition({2 * 24.0f, 40.0f * rankingNum});
-	    spriteColon_->Draw();
+		spriteColon_[rankingNum]->SetPosition({2 * 24.0f + numOffset_.x, 60.0f * rankingNum + numOffset_.y});
+	    spriteColon_[rankingNum]->Draw();
 
-	    spriteDot_->SetPosition({5 * 24.0f, 40.0f * rankingNum});
-	    spriteDot_->Draw();
+	    spriteDot_[rankingNum]->SetPosition({5 * 24.0f + numOffset_.x, 60.0f * rankingNum + numOffset_.y});
+	    spriteDot_[rankingNum]->Draw();
+
+		spriteRankingDot_[rankingNum]->SetPosition({-1 * 24.0f + numOffset_.x, 60.0f * rankingNum + numOffset_.y});
+		spriteRankingDot_[rankingNum]->Draw();
+
+		spriteRankingNum_[rankingNum]->SetPosition({-2 * 24.0f + numOffset_.x, 60.0f * rankingNum + numOffset_.y});
+		spriteRankingNum_[rankingNum]->Draw();
+
 
 		rankingNum++;
-	//}
+	}
 
 	KamataEngine::Sprite::PostDraw();
 }

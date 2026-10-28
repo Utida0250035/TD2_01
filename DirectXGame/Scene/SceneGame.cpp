@@ -1,4 +1,4 @@
-﻿#include "../Scene/SceneGame.h"
+#include "../Scene/SceneGame.h"
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
 #include "../Particle/CommandParticle.h"
@@ -9,8 +9,8 @@
 #include "../Time/DeltaTime.h"
 #include "../Time/TimeAttackManager.h"
 #include <KamataEngine.h>
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 
 using namespace KamataEngine;
 
@@ -126,6 +126,24 @@ void SceneGame::EnterScene() {
 
 	timeAttack_->StartBattle();
 
+	textureNums_[0] = KamataEngine::TextureManager::Load("0.png");
+	textureNums_[1] = KamataEngine::TextureManager::Load("1.png");
+	textureNums_[2] = KamataEngine::TextureManager::Load("2.png");
+	textureNums_[3] = KamataEngine::TextureManager::Load("3.png");
+	textureNums_[4] = KamataEngine::TextureManager::Load("4.png");
+	textureNums_[5] = KamataEngine::TextureManager::Load("5.png");
+	textureNums_[6] = KamataEngine::TextureManager::Load("6.png");
+	textureNums_[7] = KamataEngine::TextureManager::Load("7.png");
+	textureNums_[8] = KamataEngine::TextureManager::Load("8.png");
+	textureNums_[9] = KamataEngine::TextureManager::Load("9.png");
+
+	for (int i = 0; i < 6; ++i) {
+		numbers_[i].reset(KamataEngine::Sprite::Create(textureNums_[0], {-100.0f, -100.0f}));
+	}
+
+	spriteColon_.reset(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("colon.png"), {-100.0f, -100.0f}));
+	spriteDot_.reset(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("dot.png"), {-100.0f, -100.0f}));
+
 	Update();
 }
 
@@ -143,7 +161,6 @@ void SceneGame::Update() {
 			}
 
 			spriteAnnouncement_->SetColor({1, 1, 1, announcementAlpha_});
-
 		}
 	}
 
@@ -154,7 +171,6 @@ void SceneGame::Update() {
 	if (!(CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat"))) {
 
 		timeAttack_->Update(FrameDeltaTime::GetInstance()->GetDeltaTime());
-
 	}
 
 	if (boss_->Is2ndMode()) {
@@ -260,7 +276,49 @@ void SceneGame::Draw() {
 		if (!isAlreadyAnnounced_) {
 			spriteAnnouncement_->Draw();
 		}
+	}
 
+	if (!CommandParticle::GetInstance()->IsExist("bossAppear")) {
+		time_ = SplitTime::FromSeconds(timeAttack_->GetElapsedTime());
+
+		timeCount_ = time_.minutes_;
+		minutesNum_[0] = timeCount_ / 10;
+		timeCount_ %= 10;
+		minutesNum_[1] = timeCount_ / 1;
+
+		timeCount_ = time_.seconds_;
+		secondsNum_[0] = timeCount_ / 10;
+		timeCount_ %= 10;
+		secondsNum_[1] = timeCount_ / 1;
+
+		timeCount_ = time_.centiseconds_;
+		centiSecondsNum_[0] = timeCount_ / 10;
+		timeCount_ %= 10;
+		centiSecondsNum_[1] = timeCount_ / 1;
+
+		for (int i = 0; i < 2; i++) {
+			numbers_[i]->SetTextureHandle(textureNums_[minutesNum_[i]]);
+			numbers_[i]->SetPosition({i * 24.0f + 1080.0f, 0.0f});
+			numbers_[i]->Draw();
+		}
+
+		for (int i = 0; i < 2; i++) {
+			numbers_[i + 2]->SetTextureHandle(textureNums_[secondsNum_[i]]);
+			numbers_[i + 2]->SetPosition({(i + 3) * 24.0f + 1080.0f, 0.0f});
+			numbers_[i + 2]->Draw();
+		}
+
+		for (int i = 0; i < 2; i++) {
+			numbers_[i + 4]->SetTextureHandle(textureNums_[centiSecondsNum_[i]]);
+			numbers_[i + 4]->SetPosition({(i + 6) * 24.0f + 1080.0f, 0.0f});
+			numbers_[i + 4]->Draw();
+		}
+
+		spriteColon_->SetPosition({2 * 24.0f + 1080.0f, 0.0f});
+		spriteColon_->Draw();
+
+		spriteDot_->SetPosition({5 * 24.0f + 1080.0f, 0.0f});
+		spriteDot_->Draw();
 	}
 
 	KamataEngine::Sprite::PostDraw();

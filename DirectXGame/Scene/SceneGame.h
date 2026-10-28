@@ -71,6 +71,16 @@ private:
 
 	bool isAlreadyAnnounced_ = false;
 
+	std::unique_ptr<KamataEngine::Sprite> numbers_[6];
+	std::unique_ptr<KamataEngine::Sprite> spriteColon_;
+	std::unique_ptr<KamataEngine::Sprite> spriteDot_;
+	int32_t timeCount_;
+	int32_t minutesNum_[2] = {0, 0};
+	int32_t secondsNum_[2] = {0, 0};
+	int32_t centiSecondsNum_[2] = {0, 0};
+	SplitTime time_;
+	uint32_t textureNums_[10];
+
 public:
 
 	/// <summary>
