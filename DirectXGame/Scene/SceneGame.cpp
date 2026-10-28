@@ -1,4 +1,4 @@
-#include "../Scene/SceneGame.h"
+﻿#include "../Scene/SceneGame.h"
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
 #include "../Particle/CommandParticle.h"
@@ -7,10 +7,16 @@
 #include "../Scene/CommandChangeScene.h"
 #include "../Scene/SceneResult.h"
 #include "../Time/DeltaTime.h"
+#include "../Time/TimeAttackManager.h"
 #include <KamataEngine.h>
 #include <iostream>
+#include <filesystem>
 
 using namespace KamataEngine;
+
+namespace {
+namespace fs = std::filesystem;
+}
 
 namespace Atrum {
 
@@ -106,16 +112,50 @@ void SceneGame::EnterScene() {
 		spriteSkipButton_.reset(KamataEngine::Sprite::Create(textureKeyboard_, {1050.0f, 50.0f}, {1, 1, 1, 1}, {0.5f, 0.5f}));
 	}
 
+	spriteAnnouncement_.reset(KamataEngine::Sprite::Create(KamataEngine::TextureManager::Load("introAnnouncement.png"), {640.0f, 600.0f}, {1, 1, 1, 0.0f}, {0.5f, 0.5f}));
+	announcementAlpha_ = 0.0f;
+	announcementTimer_ = 0.0f;
+
 	scaffoldCrushTimer_ = 0.0f;
+
+	timeAttack_.reset(std::make_unique<TimeAttackManager>().release());
+
+	if (fs::exists(kRtaRecordFilePath)) {
+		timeAttack_->FromJson(kRtaRecordFilePath);
+	}
+
+	timeAttack_->StartBattle();
 
 	Update();
 }
 
 void SceneGame::Update() {
 
+	if (!isAlreadyAnnounced_) {
+		if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
+
+			announcementTimer_ += FrameDeltaTime::GetInstance()->GetDeltaTime();
+
+			if (announcementTimer_ >= 4.0f) {
+				announcementAlpha_ = Interpolation::Lerp(announcementAlpha_, 0.0f, 0.2f);
+			} else {
+				announcementAlpha_ = Interpolation::Lerp(announcementAlpha_, 1.0f, 0.05f);
+			}
+
+			spriteAnnouncement_->SetColor({1, 1, 1, announcementAlpha_});
+
+		}
+	}
+
 	player_->Update();
 
 	boss_->Update();
+
+	if (!(CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat"))) {
+
+		timeAttack_->Update(FrameDeltaTime::GetInstance()->GetDeltaTime());
+
+	}
 
 	if (boss_->Is2ndMode()) {
 		if (!isBoss2nd_) {
@@ -162,11 +202,15 @@ void SceneGame::Update() {
 	if (boss_->IsDeathFinished()) {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance(), new ChangeSceneFade());
 		commandParticle_->DestroyParticleAll();
+		isAlreadyAnnounced_ = false;
+		timeAttack_->EndBattle();
+		timeAttack_->ToJson(kRtaRecordFilePath);
 	}
 
 	if (player_->IsDeathFinished()) {
 		CommandChangeScene::GetInstance()->Set(SceneGame::GetInstance(), new ChangeSceneFade);
 		commandParticle_->DestroyParticleAll();
+		isAlreadyAnnounced_ = true;
 	}
 
 	if (KamataEngine::Input::GetInstance()->GetNumberOfJoysticks()) {
@@ -210,8 +254,15 @@ void SceneGame::Draw() {
 
 	KamataEngine::Sprite::PreDraw();
 	if (CommandParticle::GetInstance()->IsExist("bossAppear")) {
+
 		spriteSkipButton_->Draw();
+
+		if (!isAlreadyAnnounced_) {
+			spriteAnnouncement_->Draw();
+		}
+
 	}
+
 	KamataEngine::Sprite::PostDraw();
 }
 
@@ -236,6 +287,8 @@ void SceneGame::ExitScene() {
 
 	delete blockColor_;
 	blockColor_ = nullptr;
+
+	spriteAnnouncement_.release();
 
 	Audio::Manager::GetInstance()->Stop(bgmHandle_);
 }

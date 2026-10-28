@@ -27,10 +27,10 @@ void SceneTitle::EnterScene() {
 	//-------------------
 	// 背景
 
-	skydome_ = new Skydome;
+	skydome_.reset(std::make_unique<Skydome>().release());
 	skydome_->Initialize(KamataEngine::Model::CreateFromOBJ("skyDome", true), KeMainCamera::GetInstance()->camera_);
 
-	cloud_ = new Cloud;
+	cloud_.reset(std::make_unique<Cloud>().release());
 	cloud_->Initialize(KamataEngine::Model::CreateFromOBJ("cloud"), KeMainCamera::GetInstance()->camera_);
 
 	//
@@ -99,9 +99,6 @@ void SceneTitle::Draw() {
 void SceneTitle::ExitScene() {
 
 	Audio::Manager::GetInstance()->Stop(bgmHandle_);
-
-	delete skydome_;
-	delete cloud_;
 
 }
 

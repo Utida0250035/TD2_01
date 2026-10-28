@@ -16,11 +16,12 @@
 
 namespace Atrum::Audio {
 
-AudioManager* AudioManager::instance_ = nullptr;
+std::unique_ptr<AudioManager> AudioManager::instance_ = nullptr;
 
 AudioManager::~AudioManager() {
 
 	sourceVoicePool_.clear();
+	streamingSourceVoicePool_.clear();
 
 	xAudio2_.Reset();
 

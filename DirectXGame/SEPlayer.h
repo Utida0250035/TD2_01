@@ -1,18 +1,23 @@
 #pragma once
-#include <unordered_map>
+#include <memory>
 #include <string>
+#include <unordered_map>
 
 class SEPlayer {
 private:
-	static SEPlayer* instance_;
+	static std::unique_ptr<SEPlayer> instance_;
 
 	// コンストラクタとデストラクタの隠蔽
 	SEPlayer() = default;
+
+public:
 	~SEPlayer() = default;
+
+private:
+	
 	// コピーコンストラクタと代入演算子を無効化
 	SEPlayer(const SEPlayer&) = delete;
 	SEPlayer& operator=(const SEPlayer&) = delete;
-
 
 	std::unordered_map<size_t, bool> sounds;
 

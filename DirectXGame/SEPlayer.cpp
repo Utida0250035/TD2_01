@@ -3,13 +3,13 @@
 
 using namespace Atrum;
 
-SEPlayer* SEPlayer::instance_ = nullptr;
+std::unique_ptr<SEPlayer> SEPlayer::instance_ = nullptr;
 
 SEPlayer* SEPlayer::GetInstance() {
 	if (!instance_) {
-		instance_ = new SEPlayer;
+		instance_ = std::unique_ptr<SEPlayer>(new SEPlayer);
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void SEPlayer::Update() {
