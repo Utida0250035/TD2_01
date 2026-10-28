@@ -58,6 +58,13 @@ private:
 	float scaffoldCrushTimer_ = 0.0f;
 	float scaffoldCrushTime_ = 0.5f;
 
+	// スタート時の命令表示演出用スプライト
+	std::unique_ptr<KamataEngine::Sprite> spriteAnnouncement_;
+	float announcementAlpha_ = 0.0f;
+	float announcementTimer_ = 0.0f;
+
+	bool isAlreadyAnnounced_ = false;
+
 public:
 
 	/// <summary>
