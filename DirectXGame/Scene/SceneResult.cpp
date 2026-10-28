@@ -43,7 +43,11 @@ void SceneResult::EnterScene() {
 	timeAttackManager_ = SceneGame::GetInstance()->GetRtaManager();
 	rankingLists_ = timeAttackManager_->GetRankingList();
 
-	
+	if (rankingLists_.size() < 3) {
+		for (size_t i = 3; i > rankingLists_.size() - 1; --i) {
+			rankingLists_.push_back(5999.99f);
+		}
+	}
 
 	textureNums_[0] = KamataEngine::TextureManager::Load("0.png");
 	textureNums_[1] = KamataEngine::TextureManager::Load("1.png");
