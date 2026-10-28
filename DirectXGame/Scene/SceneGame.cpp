@@ -1,4 +1,4 @@
-#include "../Scene/SceneGame.h"
+﻿#include "../Scene/SceneGame.h"
 #include "../KeMainCamera.h"
 #include "../KeMatrix3D.h"
 #include "../Particle/CommandParticle.h"
@@ -7,10 +7,16 @@
 #include "../Scene/CommandChangeScene.h"
 #include "../Scene/SceneResult.h"
 #include "../Time/DeltaTime.h"
+#include "../Time/TimeAttackManager.h"
 #include <KamataEngine.h>
 #include <iostream>
+#include <filesystem>
 
 using namespace KamataEngine;
+
+namespace {
+namespace fs = std::filesystem;
+}
 
 namespace Atrum {
 
@@ -112,6 +118,14 @@ void SceneGame::EnterScene() {
 
 	scaffoldCrushTimer_ = 0.0f;
 
+	timeAttack_.reset(std::make_unique<TimeAttackManager>().release());
+
+	if (fs::exists(kRtaRecordFilePath)) {
+		timeAttack_->FromJson(kRtaRecordFilePath);
+	}
+
+	timeAttack_->StartBattle();
+
 	Update();
 }
 
@@ -136,6 +150,12 @@ void SceneGame::Update() {
 	player_->Update();
 
 	boss_->Update();
+
+	if (!(CommandParticle::GetInstance()->IsExist("bossAppear") || CommandParticle::GetInstance()->IsExist("bossDefeat"))) {
+
+		timeAttack_->Update(FrameDeltaTime::GetInstance()->GetDeltaTime());
+
+	}
 
 	if (boss_->Is2ndMode()) {
 		if (!isBoss2nd_) {
@@ -183,6 +203,8 @@ void SceneGame::Update() {
 		CommandChangeScene::GetInstance()->Set(SceneResult::GetInstance(), new ChangeSceneFade());
 		commandParticle_->DestroyParticleAll();
 		isAlreadyAnnounced_ = false;
+		timeAttack_->EndBattle();
+		timeAttack_->ToJson(kRtaRecordFilePath);
 	}
 
 	if (player_->IsDeathFinished()) {
@@ -240,6 +262,7 @@ void SceneGame::Draw() {
 		}
 
 	}
+
 	KamataEngine::Sprite::PostDraw();
 }
 
